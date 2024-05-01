@@ -1,9 +1,11 @@
-import Home from './Home'
+import { ThemeProvider } from '@emotion/react'
+import Home from './HomePage/Home'
+import customTheme from './utils/theme'
 function App() {
     return (
-        <div>
+        <ThemeProvider theme={customTheme}>
             <Home />
-        </div>
+        </ThemeProvider>
     )
 }
 
