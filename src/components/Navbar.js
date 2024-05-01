@@ -1,7 +1,15 @@
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
-import { MoreVertIcon, ThreadLinkIcon } from './icons'
+import {
+    ActivityIcon,
+    CreateIcon,
+    HomeIcon,
+    MoreVertIcon,
+    ProfileIcon,
+    SearchIcon,
+    ThreadLinkIcon,
+} from './icons'
 import { Button, Container } from '@mui/material'
 
 const pages = ['Home', 'Search', 'New Thread', 'Activity', 'Account']
@@ -11,22 +19,25 @@ export default function Navbar() {
         <Box>
             <AppBar color="transparent">
                 <Container maxWidth="xl">
-                    <Toolbar disableGutters>
+                    <Toolbar
+                        // disableGutters
+                        sx={{ alignItems: 'center', display: 'flex' }}
+                    >
                         <ThreadLinkIcon />
                         <Box
                             sx={{
+                                alignItems: 'center',
+                                display: { xs: 'flex', md: 'flex' },
                                 flexGrow: 1,
                                 justifyContent: 'center',
-                                display: { xs: 'flex', md: 'flex' },
+                                columnGap: 5,
                             }}
                         >
-                            {pages.map((page) => {
-                                return (
-                                    <Button sx={{ color: 'black' }}>
-                                        {page}
-                                    </Button>
-                                )
-                            })}
+                            <HomeIcon />
+                            <SearchIcon />
+                            <CreateIcon />
+                            <ActivityIcon />
+                            <ProfileIcon />
                         </Box>
                         <MoreVertIcon />
                     </Toolbar>
