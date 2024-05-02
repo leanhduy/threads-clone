@@ -1,9 +1,8 @@
-import { SafetyDivider } from '@mui/icons-material'
+import { AccountCircle, TextFields } from '@mui/icons-material'
 import {
     Box,
     Button,
     Dialog,
-    DialogTitle,
     DialogContent,
     DialogContentText,
     TextField,
@@ -14,15 +13,19 @@ import {
     Menu,
     MenuItem,
     Divider,
+    Typography,
+    Container,
+    Avatar,
 } from '@mui/material'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-const replyOptions = ['Your followers', 'Profiles you follow', 'Mentioned only']
+const replyOptions = ['Anyone', 'Profiles you follow', 'Mentioned only']
 
 const CreateNewDialog = ({ openDialog, handleOpen, handleClose }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [selectedIndex, setSelectedIndex] = useState(0)
+    const [hasThreadContent, setHasThreadContent] = useState(false)
     const openMenu = Boolean(anchorEl)
 
     const handleSubmit = (event) => {
@@ -30,7 +33,6 @@ const CreateNewDialog = ({ openDialog, handleOpen, handleClose }) => {
         const formData = new FormData(event.currentTarget)
         const formJson = Object.fromEntries(formData.entries())
         const email = formJson.email
-        console.log(email)
         handleClose()
     }
 
@@ -55,62 +57,80 @@ const CreateNewDialog = ({ openDialog, handleOpen, handleClose }) => {
                 component: 'form',
                 onSubmit: handleSubmit,
             }}
+            fullWidth
         >
-            <DialogTitle>Subscribe</DialogTitle>
+            <Box
+                sx={{
+                    fontWeight: 'bold',
+                    margin: '1rem auto 1rem',
+                    textAlign: 'center',
+                }}
+            >
+                New thread
+            </Box>
             <DialogContent>
-                {/* TODO: REPLACE WITH NEW THREAD FORM */}
-                <DialogContentText>
-                    To subscribe to this website, please enter your email
-                    address here. We will send updates occasionally.
-                </DialogContentText>
-                <TextField
-                    autoFocus
-                    required
-                    margin="dense"
-                    id="name"
-                    name="email"
-                    label="Email Address"
-                    type="email"
-                    fullWidth
-                    variant="standard"
-                />
+                <Box
+                    sx={{
+                        alignItems: 'center',
+                        display: 'flex',
+                        width: '100%',
+                    }}
+                >
+                    <Avatar
+                        sx={{ color: 'action.active', margin: '0 .5rem' }}
+                    />
+                    <Box sx={{ flexGrow: 1 }}>
+                        <Typography variant="body1">Username</Typography>
+                        <TextField
+                            id="input-with-sx"
+                            label=""
+                            variant="standard"
+                            placeholder="Start a thread..."
+                            multiline
+                            sx={{ width: '100%' }}
+                        />
+                    </Box>
+                </Box>
             </DialogContent>
             <DialogActions
                 sx={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    paddingBottom: '1.5rem',
+                    padding: '0.5rem 1.5rem',
                 }}
             >
                 <Box>
-                    <List
-                        component="nav"
-                        aria-label="Device settings"
-                        sx={{
-                            bgcolor: 'background.paper',
-                        }}
-                    >
+                    <List component="nav" aria-label="Device settings">
                         <ListItemButton
-                            id="lock-button"
                             aria-haspopup="listbox"
                             aria-controls="lock-menu"
                             aria-expanded={openMenu ? 'true' : undefined}
+                            disableRipple
+                            disableGutters
+                            id="lock-button"
                             onClick={handleClickListItem}
+                            sx={{
+                                fontWeight: 'normal',
+                                '&:hover': {
+                                    backgroundColor: 'transparent',
+                                },
+                            }}
                         >
                             <ListItemText
-                                primary={replyOptions[selectedIndex]}
+                                sx={{ color: '#b0b3b8' }}
+                                primary={`${replyOptions[selectedIndex]} can reply`}
                             />
                         </ListItemButton>
                     </List>
                     <Menu
-                        id="lock-menu"
                         anchorEl={anchorEl}
-                        open={openMenu}
-                        onClose={handleCloseMenu}
+                        id="lock-menu"
                         MenuListProps={{
                             'aria-labelledby': 'lock-button',
                             role: 'listbox',
                         }}
+                        onClose={handleCloseMenu}
+                        open={openMenu}
                     >
                         {replyOptions.map((option, index) => (
                             <Box key={option}>
@@ -120,27 +140,19 @@ const CreateNewDialog = ({ openDialog, handleOpen, handleClose }) => {
                                         handleMenuItemClick(event, index)
                                     }
                                     selected={index === selectedIndex}
+                                    sx={{
+                                        fontWeight: 'bold',
+                                        padding: 'auto 1rem',
+                                    }}
                                 >
                                     {option}
                                 </MenuItem>
-                                {index < replyOptions.length - 1 && (
-                                    <Divider sx={{ my: 0.5 }} />
-                                )}
+                                {index < replyOptions.length - 1 && <Divider />}
                             </Box>
                         ))}
                     </Menu>
                 </Box>
-                <Button
-                    sx={{
-                        color: 'white',
-                        backgroundColor: '#b0b3b8',
-                        borderRadius: '25px',
-                        '&:hover': {
-                            cursor: 'not-allowed',
-                        },
-                    }}
-                    type="submit"
-                >
+                <Button variant="contained" type="submit">
                     Post
                 </Button>
             </DialogActions>

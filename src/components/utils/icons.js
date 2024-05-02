@@ -3,8 +3,10 @@ import {
     Favorite,
     FavoriteBorder,
     Home,
+    HomeOutlined,
     MoreVert,
     Person,
+    PersonOutline,
     Search,
 } from '@mui/icons-material'
 import { Box, IconButton, SvgIcon } from '@mui/material'
@@ -37,7 +39,7 @@ export const MoreVertIcon = () => {
 export const HomeIcon = () => {
     return (
         <IconButton edge="start" color="inherit" aria-label="add">
-            <Home sx={{ fontSize: '2rem', color: '#b0b3b8' }} />
+            <HomeOutlined sx={{ fontSize: '2rem', color: '#b0b3b8' }} />
         </IconButton>
     )
 }
@@ -69,7 +71,7 @@ export const ActivityIcon = () => {
 export const ProfileIcon = () => {
     return (
         <IconButton edge="start" aria-label="add" sx={{ color: 'black' }}>
-            <Person sx={{ fontSize: '2rem', color: '#b0b3b8' }} />
+            <PersonOutline sx={{ fontSize: '2rem', color: '#b0b3b8' }} />
         </IconButton>
     )
 }

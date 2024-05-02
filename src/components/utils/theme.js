@@ -3,13 +3,14 @@ import { createTheme } from '@mui/material/styles'
 
 const customTheme = createTheme({
     components: {
-        MuiMenu: {
+        MuiDialog: {
             styleOverrides: {
                 paper: {
                     borderRadius: '25px',
                 },
             },
         },
+        MuiMenuItem: {},
     },
 })
 
