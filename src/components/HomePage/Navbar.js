@@ -14,7 +14,7 @@ import { Button, Container } from '@mui/material'
 
 export default function Navbar() {
     return (
-        <AppBar color="transparent">
+        <AppBar sx={{ backgroundColor: 'white' }}>
             <Toolbar sx={{ alignItems: 'center', display: 'flex' }}>
                 <ThreadLinkIcon />
                 <Box
@@ -23,7 +23,7 @@ export default function Navbar() {
                         display: { xs: 'flex', md: 'flex' },
                         flexGrow: 1,
                         justifyContent: 'center',
-                        columnGap: 5,
+                        columnGap: 8,
                     }}
                 >
                     <HomeIcon />

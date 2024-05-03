@@ -1,15 +1,13 @@
 import {
     Add,
-    Favorite,
     FavoriteBorder,
-    Home,
     HomeOutlined,
+    MoreHoriz,
     MoreVert,
-    Person,
     PersonOutline,
     Search,
 } from '@mui/icons-material'
-import { Box, IconButton, SvgIcon } from '@mui/material'
+import { IconButton, SvgIcon } from '@mui/material'
 
 export const ThreadLinkIcon = () => {
     return (
@@ -32,6 +30,14 @@ export const MoreVertIcon = () => {
     return (
         <IconButton edge="start" color="inherit" aria-label="open drawer">
             <MoreVert sx={{ fontSize: '2rem', color: '#b0b3b8' }} />
+        </IconButton>
+    )
+}
+
+export const MoreHorizIcon = ({ style }) => {
+    return (
+        <IconButton edge="start" color="inherit" aria-label="open drawer">
+            <MoreHoriz sx={{ color: '#b0b3b8', ...style }} />
         </IconButton>
     )
 }

@@ -18,7 +18,7 @@ const CreateNew = () => {
                 alignItems: 'center',
                 borderBottom: '1px solid #b0b3b8',
                 margin: '5rem auto 0',
-                maxWidth: '50%',
+                maxWidth: '90%',
                 padding: '1rem 0',
             }}
         >

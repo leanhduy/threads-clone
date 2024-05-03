@@ -3,12 +3,16 @@ import CreateNew from './CreateNew'
 import Navbar from './Navbar'
 import { ThemeProvider } from '@emotion/react'
 import customDialogTheme from '../utils/theme'
+import ThreadList from './ThreadList'
 
 const Home = () => {
     return (
         <>
             <Navbar />
-            <CreateNew />
+            <Container sx={{ width: '80%' }}>
+                <CreateNew />
+                <ThreadList />
+            </Container>
         </>
     )
 }

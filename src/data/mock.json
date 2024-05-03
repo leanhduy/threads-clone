@@ -1,95 +1,59 @@
 {
     "threads": [
-      {
-        "id": 1,
-        "content": "This is the content of my first thread.",
-        "author": "John Doe",
-        "timestamp": "2024-05-03T10:00:00Z",
-        "likesCount": 15,
-        "repostCount": 5,
-        "replyCount": 8
-      },
-      {
-        "id": 2,
-        "content": "Thread about React components.",
-        "author": "Jane Smith",
-        "timestamp": "2024-05-03T11:30:00Z",
-        "likesCount": 20,
-        "repostCount": 3,
-        "replyCount": 12
-      },
-      {
-        "id": 3,
-        "content": "Thread 3: Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        "author": "User3",
-        "timestamp": "2024-05-03T12:00:00Z",
-        "likesCount": 42,
-        "repostCount": 7,
-        "replyCount": 18
-      },
-      {
-        "id": 4,
-        "content": "Thread 4: Curabitur euismod justo vel nunc tincidunt, at ultrices elit aliquet.",
-        "author": "User4",
-        "timestamp": "2024-05-03T12:30:00Z",
-        "likesCount": 30,
-        "repostCount": 2,
-        "replyCount": 10
-      },
-      {
-        "id": 5,
-        "content": "Thread 5: Sed ac justo nec elit venenatis tincidunt.",
-        "author": "User5",
-        "timestamp": "2024-05-03T13:00:00Z",
-        "likesCount": 18,
-        "repostCount": 4,
-        "replyCount": 6
-      },
-      {
-        "id": 6,
-        "content": "Thread 6: Fusce eget justo euismod, bibendum elit id, cursus quam.",
-        "author": "User6",
-        "timestamp": "2024-05-03T13:30:00Z",
-        "likesCount": 25,
-        "repostCount": 6,
-        "replyCount": 15
-      },
-      {
-        "id": 7,
-        "content": "Thread 7: Nullam in justo euismod, bibendum elit id, cursus quam.",
-        "author": "User7",
-        "timestamp": "2024-05-03T14:00:00Z",
-        "likesCount": 12,
-        "repostCount": 1,
-        "replyCount": 5
-      },
-      {
-        "id": 8,
-        "content": "Thread 8: Vivamus euismod justo vel nunc tincidunt, at ultrices elit aliquet.",
-        "author": "User8",
-        "timestamp": "2024-05-03T14:30:00Z",
-        "likesCount": 22,
-        "repostCount": 3,
-        "replyCount": 9
-      },
-      {
-        "id": 9,
-        "content": "Thread 9: Phasellus ac justo nec elit venenatis tincidunt.",
-        "author": "User9",
-        "timestamp": "2024-05-03T15:00:00Z",
-        "likesCount": 35,
-        "repostCount": 8,
-        "replyCount": 14
-      },
-      {
-        "id": 10,
-        "content": "Thread 10: Praesent eget justo euismod, bibendum elit id, cursus quam.",
-        "author": "User10",
-        "timestamp": "2024-05-03T15:30:00Z",
-        "likesCount": 28,
-        "repostCount": 5,
-        "replyCount": 11
-      }
+        {
+            "id": 1,
+            "content": "This is the content of my first thread.",
+            "author": "John Doe",
+            "timestamp": "2024-05-03T10:00:00Z",
+            "likesCount": 15,
+            "repostCount": 5,
+            "replyCount": 8,
+            "avatarUrl": "https://plus.unsplash.com/premium_photo-1687183564367-ba7a1ed75379?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "imageUrl": "https://plus.unsplash.com/premium_photo-1687183564367-ba7a1ed75379?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        },
+        {
+            "id": 2,
+            "content": "Just got back from an amazing hike in the Pacific Northwest! The view from Mount Rainier was breathtaking. 🏞️ Can't wait to explore more trails this summer!",
+            "author": "Hiker123",
+            "timestamp": "2024-05-02T14:30:00Z",
+            "likesCount": 23,
+            "repostCount": 7,
+            "replyCount": 12,
+            "avatarUrl": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aG9ybnklMjBnaXJsfGVufDB8fDB8fHww",
+            "imageUrl": "https://images.unsplash.com/photo-1600807497639-3b5d8e74a232?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGhpa2luZ3xlbnwwfHwwfHx8MA%3D%3D"
+        },
+        {
+            "id": 3,
+            "content": "Just discovered the latest smartwatch with health tracking features. It's sleek, waterproof, and has a week-long battery life! 💪 Adding it to my wishlist. What's on your tech wishlist?",
+            "author": "TechEnthusiast",
+            "timestamp": "2024-04-28T09:15:00Z",
+            "likesCount": 42,
+            "repostCount": 10,
+            "replyCount": 20,
+            "avatarUrl": "https://images.unsplash.com/photo-1560298803-1d998f6b5249?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dGVjaCUyMGd1eXxlbnwwfHwwfHx8MA%3D%3D",
+            "imageUrl": "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c21hcnR3YXRjaHxlbnwwfHwwfHx8MA%3D%3D"
+        },
+        {
+            "id": 4,
+            "content": "Just finished reading 'The Midnight Library' by Matt Haig. Highly recommend it! 📚 The concept of exploring alternate lives is mind-boggling. What's the last book that left you thinking?",
+            "author": "Bookworm101",
+            "timestamp": "2024-04-25T18:45:00Z",
+            "likesCount": 30,
+            "repostCount": 6,
+            "replyCount": 15,
+            "avatarUrl": "https://images.unsplash.com/photo-1533656812321-1868a4d2b72a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bmVyZHklMjBnaXJsfGVufDB8fDB8fHww",
+            "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfTOKZPGx1RFS9cRg6JoZFO6ZxCTeQd2RVwuDHJCnp5A&s"
+        },
+        {
+            "id": 5,
+            "content": "Cooked a delicious homemade lasagna tonight! 🍝 The layers of pasta, ricotta, and marinara sauce were perfection. What's your go-to comfort food?",
+            "author": "FoodieLife",
+            "timestamp": "2024-04-20T20:00:00Z",
+            "likesCount": 18,
+            "repostCount": 3,
+            "replyCount": 10,
+            "avatarUrl": "https://images.unsplash.com/photo-1502124225665-6282a0146f6a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGdpcmwlMjBjb29rfGVufDB8fDB8fHww",
+            "imageUrl": "https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bGFzYWduYXxlbnwwfHwwfHx8MA%3D%3D"
+        }
     ]
-  }
-  
+}
