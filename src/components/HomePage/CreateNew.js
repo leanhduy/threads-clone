@@ -1,6 +1,7 @@
 import { Avatar, Box, Button, Typography } from '@mui/material'
 import { useState } from 'react'
 import CreateNewDialog from './CreateNewDialog'
+import { defaultAvatarURL } from '../utils/consts'
 
 const CreateNew = () => {
     const [openDialog, setOpenDialog] = useState(false)
@@ -22,7 +23,7 @@ const CreateNew = () => {
                 padding: '1rem 0',
             }}
         >
-            <Avatar />
+            <Avatar src={defaultAvatarURL} />
             <Button
                 variant="text"
                 onClick={handleOpen}
