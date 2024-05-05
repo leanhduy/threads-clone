@@ -1,16 +1,10 @@
 import { Avatar, Box, Button, Typography } from '@mui/material'
-import { useState } from 'react'
-import CreateNewDialog from './CreateNewDialog'
+import { useContext } from 'react'
 import { defaultAvatarURL } from '../utils/consts'
+import { NewThreadContext } from '../context/context'
 
 const CreateNew = () => {
-    const [openDialog, setOpenDialog] = useState(false)
-    const handleOpen = () => {
-        setOpenDialog(true)
-    }
-    const handleClose = () => {
-        setOpenDialog(false)
-    }
+    const { handleOpen } = useContext(NewThreadContext)
     return (
         <Box
             display="flex"
@@ -19,7 +13,7 @@ const CreateNew = () => {
                 alignItems: 'center',
                 borderBottom: '1px solid #b0b3b8',
                 margin: '5rem auto 0',
-                maxWidth: '90%',
+                maxWidth: '80%',
                 padding: '1rem 0',
             }}
         >
@@ -60,12 +54,6 @@ const CreateNew = () => {
                     Post
                 </Typography>
             </Box>
-            {/* Dialog */}
-            <CreateNewDialog
-                openDialog={openDialog}
-                handleOpen={handleOpen}
-                handleClose={handleClose}
-            />
         </Box>
     )
 }

@@ -10,9 +10,12 @@ import {
     SearchIcon,
     ThreadLinkIcon,
 } from '../utils/icons'
-import { Button, Container } from '@mui/material'
+import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import { NewThreadContext } from '../context/context'
 
 export default function Navbar() {
+    const { handleOpen } = useContext(NewThreadContext)
     return (
         <AppBar sx={{ backgroundColor: 'white' }}>
             <Toolbar sx={{ alignItems: 'center', display: 'flex' }}>
@@ -26,11 +29,20 @@ export default function Navbar() {
                         columnGap: 8,
                     }}
                 >
-                    <HomeIcon />
-                    <SearchIcon />
-                    <CreateIcon />
-                    <ActivityIcon />
-                    <ProfileIcon />
+                    <Link to="/">
+                        <HomeIcon />
+                    </Link>
+                    <Link to="/search">
+                        <SearchIcon />
+                    </Link>
+                    <CreateIcon handler={handleOpen} />
+                    <Link to="/activity">
+                        <ActivityIcon />
+                    </Link>
+                    {/* TODO: Replace :id with global user id */}
+                    <Link to="/user/:id">
+                        <ProfileIcon />
+                    </Link>
                 </Box>
                 <MoreVertIcon />
             </Toolbar>
