@@ -19,7 +19,7 @@ import { useState } from 'react'
 
 const replyOptions = ['Anyone', 'Profiles you follow', 'Mentioned only']
 
-const CreateNewDialog = ({ openDialog, handleClose }) => {
+const CreateNewDialog = ({ handleOpen, handleClose, openDialog }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [selectedIndex, setSelectedIndex] = useState(0)
     const openMenu = Boolean(anchorEl)

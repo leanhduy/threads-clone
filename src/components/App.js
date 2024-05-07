@@ -1,29 +1,59 @@
 import { ThemeProvider } from '@emotion/react'
-import Home from './HomePage/Home'
 import customTheme from './utils/theme'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
+import Navbar from './HomePage/Navbar'
+import { useState } from 'react'
+import { NewThreadContext } from './context/context'
+import { Container } from '@mui/material'
+import Home from './HomePage/Home'
 import Following from './Following/Following'
 import Search from './Search/Search'
 import Activity from './Activity/Activity'
 import Profile from './Profile/Profile'
-import Post from './Post/Post'
+import PostDetails from './Post/PostDetails'
+import CreateNewDialog from './HomePage/CreateNewDialog'
 function App() {
+    const [openDialog, setOpenDialog] = useState(false)
+    const handleOpen = () => {
+        setOpenDialog(true)
+    }
+    const handleClose = () => {
+        setOpenDialog(false)
+    }
+
     return (
-        <BrowserRouter>
-            <ThemeProvider theme={customTheme}>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/following" element={<Following />} />
-                    <Route path="/search" element={<Search />} />
-                    <Route path="/activity" element={<Activity />} />
-                    {/* <Route path="/activity/followed" element={<TBD />} />
+        <ThemeProvider theme={customTheme}>
+            <NewThreadContext.Provider
+                value={{ handleOpen, handleClose, openDialog }}
+            >
+                <BrowserRouter>
+                    <Navbar />
+                    <Container
+                        sx={{
+                            alignItems: 'center',
+                            margin: '5rem auto',
+                            width: '50%',
+                        }}
+                    >
+                        <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/following" element={<Following />} />
+                            <Route path="/search" element={<Search />} />
+                            <Route path="/activity" element={<Activity />} />
+                            {/* <Route path="/activity/followed" element={<TBD />} />
                     <Route path="/activity/following" element={<TBD />} /> */}
-                    <Route path="/user/:id" element={<Profile />} />
-                    <Route path="/post/:id" element={<Post />} />
-                </Routes>
-                <Home />
-            </ThemeProvider>
-        </BrowserRouter>
+                            <Route path="/user/:id" element={<Profile />} />
+                            <Route path="/post/:id" element={<PostDetails />} />
+                        </Routes>
+                    </Container>
+                    <CreateNewDialog
+                        openDialog={openDialog}
+                        handleOpen={handleOpen}
+                        handleClose={handleClose}
+                    />
+                </BrowserRouter>
+            </NewThreadContext.Provider>
+        </ThemeProvider>
     )
 }
 

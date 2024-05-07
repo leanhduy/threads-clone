@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 
-const Post = () => {
+const PostDetails = () => {
     return (
         <Box
             sx={{
@@ -11,9 +11,9 @@ const Post = () => {
                 textAlign: 'center',
             }}
         >
-            <h1>Post</h1>
+            <h1>PostDetails</h1>
         </Box>
     )
 }
 
-export default Post
+export default PostDetails

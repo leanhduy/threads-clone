@@ -1,10 +1,11 @@
-import { Avatar, Box, Button, Typography } from '@mui/material'
 import { useContext } from 'react'
+import { Avatar, Box, Button, Typography } from '@mui/material'
 import { defaultAvatarURL } from '../utils/consts'
 import { NewThreadContext } from '../context/context'
 
 const CreateNew = () => {
     const { handleOpen } = useContext(NewThreadContext)
+
     return (
         <Box
             display="flex"
@@ -13,7 +14,6 @@ const CreateNew = () => {
                 alignItems: 'center',
                 borderBottom: '1px solid #b0b3b8',
                 margin: '5rem auto 0',
-                maxWidth: '80%',
                 padding: '1rem 0',
             }}
         >

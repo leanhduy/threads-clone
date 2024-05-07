@@ -1,54 +1,28 @@
-import { Container } from '@mui/material'
-import CreateNew from './CreateNew'
-import Navbar from './Navbar'
-import ThreadList from './ThreadList'
-import SwitchModeButton from './SwitchModeButton'
-import { useState } from 'react'
-import { switchModeButtonStyle } from '../utils/customStyles'
-import { Outlet } from 'react-router'
+import { useContext, useState } from 'react'
 import CreateNewDialog from './CreateNewDialog'
+import CreateNew from './CreateNew'
 import { NewThreadContext } from '../context/context'
+import SwitchModeButton from './SwitchModeButton'
+import { switchModeButtonStyle } from '../utils/customStyles'
+import ThreadList from './ThreadList'
+import { useOutletContext } from 'react-router-dom'
 
 const Home = () => {
-    const [openDialog, setOpenDialog] = useState(false)
-    const handleOpen = () => {
-        setOpenDialog(true)
-    }
-    const handleClose = () => {
-        setOpenDialog(false)
-    }
     const [followingMode, setFollowingMode] = useState(true)
     const toggleMode = () => {
         setFollowingMode((mode) => !mode)
     }
+
     return (
-        <NewThreadContext.Provider value={{ handleOpen }}>
-            <Navbar />
-            <Container sx={{ width: '80%' }}>
-                {window.location.pathname === '/' ? (
-                    <>
-                        <CreateNew
-                            handleClose={handleClose}
-                            handleOpen={handleOpen}
-                        />
-                        <ThreadList />
-                        <SwitchModeButton
-                            mode={followingMode}
-                            toggleMode={toggleMode}
-                            style={switchModeButtonStyle}
-                        />
-                    </>
-                ) : (
-                    <Outlet />
-                )}
-                {/* Create Dialog */}
-                <CreateNewDialog
-                    openDialog={openDialog}
-                    handleOpen={handleOpen}
-                    handleClose={handleClose}
-                />
-            </Container>
-        </NewThreadContext.Provider>
+        <>
+            <CreateNew />
+            <ThreadList />
+            <SwitchModeButton
+                mode={followingMode}
+                toggleMode={toggleMode}
+                style={switchModeButtonStyle}
+            />
+        </>
     )
 }
 
