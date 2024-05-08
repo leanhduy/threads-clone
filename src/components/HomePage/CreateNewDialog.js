@@ -1,10 +1,8 @@
-import { AccountCircle, TextFields } from '@mui/icons-material'
 import {
     Box,
     Button,
     Dialog,
     DialogContent,
-    DialogContentText,
     TextField,
     DialogActions,
     List,
@@ -14,7 +12,6 @@ import {
     MenuItem,
     Divider,
     Typography,
-    Container,
     Avatar,
 } from '@mui/material'
 
@@ -22,17 +19,13 @@ import { useState } from 'react'
 
 const replyOptions = ['Anyone', 'Profiles you follow', 'Mentioned only']
 
-const CreateNewDialog = ({ openDialog, handleOpen, handleClose }) => {
+const CreateNewDialog = ({ handleOpen, handleClose, openDialog }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [selectedIndex, setSelectedIndex] = useState(0)
-    const [hasThreadContent, setHasThreadContent] = useState(false)
     const openMenu = Boolean(anchorEl)
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        const formData = new FormData(event.currentTarget)
-        const formJson = Object.fromEntries(formData.entries())
-        const email = formJson.email
         handleClose()
     }
 

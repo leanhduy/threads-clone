@@ -58,9 +58,14 @@ export const SearchIcon = () => {
     )
 }
 
-export const CreateIcon = () => {
+export const CreateIcon = ({ handler }) => {
     return (
-        <IconButton edge="start" aria-label="add" sx={{ color: 'black' }}>
+        <IconButton
+            edge="start"
+            aria-label="add"
+            sx={{ color: 'black' }}
+            onClick={handler}
+        >
             <Add sx={{ fontSize: '2rem', color: '#b0b3b8' }} />
         </IconButton>
     )

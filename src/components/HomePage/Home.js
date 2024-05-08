@@ -1,28 +1,27 @@
-import { Container } from '@mui/material'
+import { useContext, useState } from 'react'
+import CreateNewDialog from './CreateNewDialog'
 import CreateNew from './CreateNew'
-import Navbar from './Navbar'
-import ThreadList from './ThreadList'
+import { NewThreadContext } from '../context/context'
 import SwitchModeButton from './SwitchModeButton'
-import { useState } from 'react'
 import { switchModeButtonStyle } from '../utils/customStyles'
+import ThreadList from './ThreadList'
+import { useOutletContext } from 'react-router-dom'
 
 const Home = () => {
     const [followingMode, setFollowingMode] = useState(true)
     const toggleMode = () => {
         setFollowingMode((mode) => !mode)
     }
+
     return (
         <>
-            <Navbar />
-            <Container sx={{ width: '80%' }}>
-                <CreateNew />
-                <ThreadList />
-                <SwitchModeButton
-                    mode={followingMode}
-                    toggleMode={toggleMode}
-                    style={switchModeButtonStyle}
-                />
-            </Container>
+            <CreateNew />
+            <ThreadList />
+            <SwitchModeButton
+                mode={followingMode}
+                toggleMode={toggleMode}
+                style={switchModeButtonStyle}
+            />
         </>
     )
 }
