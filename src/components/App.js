@@ -32,7 +32,7 @@ function App() {
                         sx={{
                             alignItems: 'center',
                             margin: '5rem auto',
-                            width: '50%',
+                            width: '60%',
                         }}
                     >
                         <Routes>

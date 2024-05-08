@@ -44,6 +44,96 @@
             "avatarURL": "https://images.unsplash.com/photo-1606525380696-c2bfe72f7b8d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dHJhdmVsZXJ8ZW58MHx8MHx8fDI%3D",
             "link": "https://instagram.com/travelbug",
             "isPrivateProfile": true
+        },
+        {
+            "user_id": "2a3bot01",
+            "user_name": "bot01",
+            "password": "password01",
+            "bio": "Passionate about exploring new technologies!",
+            "avatarURL": "myimage.png",
+            "link": "",
+            "isPrivateProfile": false
+        },
+        {
+            "user_id": "2a3bot02",
+            "user_name": "bot02",
+            "password": "password01",
+            "bio": "Passionate about exploring new technologies!",
+            "avatarURL": "myimage.png",
+            "link": "",
+            "isPrivateProfile": false
+        },
+        {
+            "user_id": "2a3bot03",
+            "user_name": "bot03",
+            "password": "password01",
+            "bio": "Passionate about exploring new technologies!",
+            "avatarURL": "myimage.png",
+            "link": "",
+            "isPrivateProfile": false
+        },
+        {
+            "user_id": "2a3bot04",
+            "user_name": "bot04",
+            "password": "password01",
+            "bio": "Passionate about exploring new technologies!",
+            "avatarURL": "myimage.png",
+            "link": "",
+            "isPrivateProfile": false
+        },
+        {
+            "user_id": "2a3bot05",
+            "user_name": "bot05",
+            "password": "password01",
+            "bio": "Passionate about exploring new technologies!",
+            "avatarURL": "myimage.png",
+            "link": "",
+            "isPrivateProfile": false
+        },
+        {
+            "user_id": "2a3bot06",
+            "user_name": "bot06",
+            "password": "password01",
+            "bio": "Passionate about exploring new technologies!",
+            "avatarURL": "myimage.png",
+            "link": "",
+            "isPrivateProfile": false
+        },
+        {
+            "user_id": "2a3bot07",
+            "user_name": "bot07",
+            "password": "password01",
+            "bio": "Passionate about exploring new technologies!",
+            "avatarURL": "myimage.png",
+            "link": "",
+            "isPrivateProfile": false
+        },
+        {
+            "user_id": "2a3bot08",
+            "user_name": "bot08",
+            "password": "password01",
+            "bio": "Passionate about exploring new technologies!",
+            "avatarURL": "myimage.png",
+            "link": "",
+            "isPrivateProfile": false
+        },
+        {
+            "user_id": "2a3bot09",
+            "user_name": "bot09",
+            "password": "password01",
+            "bio": "Passionate about exploring new technologies!",
+            "avatarURL": "myimage.png",
+            "link": "",
+            "isPrivateProfile": false
+        },
+        {
+            "user_id": "2a3bot10",
+            "user_name": "bot10",
+            "password": "password01",
+            "bio": "Passionate about exploring new technologies!",
+            "avatarURL": "myimage.png",
+            "link": "",
+            "isPrivateProfile": false
         }
     ],
     "comments": [
