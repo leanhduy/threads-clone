@@ -38,7 +38,7 @@ const Search = () => {
     return (
         <>
             {/* Search bar */}
-            <SearchBar handleFilter={filterBySearchKey} />
+            <SearchBar />
 
             <InfiniteScroll
                 dataLength={users.length}
