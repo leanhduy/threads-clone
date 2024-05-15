@@ -1,0 +1,57 @@
+.imagelist {
+    display: flex;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+.imagelist__container {
+    display: flex;
+    flex-direction: column;
+    color: white;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+}
+
+.imagelist__image {
+    border-radius: 10px;
+    max-height: 20rem;
+}
+
+.username {
+    font-weight: 600;
+}
+
+.avatar {
+    align-self: flex-start;
+    margin: 0 .5rem;
+}
+
+.btn {
+    align-content: center;
+    background-color: rgba(0, 0, 0, .5);
+    color: #fff;
+    font-weight: 500;
+    height: 2rem;
+    position: relative;
+    width: 2rem;
+}
+
+.btn:hover {
+    cursor: pointer;
+}
+
+.topBtn {
+    align-self: flex-end;
+    border-radius: 50%;
+    right: .5rem;
+    top: 2.5rem;
+}
+
+.bottomBtn {
+    align-self: flex-start;
+    border-radius: 10px;
+    bottom: 2.5rem;
+    left: .5rem;
+    width: 3rem;
+}

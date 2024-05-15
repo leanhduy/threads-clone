@@ -1,4 +1,4 @@
-import { formatDistanceStrict, formatDistanceToNowStrict } from 'date-fns'
+import { formatDistanceToNowStrict } from 'date-fns'
 
 export const convertTimeUnit = (time) => {
     // the time string contain 2 parts: <numeric value> <time unit>. e.g., 2 weeks
@@ -8,7 +8,6 @@ export const convertTimeUnit = (time) => {
         case 'second':
         case 'seconds':
             return 'just now'
-            break
         case 'minute':
         case 'minutes':
             parts[1] = 'm'
@@ -33,3 +32,6 @@ export const convertTimeUnit = (time) => {
     }
     return parts.join('')
 }
+
+// Create a unique id string with 8 characters
+export const makeId = () => Math.random().toString(16).substring(2, 10)
