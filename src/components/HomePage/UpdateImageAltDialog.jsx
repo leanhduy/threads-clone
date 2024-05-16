@@ -3,53 +3,84 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
-    DialogContentText,
     Button,
     TextField,
 } from '@mui/material'
 
-const UpdateImageAltDialog = ({ open, setOpen }) => {
+import styles from '../../styles/newdialog.module.css'
+import { useEffect, useRef } from 'react'
+
+const UpdateImageAltDialog = ({
+    image,
+    setImage,
+    isUpdateAlt,
+    setIsUpdateAlt,
+}) => {
+    const ref = useRef()
+
+    useEffect(() => {}, [])
+
+    const handleChange = (newVal) => {
+        ref.current.value = newVal
+    }
+
     const handleClose = () => {
-        setOpen(false)
+        // Update the image alt
+        setImage({ ...image, alt: ref.current.value })
+
+        // Update the
+        setIsUpdateAlt(false)
     }
 
     return (
         <Dialog
-            open={open}
+            open={isUpdateAlt}
             onClose={handleClose}
             PaperProps={{
-                component: 'form',
-                onSubmit: (event) => {
-                    event.preventDefault()
-                    const formData = new FormData(event.currentTarget)
-                    const formJson = Object.fromEntries(formData.entries())
-                    const email = formJson.email
-                    console.log(email)
-                    handleClose()
+                sx: {
+                    height: '25rem',
+                    width: '100%',
                 },
             }}
         >
-            <DialogTitle>Subscribe</DialogTitle>
+            <DialogTitle className={styles['altUpdateForm__title']}>
+                Add alt text
+            </DialogTitle>
             <DialogContent>
-                <DialogContentText>
-                    To subscribe to this website, please enter your email
-                    address here. We will send updates occasionally.
-                </DialogContentText>
+                <img
+                    src={image.url}
+                    alt={image.alt}
+                    className={styles['altUpdateForm__thumbnailImg']}
+                />
+                <hr className={styles['divider']} />
                 <TextField
-                    autoFocus
-                    required
-                    margin="dense"
-                    id="name"
-                    name="email"
-                    label="Email Address"
-                    type="email"
-                    fullWidth
+                    id="imageAlt"
                     variant="standard"
+                    placeholder={
+                        image.alt ||
+                        'Describe this for people with visual impairments...'
+                    }
+                    InputProps={{
+                        disableUnderline: true,
+                    }}
+                    fullWidth
+                    inputRef={ref}
+                    onChange={(e) => handleChange(e.target.value)}
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button type="submit">Subscribe</Button>
+                <Button
+                    className={styles['altUpdateForm__cancelButton']}
+                    onClick={handleClose}
+                >
+                    Cancel
+                </Button>
+                <Button
+                    className={styles['altUpdateForm__DoneButton']}
+                    onClick={handleClose}
+                >
+                    Done
+                </Button>
             </DialogActions>
         </Dialog>
     )

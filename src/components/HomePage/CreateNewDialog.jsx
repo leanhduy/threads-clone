@@ -12,7 +12,7 @@ import {
 import { styled } from '@mui/material/styles'
 import styles from '../../styles/newdialog.module.css'
 
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { defaultAvatarURL } from '../utils/consts'
 import { makeId } from '../utils/helpers'
 import ThreadImage from './ThreadImage'
@@ -21,10 +21,6 @@ const CreateNewDialog = ({ handleOpen, handleClose, openDialog }) => {
     const imageURL = null // TODO: REPLACE WITH USER DATA
     const [images, setImages] = useState([])
     const mediaRef = useRef()
-
-    useEffect(() => {
-        console.log(images)
-    }, [images])
 
     const handleSubmit = (event) => {
         event.preventDefault()

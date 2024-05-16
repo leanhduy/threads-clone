@@ -1,14 +1,15 @@
 import { Box } from '@mui/material'
 import styles from '../../styles/newdialog.module.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import UpdateImageAltDialog from './UpdateImageAltDialog'
 
 const ThreadImage = ({ imageProp, remove }) => {
     const [image, setImage] = useState(imageProp)
     const [isUpdateAlt, setIsUpdateAlt] = useState(false)
+
     return (
         <>
-            <Box className={styles.imagelist__container}>
+            <Box className={styles.singleImg__container}>
                 <Box
                     className={`${styles.btn} ${styles.topBtn}`}
                     onClick={() => {
@@ -17,12 +18,17 @@ const ThreadImage = ({ imageProp, remove }) => {
                 >
                     X
                 </Box>
-                <img
-                    className={styles.imagelist__image}
-                    alt={image.alt}
-                    src={image.url}
-                    loading="lazy"
-                />
+                <figure>
+                    <img
+                        className={styles.singleImg__image}
+                        alt={image.alt}
+                        src={image.url}
+                        loading="lazy"
+                    />
+                    <figcaption className={styles.singleImg__caption}>
+                        {image.alt}
+                    </figcaption>
+                </figure>
                 <Box
                     className={`${styles.btn} ${styles.bottomBtn}`}
                     onClick={() => {
@@ -34,8 +40,9 @@ const ThreadImage = ({ imageProp, remove }) => {
             </Box>
             {/* Update Image alt text dialog */}
             <UpdateImageAltDialog
-                open={isUpdateAlt}
-                setOpen={setIsUpdateAlt}
+                isUpdateAlt={isUpdateAlt}
+                setIsUpdateAlt={setIsUpdateAlt}
+                image={image}
                 setImage={setImage}
             />
         </>
