@@ -24,18 +24,18 @@ const UpdateImageAltDialog = ({
         ref.current.value = newVal
     }
 
-    const handleClose = () => {
+    const handleUpdateAlt = () => {
         // Update the image alt
         setImage({ ...image, alt: ref.current.value })
-
-        // Update the
         setIsUpdateAlt(false)
     }
 
     return (
         <Dialog
             open={isUpdateAlt}
-            onClose={handleClose}
+            onClose={() => {
+                setIsUpdateAlt(false)
+            }}
             PaperProps={{
                 sx: {
                     height: '25rem',
@@ -71,13 +71,15 @@ const UpdateImageAltDialog = ({
             <DialogActions>
                 <Button
                     className={styles['altUpdateForm__cancelButton']}
-                    onClick={handleClose}
+                    onClick={() => {
+                        setIsUpdateAlt(false)
+                    }}
                 >
                     Cancel
                 </Button>
                 <Button
                     className={styles['altUpdateForm__DoneButton']}
-                    onClick={handleClose}
+                    onClick={handleUpdateAlt}
                 >
                     Done
                 </Button>
