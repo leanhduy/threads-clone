@@ -1,6 +1,6 @@
 import { ThemeProvider } from '@emotion/react'
 import customTheme from './utils/theme'
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Navbar from './HomePage/Navbar'
 import { useState } from 'react'
 import { NewThreadContext } from './context/context'
@@ -11,7 +11,7 @@ import Search from './Search/Search'
 import Activity from './Activity/Activity'
 import Profile from './Profile/Profile'
 import PostDetails from './Post/PostDetails'
-import CreateNewDialog from './HomePage/CreateNewDialog'
+import NewPostDialog from './HomePage/NewPostDialog'
 function App() {
     const [openDialog, setOpenDialog] = useState(false)
     const handleOpen = () => {
@@ -46,7 +46,7 @@ function App() {
                             <Route path="/post/:id" element={<PostDetails />} />
                         </Routes>
                     </Container>
-                    <CreateNewDialog
+                    <NewPostDialog
                         openDialog={openDialog}
                         handleOpen={handleOpen}
                         handleClose={handleClose}

@@ -1,4 +1,4 @@
-import { PermMediaOutlined } from '@mui/icons-material'
+import { NoEncryption, PermMediaOutlined } from '@mui/icons-material'
 import {
     Box,
     Button,
@@ -12,37 +12,66 @@ import {
 import { styled } from '@mui/material/styles'
 import styles from '../../styles/newdialog.module.css'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { defaultAvatarURL } from '../utils/consts'
 import { makeId } from '../utils/helpers'
 import ThreadImage from './ThreadImage'
 
-const CreateNewDialog = ({ handleOpen, handleClose, openDialog }) => {
-    const imageURL = null // TODO: REPLACE WITH USER DATA
+// styled-components
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+})
+
+const NewPostDialog = ({ handleOpen, handleClose, openDialog }) => {
+    // Global values
+    const imageURL = null // TODO: Later use context or Redux / recoil to manage global user data
+    const [post, setPost] = useState({
+        post_id: makeId(),
+        post_body: '',
+        post_images: [],
+        upload_timestamp: new Date(
+            new Date().getTime() - new Date().getTimezoneOffset() * 60000
+        ),
+        likes_count: 0,
+        reply_count: 0,
+        repost_count: 0,
+        comments: [],
+        author: '1a2b3c4d',
+    })
     const [images, setImages] = useState([])
     const mediaRef = useRef()
+
+    useEffect(() => {
+        if (images.length > 0) {
+            setPost({ ...post, post_images: [...images.map((i) => i.url)] })
+        }
+    }, [images])
+
+    const handleChange = (e) => {
+        setPost({ ...post, post_body: e.target.value })
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault()
         handleClose()
     }
 
-    const VisuallyHiddenInput = styled('input')({
-        clip: 'rect(0 0 0 0)',
-        clipPath: 'inset(50%)',
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        whiteSpace: 'nowrap',
-        width: 1,
-    })
-
     const removeImage = (imageId) => {
         setImages((prevImgs) => [
             ...prevImgs.filter((img) => img.id !== imageId),
         ])
+    }
+
+    const handleCreate = () => {
+        console.log('Created!')
     }
 
     return (
@@ -89,17 +118,18 @@ const CreateNewDialog = ({ handleOpen, handleClose, openDialog }) => {
                             Username
                         </Typography>
                         <TextField
-                            id="input-with-sx"
-                            label=""
+                            id="newPost"
                             variant="standard"
                             placeholder="Start a thread..."
                             multiline
                             InputProps={{
                                 disableUnderline: true,
                             }}
+                            onChange={handleChange}
                         />
                         <div className={styles.imagelist}>
-                            {images.length > 0 &&
+                            {images &&
+                                images.length > 0 &&
                                 images.map((image) => (
                                     <ThreadImage
                                         key={image.id}
@@ -128,8 +158,8 @@ const CreateNewDialog = ({ handleOpen, handleClose, openDialog }) => {
                                 onChange={() => {
                                     for (const img of mediaRef.current.files) {
                                         const url = URL.createObjectURL(img)
-                                        setImages((prev) => [
-                                            ...prev,
+                                        setImages([
+                                            ...images,
                                             {
                                                 id: makeId(),
                                                 url: url,
@@ -154,7 +184,14 @@ const CreateNewDialog = ({ handleOpen, handleClose, openDialog }) => {
             >
                 {/* Action menu */}
                 <Box sx={{ flexGrow: 1 }}></Box>
-                <Button variant="contained" type="button">
+                <Button
+                    disabled={post.post_body.length === 0}
+                    disableElevation
+                    variant="contained"
+                    type="button"
+                    className={styles.btnRound}
+                    onClick={handleCreate}
+                >
                     Post
                 </Button>
             </DialogActions>
@@ -162,4 +199,4 @@ const CreateNewDialog = ({ handleOpen, handleClose, openDialog }) => {
     )
 }
 
-export default CreateNewDialog
+export default NewPostDialog

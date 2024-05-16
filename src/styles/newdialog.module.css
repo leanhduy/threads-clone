@@ -1,6 +1,10 @@
 :root {
     --base-border-color: #b0b3b8;
     --base-text-color: #000;
+    --light-text-color: #000;
+    --light-bg-color: #fff;
+    --dark-text-color: #fff;
+    --dark-bg-color: #000;
 }
 
 * {
@@ -39,6 +43,24 @@
 .avatar {
     align-self: flex-start;
     margin: 0 .5rem;
+}
+
+/* NewPostDialog */
+button.btnRound {
+    background-color: var(--dark-bg-color);
+    border-radius: 25px;
+    color: var(--dark-text-color);
+    display: block;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    list-style: 1.13125rem;
+    margin: 0 .25rem 1rem 0;
+    text-transform: capitalize;
+}
+
+button.btnRound:hover {
+    background-color: var(--dark-bg-color);
+    color: var(--dark-text-color);
 }
 
 .btn {
