@@ -6,6 +6,7 @@ import ThreadList from './ThreadList'
 
 const Home = () => {
     const [followingMode, setFollowingMode] = useState(true)
+
     const toggleMode = () => {
         setFollowingMode((mode) => !mode)
     }

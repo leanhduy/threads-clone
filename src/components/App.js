@@ -2,7 +2,7 @@ import { ThemeProvider } from '@emotion/react'
 import customTheme from './utils/theme'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Navbar from './HomePage/Navbar'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NewThreadContext } from './context/context'
 import { Container } from '@mui/material'
 import Home from './HomePage/Home'
@@ -40,8 +40,6 @@ function App() {
                             <Route path="/following" element={<Following />} />
                             <Route path="/search" element={<Search />} />
                             <Route path="/activity" element={<Activity />} />
-                            {/* <Route path="/activity/followed" element={<TBD />} />
-                    <Route path="/activity/following" element={<TBD />} /> */}
                             <Route path="/user/:id" element={<Profile />} />
                             <Route path="/post/:id" element={<PostDetails />} />
                         </Routes>

@@ -16,7 +16,6 @@ import { useEffect, useRef, useState } from 'react'
 import { defaultAvatarURL } from '../utils/consts'
 import { makeId } from '../utils/helpers'
 import ThreadImage from './ThreadImage'
-import { postsAPI } from '../../data/localDb'
 
 // styled-components
 const VisuallyHiddenInput = styled('input')({
@@ -31,7 +30,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 })
 
-const NewPostDialog = ({ handleOpen, handleClose, openDialog }) => {
+const NewPostDialog = ({ handleClose, openDialog }) => {
     // Global values
     const imageURL = null // TODO: Later use context or Redux / recoil to manage global user data
     const [post, setPost] = useState({
@@ -60,18 +59,8 @@ const NewPostDialog = ({ handleOpen, handleClose, openDialog }) => {
         setPost({ ...post, post_body: e.target.value })
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        handleClose()
-    }
-
-    const removeImage = (imageId) => {
-        setImages((prevImgs) => [
-            ...prevImgs.filter((img) => img.id !== imageId),
-        ])
-    }
-
-    const handleCreate = async () => {
+    const handleSubmit = async (event) => {
+        // event.preventDefault()
         // Define the url
         const url = 'http://localhost:3001/posts'
         // Prepare the data (post)
@@ -96,8 +85,19 @@ const NewPostDialog = ({ handleOpen, handleClose, openDialog }) => {
             }
         } catch (error) {
             console.log(error)
+        } finally {
+            // Close the dialog
+            handleClose()
         }
     }
+
+    const removeImage = (imageId) => {
+        setImages((prevImgs) => [
+            ...prevImgs.filter((img) => img.id !== imageId),
+        ])
+    }
+
+    // const handleCreate = async () => {}
 
     return (
         <Dialog
@@ -213,9 +213,8 @@ const NewPostDialog = ({ handleOpen, handleClose, openDialog }) => {
                     disabled={post.post_body.length === 0}
                     disableElevation
                     variant="contained"
-                    type="button"
+                    type="submit"
                     className={styles.btnRound}
-                    onClick={handleCreate}
                 >
                     Post
                 </Button>
