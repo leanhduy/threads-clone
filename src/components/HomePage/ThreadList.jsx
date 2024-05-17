@@ -12,7 +12,7 @@ const ThreadList = () => {
         <>
             {posts !== null ? (
                 posts.map((p) => {
-                    return <Post key={p.post_id} post={p} />
+                    return <Post key={p.id} post={p} />
                 })
             ) : (
                 <Typography variants="h1" color="error">

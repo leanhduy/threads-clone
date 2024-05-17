@@ -16,6 +16,7 @@ import { useEffect, useRef, useState } from 'react'
 import { defaultAvatarURL } from '../utils/consts'
 import { makeId } from '../utils/helpers'
 import ThreadImage from './ThreadImage'
+import { postsAPI } from '../../data/localDb'
 
 // styled-components
 const VisuallyHiddenInput = styled('input')({
@@ -34,7 +35,7 @@ const NewPostDialog = ({ handleOpen, handleClose, openDialog }) => {
     // Global values
     const imageURL = null // TODO: Later use context or Redux / recoil to manage global user data
     const [post, setPost] = useState({
-        post_id: makeId(),
+        id: makeId(),
         post_body: '',
         post_images: [],
         upload_timestamp: new Date(
@@ -70,8 +71,32 @@ const NewPostDialog = ({ handleOpen, handleClose, openDialog }) => {
         ])
     }
 
-    const handleCreate = () => {
-        console.log('Created!')
+    const handleCreate = async () => {
+        // Define the url
+        const url = 'http://localhost:3001/posts'
+        // Prepare the data (post)
+        // Create fetch options
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(post),
+        }
+        // Send the POST request
+        try {
+            const res = await fetch(url, options)
+            const data = await res.json()
+            if (res.status === 201) {
+                console.log('New post is created successfully!', data)
+            } else if (res.status >= 400) {
+                console.error('Error creating post:', await res.text()) // Get error message from response body
+            } else {
+                console.error('Unexpected response:', res.status)
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
