@@ -19,13 +19,13 @@ import { useFetch } from '../../hooks/useFetch'
 import { usersAPI } from '../../data/localDb'
 import { useEffect } from 'react'
 import { useTheme } from '@emotion/react'
+import NoImagePlaceHolder from './NoImagePlaceHolder'
 
 const Post = ({ post }) => {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-    const { data: author, error } = useFetch(
-        `${usersAPI}?user_id=${post.author}`
-    )
+    const { data: author } = useFetch(`${usersAPI}?user_id=${post.author}`)
+
     useEffect(() => {}, [author])
     return (
         <Box
@@ -84,6 +84,7 @@ const Post = ({ post }) => {
                                 post.post_images.map((url) => (
                                     <Image
                                         key={url}
+                                        showLoading
                                         src={url}
                                         layout={
                                             isMobile
@@ -92,6 +93,7 @@ const Post = ({ post }) => {
                                         }
                                         width={isMobile ? '100%' : '80%'}
                                         sx={{ borderRadius: '10px' }}
+                                        errorIcon={<NoImagePlaceHolder />}
                                     />
                                 ))}
                         </Box>
