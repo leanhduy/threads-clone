@@ -1,4 +1,4 @@
-import { NoEncryption, PermMediaOutlined } from '@mui/icons-material'
+import { PermMediaOutlined } from '@mui/icons-material'
 import {
     Box,
     Button,
@@ -12,10 +12,12 @@ import {
 import { styled } from '@mui/material/styles'
 import styles from '../../styles/newdialog.module.css'
 
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { defaultAvatarURL } from '../utils/consts'
 import { makeId } from '../utils/helpers'
 import ThreadImage from './ThreadImage'
+import Notification from '../Common/Notification'
+import { NotificationContext } from '../context/context'
 
 // styled-components
 const VisuallyHiddenInput = styled('input')({
@@ -46,6 +48,8 @@ const NewPostDialog = ({ handleClose, openDialog }) => {
         comments: [],
         author: '1a2b3c4d',
     })
+
+    // Hooks
     const [images, setImages] = useState([])
     const mediaRef = useRef()
 
@@ -55,12 +59,14 @@ const NewPostDialog = ({ handleClose, openDialog }) => {
         }
     }, [images])
 
+    const { handleOpenNotification } = useContext(NotificationContext)
+
     const handleChange = (e) => {
         setPost({ ...post, post_body: e.target.value })
     }
 
     const handleSubmit = async (event) => {
-        // event.preventDefault()
+        event.preventDefault()
         // Define the url
         const url = 'http://localhost:3001/posts'
         // Prepare the data (post)
@@ -83,6 +89,8 @@ const NewPostDialog = ({ handleClose, openDialog }) => {
             } else {
                 console.error('Unexpected response:', res.status)
             }
+            // Display Notification
+            handleOpenNotification('Post created!', 'success')
         } catch (error) {
             console.log(error)
         } finally {
@@ -100,126 +108,133 @@ const NewPostDialog = ({ handleClose, openDialog }) => {
     // const handleCreate = async () => {}
 
     return (
-        <Dialog
-            open={openDialog}
-            onClose={handleClose}
-            PaperProps={{
-                component: 'form',
-                onSubmit: handleSubmit,
-            }}
-            fullWidth
-        >
-            <Box
-                sx={{
-                    fontWeight: 'bold',
-                    margin: '1rem auto 1rem',
-                    textAlign: 'center',
+        <>
+            <Dialog
+                open={openDialog}
+                onClose={handleClose}
+                PaperProps={{
+                    component: 'form',
+                    onSubmit: handleSubmit,
                 }}
+                fullWidth
             >
-                New thread
-            </Box>
-            <DialogContent>
                 <Box
                     sx={{
-                        alignItems: 'center',
-                        display: 'flex',
-                        width: '100%',
+                        fontWeight: 'bold',
+                        margin: '1rem auto 1rem',
+                        textAlign: 'center',
                     }}
                 >
-                    <Avatar
-                        className={styles.avatar}
-                        src={imageURL || defaultAvatarURL}
-                    />
+                    New thread
+                </Box>
+                <DialogContent>
                     <Box
                         sx={{
-                            flexGrow: 1,
+                            alignItems: 'center',
                             display: 'flex',
-                            margin: '0 auto',
-                            flexDirection: 'column',
-                            width: '90%',
+                            width: '100%',
                         }}
                     >
-                        <Typography className={styles.username} variant="body1">
-                            Username
-                        </Typography>
-                        <TextField
-                            id="newPost"
-                            variant="standard"
-                            placeholder="Start a thread..."
-                            multiline
-                            InputProps={{
-                                disableUnderline: true,
-                            }}
-                            onChange={handleChange}
+                        <Avatar
+                            className={styles.avatar}
+                            src={imageURL || defaultAvatarURL}
                         />
-                        <div className={styles.imagelist}>
-                            {images &&
-                                images.length > 0 &&
-                                images.map((image) => (
-                                    <ThreadImage
-                                        key={image.id}
-                                        imageProp={image}
-                                        remove={removeImage}
-                                    />
-                                ))}
-                        </div>
-                        <Button
-                            component="label"
-                            disableRipple
-                            disableElevation
-                            variant="text"
-                            startIcon={<PermMediaOutlined />}
+                        <Box
                             sx={{
-                                width: 32,
-                                color: '#b0b3b8',
-                                '&:hover': {
-                                    backgroundColor: 'transparent',
-                                },
+                                flexGrow: 1,
+                                display: 'flex',
+                                margin: '0 auto',
+                                flexDirection: 'column',
+                                width: '90%',
                             }}
                         >
-                            <VisuallyHiddenInput
-                                accept="image/png, image/jpeg"
-                                id="myImage"
-                                onChange={() => {
-                                    for (const img of mediaRef.current.files) {
-                                        const url = URL.createObjectURL(img)
-                                        setImages([
-                                            ...images,
-                                            {
-                                                id: makeId(),
-                                                url: url,
-                                                alt: 'loren ipsum',
-                                            },
-                                        ])
-                                    }
+                            <Typography
+                                className={styles.username}
+                                variant="body1"
+                            >
+                                Username
+                            </Typography>
+                            <TextField
+                                id="newPost"
+                                variant="standard"
+                                placeholder="Start a thread..."
+                                multiline
+                                InputProps={{
+                                    disableUnderline: true,
                                 }}
-                                ref={mediaRef}
-                                type="file"
+                                onChange={handleChange}
                             />
-                        </Button>
+                            <div className={styles.imagelist}>
+                                {images &&
+                                    images.length > 0 &&
+                                    images.map((image) => (
+                                        <ThreadImage
+                                            key={image.id}
+                                            imageProp={image}
+                                            remove={removeImage}
+                                        />
+                                    ))}
+                            </div>
+                            <Button
+                                component="label"
+                                disableRipple
+                                disableElevation
+                                variant="text"
+                                startIcon={<PermMediaOutlined />}
+                                sx={{
+                                    width: 32,
+                                    color: '#b0b3b8',
+                                    '&:hover': {
+                                        backgroundColor: 'transparent',
+                                    },
+                                }}
+                            >
+                                <VisuallyHiddenInput
+                                    accept="image/png, image/jpeg"
+                                    id="myImage"
+                                    onChange={() => {
+                                        for (const img of mediaRef.current
+                                            .files) {
+                                            const url = URL.createObjectURL(img)
+                                            setImages([
+                                                ...images,
+                                                {
+                                                    id: makeId(),
+                                                    url: url,
+                                                    alt: 'loren ipsum',
+                                                },
+                                            ])
+                                        }
+                                    }}
+                                    ref={mediaRef}
+                                    type="file"
+                                />
+                            </Button>
+                        </Box>
                     </Box>
-                </Box>
-            </DialogContent>
-            <DialogActions
-                sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    padding: '0.5rem 1.5rem',
-                }}
-            >
-                {/* Action menu */}
-                <Box sx={{ flexGrow: 1 }}></Box>
-                <Button
-                    disabled={post.post_body.length === 0}
-                    disableElevation
-                    variant="contained"
-                    type="submit"
-                    className={styles.btnRound}
+                </DialogContent>
+                <DialogActions
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        padding: '0.5rem 1.5rem',
+                    }}
                 >
-                    Post
-                </Button>
-            </DialogActions>
-        </Dialog>
+                    {/* Action menu */}
+                    <Box sx={{ flexGrow: 1 }}></Box>
+                    <Button
+                        disabled={post.post_body.length === 0}
+                        disableElevation
+                        variant="contained"
+                        type="submit"
+                        className={styles.btnRound}
+                    >
+                        Post
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Notification />
+        </>
     )
 }
 
