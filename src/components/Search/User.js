@@ -1,5 +1,4 @@
 import { Grid, Avatar, Box, Typography, Button, Divider } from '@mui/material'
-import { useEffect } from 'react'
 
 const User = ({ user }) => {
     return (
@@ -29,8 +28,6 @@ const User = ({ user }) => {
                     <Box
                         sx={{
                             columnGap: 1,
-                            // display: 'flex',
-                            // alignItems: 'center',
                         }}
                     >
                         <Typography variant="body1" fontWeight={'bold'}>
@@ -54,7 +51,6 @@ const User = ({ user }) => {
                     </Button>
                 </Grid>
             </Grid>
-            <Divider />
         </>
     )
 }
