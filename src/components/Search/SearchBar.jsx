@@ -1,11 +1,4 @@
-import {
-    IconButton,
-    Autocomplete,
-    Container,
-    TextField,
-    Typography,
-    Box,
-} from '@mui/material'
+import { Autocomplete, Container, TextField, Box } from '@mui/material'
 import { Search } from '@mui/icons-material'
 import SearchResult from './SearchResult'
 import { useEffect, useState } from 'react'

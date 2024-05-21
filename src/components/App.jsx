@@ -13,7 +13,7 @@ import Following from './Following/Following'
 import Search from './Search/Search'
 import Activity from './Activity/Activity'
 import Profile from './Profile/Profile'
-import PostDetails from './Post/PostDetails'
+import ReplyDetails from './Post/ReplyDetails'
 import NewPostDialog from './HomePage/NewPostDialog'
 import Follows from './Activity/Follows'
 import Replies from './Activity/Replies'
@@ -73,7 +73,7 @@ function App() {
                                 <Route path="/user/:id" element={<Profile />} />
                                 <Route
                                     path="/post/:id"
-                                    element={<PostDetails />}
+                                    element={<ReplyDetails />}
                                 />
                             </Routes>
                         </Container>

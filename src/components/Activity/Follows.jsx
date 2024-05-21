@@ -10,7 +10,6 @@ const Follows = () => {
 
     const [followers, setFollowers] = useState([])
     useEffect(() => {
-        console.log(activities)
         setFollowers(activities)
     }, [])
     //#endregion
@@ -87,9 +86,10 @@ const Follows = () => {
                         <Typography
                             variant="body1"
                             sx={{
-                                display: 'inline-block',
-                                marginRight: '.25rem',
                                 color: '#000',
+                                display: 'inline-block',
+                                fontWeight: '600',
+                                marginRight: '.375rem',
                             }}
                         >
                             {user.user_name}
