@@ -526,14 +526,16 @@ export const mockActivityFollows = [
         user_name: 'jessie_21',
         avatarURL:
             'https://images.unsplash.com/photo-1602233158242-3ba0ac4d2167?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Z2lybHxlbnwwfHwwfHx8Mg%3D%3D',
-        followOn: '2024-05-01T11:15:00Z',
+        followMeAt: '2024-05-21T11:15:00Z',
+        isFollowing: true,
     },
     {
         id: '9i0j1k2l',
         user_name: 'coding_ninja',
         avatarURL:
             'https://images.unsplash.com/photo-1552308995-2baac1ad5490?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y29kaW5nJTIwbmluamF8ZW58MHx8MHx8fDI%3D',
-        followOn: '2024-05-01T11:15:00Z',
+        followMeAt: '2024-05-01T11:15:00Z',
+        isFollowing: false,
     },
 ]
 
