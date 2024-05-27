@@ -3,8 +3,6 @@ import User from './User'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { usersAPI } from '../../data/localDb'
-import { formatISO } from 'date-fns'
-import { Box } from '@mui/material'
 
 const Search = () => {
     const [users, setUsers] = useState([])

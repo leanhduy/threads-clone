@@ -2,7 +2,7 @@ import { useState } from 'react'
 import CreateNew from './CreateNew'
 import SwitchModeButton from './SwitchModeButton'
 import { switchModeButtonStyle } from '../utils/customStyles'
-import ThreadList from './ThreadList'
+import PostList from './PostList'
 
 const Home = () => {
     const [followingMode, setFollowingMode] = useState(true)
@@ -14,7 +14,7 @@ const Home = () => {
     return (
         <>
             <CreateNew />
-            <ThreadList />
+            <PostList />
             <SwitchModeButton
                 mode={followingMode}
                 toggleMode={toggleMode}

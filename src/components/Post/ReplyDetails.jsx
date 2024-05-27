@@ -1,5 +1,3 @@
-import Image from 'mui-image'
-import { MoreHorizIcon } from '../utils/icons'
 import {
     Avatar,
     Box,
@@ -8,19 +6,33 @@ import {
     Typography,
     useMediaQuery,
 } from '@mui/material'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { mockPosts } from '../../data/localDb'
+import { convertTimeUnit } from '../utils/helpers'
+import { MoreHorizIcon } from '../utils/icons'
+import { useTheme } from '@emotion/react'
+import Image from 'mui-image'
+import NoImagePlaceHolder from '../HomePage/NoImagePlaceHolder'
 import {
     ChatBubbleOutline,
     FavoriteBorder,
     RepeatOutlined,
     SendOutlined,
 } from '@mui/icons-material'
-import { convertTimeUnit } from '../utils/helpers'
-import { useTheme } from '@emotion/react'
-import NoImagePlaceHolder from './NoImagePlaceHolder'
 
-const Post = ({ post }) => {
+const ReplyDetails = () => {
     const theme = useTheme()
+    const params = useParams()
+    const [post, setPost] = useState(null)
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+
+    useEffect(() => {
+        let result = mockPosts.find((p) => p.id === params.id)
+        console.log(result)
+        setPost({ ...result })
+    }, [])
+
     return (
         <Box
             sx={{
@@ -30,13 +42,13 @@ const Post = ({ post }) => {
         >
             {post && (
                 <Grid container spacing={1}>
-                    <Grid item xs={3} sm={3} md={2} lg={2}>
+                    <Grid item xs={1} sm={1} md={1} lg={1}>
                         <Avatar
                             sx={{ margin: '0 auto', width: 48, height: 48 }}
                             src={post.author.avatarURL}
                         />
                     </Grid>
-                    <Grid item xs={9} sm={9} md={10} lg={10}>
+                    <Grid item xs={11} sm={11} md={11} lg={11}>
                         <Box
                             sx={{
                                 columnGap: 1,
@@ -152,4 +164,4 @@ const Post = ({ post }) => {
     )
 }
 
-export default Post
+export default ReplyDetails
