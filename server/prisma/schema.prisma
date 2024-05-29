@@ -7,16 +7,4 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Customer {
-  customer_id   Int       @id @default(autoincrement())
-  first_name    String    @db.VarChar(255)
-  last_name     String    @db.VarChar(255)
-  address       Address   @relation(fields: [address_id], references: [address_id])
-  address_id    Int
-}
-
-model Address {
-  address_id    Int       @id @default(autoincrement())
-  address       String
-  customers     Customer[]
-}
+# TODO: ADD THE PRISMA MODEL & REMOVE THIS COMMENT
