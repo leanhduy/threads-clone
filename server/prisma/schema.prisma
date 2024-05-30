@@ -7,4 +7,68 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-# TODO: ADD THE PRISMA MODEL & REMOVE THIS COMMENT
+/// User of the thread social media
+model User {
+  id             Int           @id @default(autoincrement())
+  username       String        @unique
+  bio            String?
+  fullname       String?
+  joinedOn       DateTime      @default(now())
+  followerCount  Int           @default(0)
+  followingCount Int           @default(0)
+  postCount      Int           @default(0)
+  // A user can be followed by zero or more users
+  followedBy     Follows[]     @relation("followedBy")
+  // A user can follow by zero or more users
+  following      Follows[]     @relation("following")
+  posts          Post[]
+  profileImage   ProfileImage?
+}
+
+model Follows {
+  followedBy   User @relation("followedBy", fields: [followedById], references: [id])
+  followedById Int
+  following    User @relation("following", fields: [followingId], references: [id])
+  followingId  Int
+
+  @@id([followingId, followedById])
+}
+
+/// Profile Image of a User
+model ProfileImage {
+  id     Int    @id @default(autoincrement())
+  url    String
+  /// The user who has this image as the profile image
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int    @unique
+}
+
+/// A Post by a User
+model Post {
+  id           Int         @id @default(autoincrement())
+  body         String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  likeCount    Int         @default(0)
+  repostCount  Int         @default(0)
+  replyCount   Int         @default(0)
+  // A post can have zero or many images
+  postImages   PostImage[]
+  author       User        @relation(fields: [authorId], references: [id])
+  authorId     Int
+  // A post has zero or more reply (which is also a post)
+  parentPostId Int?
+  parentPost   Post?       @relation("PostReplies", fields: [parentPostId], references: [id])
+  // A reply has zero or one originalPost
+  replies      Post[]      @relation("PostReplies")
+}
+
+/// The Image included in a Post
+model PostImage {
+  id      Int     @id @default(autoincrement())
+  url     String
+  caption String?
+  // A post image is included in 1 and only 1 post
+  post    Post    @relation(fields: [postId], references: [id])
+  postId  Int
+}

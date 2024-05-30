@@ -47,7 +47,7 @@ type User {
   followers: [User!]
   followings: [User!]
   posts: [Post!]
-  profileImage: ProfileImage!
+  profileImage: ProfileImage
 }
 
 type ProfileImage {
@@ -64,8 +64,7 @@ type Post {
   likeCount: Int
   repostCount: Int
   replyCount: Int
-  replyOriginalPost: Post
-  repostOriginalPost: Post
+  parentPost: Post
   replies: [Post!]  
 }
 

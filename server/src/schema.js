@@ -1,140 +1,298 @@
-import {
+const {
   objectType,
   arg,
   nonNull,
   idArg,
   inputObjectType,
-  scalarType,
-} from "@nexus/schema";
+  asNexusMethod,
+  makeSchema,
+  intArg,
+} = require('nexus')
 
-/**
- * TODO: ADD THE DATETIME scalar field for some of the fields: (Post) createdAt, updatedAt, (User) joinedOn
- * ? Refer to the schema.js file of the graphqo-apollo-prisma-nexus project (D:\source-code\playground\graphql\graphql-apollo-prisma-nexus)
- */
+const { DateTimeResolver } = require('graphql-scalars')
+
+const DateTime = asNexusMethod(DateTimeResolver, 'date')
 
 const Mutation = objectType({
-  name: "Mutation",
+  name: 'Mutation',
   definition(t) {
-    t.field("addUser", {
+    t.field('addUser', {
       type: User,
       args: {
         userCreateInput: arg({ type: nonNull(UserCreateInput) }),
       },
-    });
-    t.field("createPost", {
+    })
+    t.field('createPost', {
       type: Post,
       args: {
         authorId: nonNull(idArg()),
         data: arg({ type: nonNull(PostCreateInput) }),
       },
-    });
-    t.field("updatePost", {
+    })
+    t.field('updatePost', {
       type: Post,
       args: {
         postId: nonNull(idArg()),
         data: arg({ type: nonNull(PostCreateInput) }),
       },
-    });
+    })
   },
-});
+})
 const Post = objectType({
-  name: "Post",
+  name: 'Post',
   definition(t) {
-    t.nonNull.id("id");
-    t.nonNull.string("body");
-    t.list.field("postImages", { type: PostImage });
-    t.nonNull.field("author", { type: User });
-    t.int("likeCount");
-    t.int("repostCount");
-    t.int("replyCount");
-    t.field("replyOriginalPost", { type: Post });
-    t.field("repostOriginalPost", { type: Post });
-    t.list.nonNull.field("replies", { type: Post });
+    t.nonNull.id('id')
+    t.nonNull.string('body')
+    t.nonNull.field('createdAt', { type: 'DateTime' })
+    t.nonNull.field('updatedAt', { type: 'DateTime' })
+    t.list.nonNull.field('postImages', {
+      type: PostImage,
+      resolve: (parent, _, context) => {
+        return context.prisma.postImage.findMany({
+          where: { postId: parent.id },
+        })
+      },
+    })
+    t.nonNull.field('author', {
+      type: User,
+      resolve: (parent, _, context) => {
+        return context.prisma.user.findUnique({
+          where: { id: parent.authorId },
+        })
+      },
+    })
+    t.int('likeCount')
+    t.int('repostCount')
+    t.int('replyCount')
+    t.field('parentPost', {
+      type: Post,
+      resolve: (parent, _, context) => {
+        return context.prisma.post.findUnique({
+          where: { id: parent.parentPostId },
+        })
+      },
+    })
+    t.list.field('replies', {
+      type: Post,
+      resolve: (parent, _, context) =>
+        context.prisma.post.findMany({
+          where: { parentPostId: parent.id },
+        }),
+    })
   },
-});
+})
 const PostImage = objectType({
-  name: "PostImage",
+  name: 'PostImage',
   definition(t) {
-    t.nonNull.id("id");
-    t.nonNull.string("url");
-    t.string("caption");
-    t.nonNull.field("post", { type: Post });
+    t.nonNull.id('id')
+    t.nonNull.string('url')
+    t.string('caption')
+    t.nonNull.field('post', {
+      type: Post,
+      resolve: (parent, _, context) =>
+        context.prisma.post.findUnique({
+          where: { id: parent.postId },
+        }),
+    })
   },
-});
+})
 const ProfileImage = objectType({
-  name: "ProfileImage",
+  name: 'ProfileImage',
   definition(t) {
-    t.nonNull.id("id");
-    t.nonNull.string("url");
-    t.nonNull.field("user", { type: User });
+    t.nonNull.id('id')
+    t.nonNull.string('url')
+    t.field('user', {
+      type: User,
+      resolve: (parent, _, context) => {
+        return context.prisma.user.findUnique({
+          where: { id: parent.userId },
+        })
+      },
+    })
   },
-});
+})
 const Query = objectType({
-  name: "Query",
+  name: 'Query',
   definition(t) {
-    t.list.nonNull.field("users", { type: User });
-    t.field("userById", {
+    // Get all users
+    t.nonNull.list.nonNull.field('users', {
+      type: User,
+      resolve: (_parent, _args, context) => {
+        return context.prisma.user.findMany()
+      },
+    })
+    // Get a user by id
+    t.nullable.field('userById', {
       type: User,
       args: {
-        id: nonNull(idArg()),
+        id: intArg(),
       },
-    });
-    t.list.field("posts", { type: Post });
-    t.list.field("postByUser", {
+      resolve: (_parent, args, context) => {
+        return context.prisma.user.findUnique({
+          where: { id: args.id || undefined },
+        })
+      },
+    })
+    // Get all posts
+    t.list.field('posts', {
+      type: Post,
+      resolve: (_parent, _args, context) => {
+        return context.prisma.post.findMany()
+      },
+    })
+    // Get all posts of a user
+    t.list.field('postByUser', {
       type: Post,
       args: {
-        userId: nonNull(idArg()),
+        userId: intArg(),
       },
-    });
+      resolve: (parent, _args, context) => {
+        return context.prisma.post.findMany({
+          where: { id: parent.userId || undefined },
+        })
+      },
+    })
+    t.nonNull.list.nonNull.field('profileImages', {
+      type: ProfileImage,
+      resolve: (_parent, _args, context) => {
+        return context.prisma.profileImage.findMany()
+      },
+    })
+    t.nonNull.field('userProfileImage', {
+      type: ProfileImage,
+      resolve: (parent, _args, context) => {
+        return context.prisma.profileImage.findUnique({
+          where: { id: parent.id || undefined },
+        })
+      },
+    })
   },
-});
+})
 const User = objectType({
-  name: "User",
+  name: 'User',
   definition(t) {
-    t.nonNull.id("id");
-    t.nonNull.string("username");
-    t.string("bio");
-    t.string("fullname");
-    t.int("followerCount");
-    t.int("followingCount");
-    t.int("postCount");
-    t.list.nonNull.field("followers", { type: User });
-    t.list.nonNull.field("followings", { type: User });
-    t.list.nonNull.field("posts", { type: Post });
-    t.nonNull.field("profileImage", { type: ProfileImage });
+    t.nonNull.id('id')
+    t.nonNull.string('username')
+    t.string('bio')
+    t.string('fullname')
+    t.nonNull.field('joinedOn', { type: 'DateTime' })
+    t.int('followerCount')
+    t.int('followingCount')
+    t.int('postCount')
+    t.list.field('followedBy', {
+      type: User,
+      resolve: async (parent, _, context) => {
+        const follows = await context.prisma.follows.findMany({
+          where: { followingId: parent.id },
+        })
+
+        // Map the followedBy relation from each Follows object to a User array
+        const followedByUsers = await Promise.all(
+          follows.map(async (follow) => {
+            return context.prisma.user.findUnique({
+              where: { id: follow.followedById },
+            })
+          }),
+        )
+        return followedByUsers
+      },
+    })
+    t.list.field('following', {
+      type: User,
+      resolve: async (parent, _, context) => {
+        const follows = await context.prisma.follows.findMany({
+          where: { followedById: parent.id },
+        })
+
+        // Map the following relation from each Follows object to a User array
+        const followingUsers = await Promise.all(
+          follows.map(async (followed) => {
+            return context.prisma.user.findUnique({
+              where: { id: followed.followingId },
+            })
+          }),
+        )
+        return followingUsers
+      },
+    })
+    t.list.field('posts', {
+      type: Post,
+      resolve: async (parent, _, context) => {
+        return await context.prisma.post.findMany({
+          where: { authorId: parent.id },
+        })
+      },
+    })
+    t.field('profileImage', {
+      type: ProfileImage,
+      resolve: (parent, _, context) => {
+        return context.prisma.user
+          .findUnique({
+            where: { id: parent.id },
+          })
+          .following()
+      },
+    })
   },
-});
+})
 
 const PostCreateInput = inputObjectType({
-  name: "PostCreateInput",
+  name: 'PostCreateInput',
   definition(t) {
-    t.nonNull.string("body");
-    t.list.field("postImages", { type: PostImageCreateInput });
+    t.nonNull.string('body')
+    t.list.field('postImages', { type: PostImageCreateInput })
   },
-});
+})
 const PostImageCreateInput = inputObjectType({
-  name: "PostImageCreateInput",
+  name: 'PostImageCreateInput',
   definition(t) {
-    t.nonNull.string("url");
-    t.string("caption");
+    t.nonNull.string('url')
+    t.string('caption')
   },
-});
-const ProfileImageInput = inputObjectType({
-  name: "ProfileImageInput",
+})
+const ProfileImageCreateInput = inputObjectType({
+  name: 'ProfileImageCreateInput',
   definition(t) {
-    t.nonNull.id("id");
-    t.nonNull.string("url");
+    t.nonNull.id('id')
+    t.nonNull.string('url')
   },
-});
+})
 const UserCreateInput = inputObjectType({
-  name: "UserCreateInput",
+  name: 'UserCreateInput',
   definition(t) {
-    t.nonNull.string("username");
-    t.string("bio");
-    t.string("fullname");
-    t.list.field("profileImage", { type: ProfileImageInput });
-    t.list.field("posts", { type: PostCreateInput });
-    t.list.field("followers", { type: UserCreateInput });
-    t.list.field("following", { type: UserCreateInput });
+    t.nonNull.string('username')
+    t.string('bio')
+    t.string('fullname')
+    t.list.field('profileImage', { type: ProfileImageCreateInput })
+    t.list.field('posts', { type: PostCreateInput })
+    t.list.field('followers', { type: UserCreateInput })
+    t.list.field('following', { type: UserCreateInput })
   },
-});
+})
+
+const schema = makeSchema({
+  types: [
+    Query,
+    Mutation,
+    User,
+    ProfileImage,
+    Post,
+    PostImage,
+    UserCreateInput,
+    PostCreateInput,
+    ProfileImageCreateInput,
+    PostImageCreateInput,
+    DateTime,
+  ],
+  outputs: {
+    schema: __dirname + '/../schema.graphql',
+    typegen: __dirname + '/generated/nexus.ts',
+  },
+  sourceTypes: {
+    modules: [{ module: '@prisma/client', alias: 'prisma' }],
+  },
+})
+
+module.exports = {
+  schema: schema,
+}
