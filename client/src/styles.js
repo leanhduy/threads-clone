@@ -2,6 +2,11 @@ import React from 'react'
 import { Global } from '@emotion/core'
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded'
 import PostAddRoundedIcon from '@mui/icons-material/PostAddRounded'
+import DragHandleRoundedIcon from '@mui/icons-material/DragHandleRounded'
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
+import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded'
+import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded'
+import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded'
 import { styled } from '@mui/material/styles'
 
 export const unit = 8
@@ -184,8 +189,35 @@ export default GlobalStyles
 /**
  * ? EXPORT ALL THE MUI-ICONS USED THROUGHOUT THE APP, ADD CUSTOM STYLES IF NEEDED
  */
-const StyledHomeRoundedIcon = styled(HomeRoundedIcon)(() => ({}))
+const StyledHomeRoundedIcon = styled(HomeRoundedIcon)(() => ({
+    width: 32,
+    height: 32,
+}))
 const StyledPostAddRoundedIcon = styled(PostAddRoundedIcon)(() => ({}))
+const StyledDragHandleRoundedIcon = styled(DragHandleRoundedIcon)(() => ({
+    width: 32,
+    height: 32,
+}))
+const StyledSearchRoundedIcon = styled(SearchRoundedIcon)(() => ({
+    width: 32,
+    height: 32,
+}))
+const StyledBorderColorRoundedIcon = styled(BorderColorRoundedIcon)(() => ({
+    width: 32,
+    height: 32,
+}))
+const StyledFavoriteBorderRoundedIcon = styled(FavoriteBorderRoundedIcon)(
+    () => ({ width: 32, height: 32 })
+)
+const StyledPersonOutlineRoundedIcon = styled(PersonOutlineRoundedIcon)(() => ({
+    width: 32,
+    height: 32,
+}))
 
 export { StyledHomeRoundedIcon as HomeRoundedIcon }
 export { StyledPostAddRoundedIcon as PostAddRoundedIcon }
+export { StyledDragHandleRoundedIcon as DragHandleRoundedIcon }
+export { StyledSearchRoundedIcon as SearchRoundedIcon }
+export { StyledBorderColorRoundedIcon as BorderColorRoundedIcon }
+export { StyledFavoriteBorderRoundedIcon as FavoriteBorderRoundedIcon }
+export { StyledPersonOutlineRoundedIcon as PersonOutlineRoundedIcon }

@@ -23,7 +23,7 @@ const Home = () => {
         <Layout grid>
             <QueryResult loading={loading} error={error} data={data}>
                 {/* TODO: NEXT WE NEED TO BUILD THE POST COMPONENT TO DISPLAY EACH POST */}
-                {JSON.stringify(data)}
+                {/* {JSON.stringify(data)} */}
             </QueryResult>
         </Layout>
     )

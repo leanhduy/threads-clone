@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header, Footer } from '../components'
+import { Navbar } from '../components'
 import styled from '@emotion/styled'
 import { widths, unit } from '../styles'
 
@@ -10,11 +10,10 @@ import { widths, unit } from '../styles'
 const Layout = ({ fullWidth, children, grid }) => {
     return (
         <>
-            {/* <Header /> */}
+            <Navbar />
             <PageContainer fullWidth={fullWidth} grid={grid}>
                 {children}
             </PageContainer>
-            {/* <Footer /> */}
         </>
     )
 }
