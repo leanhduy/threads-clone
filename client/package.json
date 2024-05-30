@@ -3,29 +3,39 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
-        "@emotion/react": "^11.11.4",
-        "@emotion/styled": "^11.11.5",
-        "@mui/icons-material": "^5.15.15",
-        "@mui/material": "^5.15.15",
-        "@testing-library/jest-dom": "^5.17.0",
-        "@testing-library/react": "^13.4.0",
-        "@testing-library/user-event": "^13.5.0",
-        "date-fns": "^3.6.0",
-        "install": "^0.13.0",
-        "json-server": "0.17.4",
-        "mui-image": "^1.0.7",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
-        "react-infinite-scroll-component": "^6.1.0",
-        "react-router-dom": "^6.23.0",
-        "react-scripts": "5.0.1",
-        "web-vitals": "^2.1.4"
+        "@apollo/client": "^3.10.4",
+        "@apollo/space-kit": "^9.3.1",
+        "@emotion/cache": "^11.4.0",
+        "@emotion/core": "^10.1.1",
+        "@emotion/react": "^11.4.0",
+        "@emotion/styled": "^11.3.0",
+        "@mui/icons-material": "^5.15.19",
+        "@mui/material": "^5.15.19",
+        "graphql": "^16.8.1",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-markdown": "^9.0.1",
+        "react-player": "^2.14.1",
+        "react-router-dom": "^6.22.0"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-react": "^4.2.1",
+        "@vitest/ui": "^0.34.0",
+        "happy-dom": "^12.1.2",
+        "jest": "^27.5.1",
+        "vite": "^4.4.2",
+        "vitest": "^0.34.0"
+    },
+    "prettier": {
+        "trailingComma": "es5",
+        "tabWidth": 4,
+        "semi": false,
+        "singleQuote": true
     },
     "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
+        "test": "vitest",
+        "start": "vite",
+        "build": "vite build"
     },
     "eslintConfig": {
         "extends": [
