@@ -13,6 +13,24 @@ const { DateTimeResolver } = require('graphql-scalars')
 
 const DateTime = asNexusMethod(DateTimeResolver, 'date')
 
+/**
+ * ? HELPER FUNCTIONS
+ */
+async function getFollowingUsers(userId, context) {
+  const follows = await context.prisma.follows.findMany({
+    where: { followedById: userId },
+  })
+
+  const followingUsers = await Promise.all(
+    follows.map(async (follow) => {
+      return context.prisma.user.findUnique({
+        where: { id: follow.followingId },
+      })
+    }),
+  )
+  return followingUsers
+}
+
 const Mutation = objectType({
   name: 'Mutation',
   definition(t) {
@@ -140,6 +158,67 @@ const Query = objectType({
         return context.prisma.post.findMany()
       },
     })
+
+    // ? Posts in "FOR YOU" mode
+    t.list.field('feedForYou', {
+      type: Post,
+      resolve: (_parent, _args, context) => {
+        return context.prisma.post.findMany({
+          include: {
+            author: {
+              select: {
+                id: true,
+                username: true,
+                fullname: true,
+                bio: true,
+                profileImage: true,
+                followerCount: true,
+              },
+            },
+          },
+          orderBy: [{ createdAt: 'desc' }],
+        })
+      },
+    })
+
+    // ? Posts in "FOLLOWING" mode
+    t.list.field('feedFollowing', {
+      type: Post,
+      args: {
+        userId: intArg(),
+      },
+      resolve: async (_, args, context) => {
+        if (!args.userId) {
+          throw new Error('userId argument is required')
+        }
+        // Get all the users that the current user with args.id is following
+        const followingUsers = await getFollowingUsers(args.userId, context)
+        // Create a list of integer contains only the id of the following users
+        const ids = followingUsers.map((u) => u.id)
+        // Query the post of those following users
+        return context.prisma.post.findMany({
+          include: {
+            author: {
+              select: {
+                id: true,
+                username: true,
+                fullname: true,
+                bio: true,
+                profileImage: true,
+                followerCount: true,
+              },
+            },
+          },
+          where: {
+            author: {
+              id: { in: [...ids] },
+            },
+          },
+          orderBy: [{ createdAt: 'desc' }],
+        })
+      },
+    })
+
     // Get all posts of a user
     t.list.field('postByUser', {
       type: Post,
@@ -197,24 +276,14 @@ const User = objectType({
         return followedByUsers
       },
     })
+
     t.list.field('following', {
       type: User,
       resolve: async (parent, _, context) => {
-        const follows = await context.prisma.follows.findMany({
-          where: { followedById: parent.id },
-        })
-
-        // Map the following relation from each Follows object to a User array
-        const followingUsers = await Promise.all(
-          follows.map(async (followed) => {
-            return context.prisma.user.findUnique({
-              where: { id: followed.followingId },
-            })
-          }),
-        )
-        return followingUsers
+        return await getFollowingUsers(parent.id, context)
       },
     })
+
     t.list.field('posts', {
       type: Post,
       resolve: async (parent, _, context) => {

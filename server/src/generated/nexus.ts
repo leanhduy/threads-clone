@@ -137,6 +137,8 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User'] | null; // User
   }
   Query: { // field return type
+    feedFollowing: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
+    feedForYou: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
     postByUser: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
     posts: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
     profileImages: NexusGenRootTypes['ProfileImage'][]; // [ProfileImage!]!
@@ -191,6 +193,8 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
   }
   Query: { // field return type name
+    feedFollowing: 'Post'
+    feedForYou: 'Post'
     postByUser: 'Post'
     posts: 'Post'
     profileImages: 'ProfileImage'
@@ -229,6 +233,9 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    feedFollowing: { // args
+      userId?: number | null; // Int
+    }
     postByUser: { // args
       userId?: number | null; // Int
     }
