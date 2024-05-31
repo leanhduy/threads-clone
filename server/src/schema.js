@@ -171,7 +171,9 @@ const Query = objectType({
                 username: true,
                 fullname: true,
                 bio: true,
-                profileImage: true,
+                profileImage: {
+                  include: { user: true },
+                },
                 followerCount: true,
               },
             },
@@ -292,14 +294,13 @@ const User = objectType({
         })
       },
     })
+
     t.field('profileImage', {
       type: ProfileImage,
       resolve: (parent, _, context) => {
-        return context.prisma.user
-          .findUnique({
-            where: { id: parent.id },
-          })
-          .following()
+        return context.prisma.profileImage.findUnique({
+          where: { userId: parent.id },
+        })
       },
     })
   },

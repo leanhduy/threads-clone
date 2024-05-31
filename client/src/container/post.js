@@ -3,7 +3,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import {
     ChatBubbleOutlineRoundedIcon,
-    FavoriteBorderRoundedIcon,
     LikeIcon,
     MoreHorizIcon,
     RepostIcon,
@@ -36,7 +35,7 @@ const Post = ({ post }) => {
                     <LinkContainer to={'/search'}>
                         {body}
                         {postImages?.map((i) => (
-                            <PostImage key={i.id} src={i.url} width={500} />
+                            <PostImage key={i.id} src={i.url} />
                         ))}
                     </LinkContainer>
                 </ContentMainBody>
@@ -78,6 +77,9 @@ const Content = styled.div({
     alignItems: 'flex-start',
     columnGap: '.5rem',
     padding: '1.5rem 2rem',
+    width: '100%',
+    minWidth: 'auto',
+    overflowX: 'auto',
 })
 
 const ContentSide = styled.div({})
@@ -88,6 +90,7 @@ const ContentMain = styled.div({
     flexDirection: 'column',
     flexGrow: 1,
     rowGap: '.5rem',
+    wordBreak: 'break-word',
 })
 
 const ContentMainHeader = styled.div({
@@ -116,8 +119,10 @@ const PostAvatarImage = styled.img({
     filter: 'grayscale(60%)',
 })
 
-const PostImage = styled(Image)({
-    margin: '1rem auto',
+const PostImage = styled.img({
+    margin: '1rem 0',
+    maxWidth: '70%',
+    height: 'auto',
 })
 
 const Title = styled.h5({})
@@ -129,4 +134,13 @@ const Subtitle = styled.span({
 
 const PostAction = styled(Button)({
     color: colors.black.base,
+    whiteSpace: 'nowrap',
+    height: '2rem',
+})
+
+const ImageContainer = styled.div({
+    display: 'flex',
+    flexDirection: 'row',
+    justifyItems: 'flex-start',
+    width: '100%',
 })

@@ -11,6 +11,8 @@ import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded'
 import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded'
 import SendRoundedIcon from '@mui/icons-material/SendRounded'
 import ScreenRotationAltRoundedIcon from '@mui/icons-material/ScreenRotationAltRounded'
+import SyncAltIcon from '@mui/icons-material/SyncAlt'
+import AddIcon from '@mui/icons-material/Add'
 import { styled } from '@mui/material/styles'
 
 export const unit = 8
@@ -200,6 +202,8 @@ const StyledHomeRoundedIcon = styled(HomeRoundedIcon)(() => ({
 }))
 const StyledPostAddRoundedIcon = styled(PostAddRoundedIcon)(() => ({}))
 const StyledMoreHorizIcon = styled(MoreHorizIcon)(() => ({}))
+const StyledAddIcon = styled(AddIcon)(() => ({}))
+const StyledSyncAltIcon = styled(SyncAltIcon)(() => ({}))
 const StyledSendRoundedIcon = styled(SendRoundedIcon)(() => ({
     color: colors.black.base,
 }))
@@ -244,3 +248,5 @@ export { StyledChatBubbleOutlineRoundedIcon as ChatBubbleOutlineRoundedIcon }
 export { StyledSendRoundedIcon as SendRoundedIcon }
 export { StyledRepostIcon as RepostIcon }
 export { StyledLikeIcon as LikeIcon }
+export { StyledAddIcon as AddIcon }
+export { StyledSyncAltIcon as ToggleIcon }
