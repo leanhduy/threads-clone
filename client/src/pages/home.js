@@ -1,6 +1,7 @@
 import React from 'react'
 import { Layout, QueryResult } from '../components'
 import { gql, useQuery } from '@apollo/client'
+import Post from '../container/post'
 
 // ? QUERY
 const FEED_FOR_YOU = gql`
@@ -9,10 +10,23 @@ const FEED_FOR_YOU = gql`
             id
             body
             createdAt
-            updatedAt
             likeCount
-            repostCount
             replyCount
+            author {
+                id
+                username
+                bio
+                fullname
+                profileImage {
+                    id
+                    url
+                }
+            }
+            postImages {
+                id
+                url
+                caption
+            }
         }
     }
 `
@@ -22,8 +36,12 @@ const Home = () => {
     return (
         <Layout grid>
             <QueryResult loading={loading} error={error} data={data}>
-                {/* TODO: NEXT WE NEED TO BUILD THE POST COMPONENT TO DISPLAY EACH POST */}
-                {/* {JSON.stringify(data)} */}
+                {/* Might need to refactor this div into a styled element */}
+                <div>
+                    {data?.feedForYou?.map((post) => (
+                        <Post post={post} />
+                    ))}
+                </div>
             </QueryResult>
         </Layout>
     )

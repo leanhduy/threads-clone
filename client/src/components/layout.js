@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navbar } from '../components'
 import styled from '@emotion/styled'
-import { widths, unit } from '../styles'
+import { widths, unit, colors } from '../styles'
 
 /**
  * Layout renders the full page content:
@@ -28,7 +28,8 @@ const PageContainer = styled.div((props) => ({
     flexWrap: 'wrap',
     alignSelf: 'center',
     flexGrow: 1,
-    maxWidth: props.fullWidth ? undefined : `${widths.regularPageWidth}px`,
+    width: `${widths.textPageWidth}px`,
+    maxWidth: props.fullWidth ? undefined : `${widths.textPageWidth}px`,
     width: '100%',
     padding: props.fullWidth ? 0 : unit * 2,
     paddingBottom: unit * 5,

@@ -6,7 +6,11 @@ import DragHandleRoundedIcon from '@mui/icons-material/DragHandleRounded'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded'
 import FavoriteBorderRoundedIcon from '@mui/icons-material/FavoriteBorderRounded'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded'
+import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded'
+import SendRoundedIcon from '@mui/icons-material/SendRounded'
+import ScreenRotationAltRoundedIcon from '@mui/icons-material/ScreenRotationAltRounded'
 import { styled } from '@mui/material/styles'
 
 export const unit = 8
@@ -26,8 +30,11 @@ const GlobalStyles = () => (
                 margin: 0,
                 padding: 0,
                 fontFamily: "'Source Sans Pro', sans-serif",
-                backgroundColor: colors.white.base,
+                backgroundColor: colors.silver.base,
                 color: colors.black.base,
+            },
+            a: {
+                color: 'inherit',
             },
             '#root': {
                 display: 'flex',
@@ -53,8 +60,6 @@ const GlobalStyles = () => (
             },
             h5: {
                 fontSize: 16,
-                textTransform: 'uppercase',
-                letterSpacing: 4,
             },
         }}
     />
@@ -194,6 +199,16 @@ const StyledHomeRoundedIcon = styled(HomeRoundedIcon)(() => ({
     height: 32,
 }))
 const StyledPostAddRoundedIcon = styled(PostAddRoundedIcon)(() => ({}))
+const StyledMoreHorizIcon = styled(MoreHorizIcon)(() => ({}))
+const StyledSendRoundedIcon = styled(SendRoundedIcon)(() => ({
+    color: colors.black.base,
+}))
+const StyledRepostIcon = styled(ScreenRotationAltRoundedIcon)(() => ({
+    color: colors.black.base,
+}))
+const StyledChatBubbleOutlineRoundedIcon = styled(ChatBubbleOutlineRoundedIcon)(
+    () => ({ color: colors.black.base })
+)
 const StyledDragHandleRoundedIcon = styled(DragHandleRoundedIcon)(() => ({
     width: 32,
     height: 32,
@@ -213,6 +228,9 @@ const StyledPersonOutlineRoundedIcon = styled(PersonOutlineRoundedIcon)(() => ({
     width: 32,
     height: 32,
 }))
+const StyledLikeIcon = styled(FavoriteBorderRoundedIcon)(() => ({
+    color: colors.black.base,
+}))
 
 export { StyledHomeRoundedIcon as HomeRoundedIcon }
 export { StyledPostAddRoundedIcon as PostAddRoundedIcon }
@@ -221,3 +239,8 @@ export { StyledSearchRoundedIcon as SearchRoundedIcon }
 export { StyledBorderColorRoundedIcon as BorderColorRoundedIcon }
 export { StyledFavoriteBorderRoundedIcon as FavoriteBorderRoundedIcon }
 export { StyledPersonOutlineRoundedIcon as PersonOutlineRoundedIcon }
+export { StyledMoreHorizIcon as MoreHorizIcon }
+export { StyledChatBubbleOutlineRoundedIcon as ChatBubbleOutlineRoundedIcon }
+export { StyledSendRoundedIcon as SendRoundedIcon }
+export { StyledRepostIcon as RepostIcon }
+export { StyledLikeIcon as LikeIcon }
