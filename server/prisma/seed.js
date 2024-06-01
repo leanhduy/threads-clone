@@ -13,7 +13,7 @@ const userData = [
     postCount: 2,
     profileImage: {
       create: {
-        url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReqaJqLgwkn6iv6zYnGstD4KwDa25jEaxjDA&shttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReqaJqLgwkn6iv6zYnGstD4KwDa25jEaxjDA&s',
+        url: 'https://avatars.githubusercontent.com/u/9838872?v=4',
       },
     },
     posts: {
@@ -23,7 +23,7 @@ const userData = [
           postImages: {
             create: [
               {
-                url: 'https://via.placeholder.com/600x400',
+                url: 'https://cdn.fs.teachablecdn.com/u8LFsjeERwyHlzyIg4w0',
                 caption: 'React Tutorial Thumbnail',
               },
             ],
@@ -34,11 +34,11 @@ const userData = [
           postImages: {
             create: [
               {
-                url: 'https://via.placeholder.com/500x300',
+                url: 'https://merehead.com/blog/wp-content/uploads/10-16.jpg',
                 caption: 'Conference Stage',
               },
               {
-                url: 'https://via.placeholder.com/400x400',
+                url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj8ReQI8KoypV30sbHm9suv92CKGAxTsAbBA&s',
                 caption: 'Conference Logo',
               },
             ],
@@ -58,7 +58,7 @@ const userData = [
     postCount: 2,
     profileImage: {
       create: {
-        url: 'https://via.placeholder.com/300x300',
+        url: 'https://media.vogue.fr/photos/62f376b89b00e2dab9f259a9/2:3/w_2560%2Cc_limit/00-story%2520(10).jpg',
       },
     },
     posts: {
@@ -68,7 +68,7 @@ const userData = [
           postImages: {
             create: [
               {
-                url: 'https://via.placeholder.com/600x400',
+                url: 'https://people.com/thmb/84DrQQxD1fHana0mkkpTieZ2ETs=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(733x27:735x29)/serena-williams-insta-041823-14627b51d13144ceb7877a838070c418.jpg',
                 caption: 'Tennis Practice',
               },
             ],
@@ -79,7 +79,7 @@ const userData = [
           postImages: {
             create: [
               {
-                url: 'https://via.placeholder.com/400x300',
+                url: 'https://s.yimg.com/ny/api/res/1.2/1g39Eu98IAwplNFhgtMKHA--/YXBwaWQ9aGlnaGxhbmRlcjt3PTY0MDtoPTQyNw--/https://media.zenfs.com/en/people_218/c22f4f5e64a5faccf70496f29d50724b',
                 caption: 'Family Time',
               },
             ],
@@ -88,7 +88,6 @@ const userData = [
       ],
     },
     followedBy: [{ id: 3 }], // Followers
-    // following: [], // Following
   },
   {
     username: 'prof_einstein',
@@ -99,7 +98,7 @@ const userData = [
     postCount: 1,
     profileImage: {
       create: {
-        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Albert_Einstein_Head.jpg/800px-Albert_Einstein_Head.jpg',
+        url: 'https://storage.googleapis.com/pai-images/437b278abeb1460480fe1795abf9f524.jpeg',
       },
     },
     posts: {
@@ -109,7 +108,7 @@ const userData = [
           postImages: {
             create: [
               {
-                url: 'https://via.placeholder.com/500x350',
+                url: 'https://i.insider.com/560c063b9dd7cc1d008be271?width=800&format=jpeg&auto=webp',
                 caption: "Einstein's Blackboard",
               },
             ],
@@ -117,8 +116,6 @@ const userData = [
         },
       ],
     },
-    // followedBy: [{ id: 1 }], // Followers
-    // following: [{ id: 1 }], // Following
   },
 ]
 
