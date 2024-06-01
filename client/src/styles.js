@@ -221,6 +221,10 @@ const StyledSearchRoundedIcon = styled(SearchRoundedIcon)(() => ({
     width: 32,
     height: 32,
 }))
+const StyledSearchRoundedSmallIcon = styled(SearchRoundedIcon)(() => ({
+    width: 24,
+    height: 24,
+}))
 const StyledBorderColorRoundedIcon = styled(BorderColorRoundedIcon)(() => ({
     width: 32,
     height: 32,
@@ -240,6 +244,7 @@ export { StyledHomeRoundedIcon as HomeRoundedIcon }
 export { StyledPostAddRoundedIcon as PostAddRoundedIcon }
 export { StyledDragHandleRoundedIcon as DragHandleRoundedIcon }
 export { StyledSearchRoundedIcon as SearchRoundedIcon }
+export { StyledSearchRoundedSmallIcon as SearchRoundedSmallIcon }
 export { StyledBorderColorRoundedIcon as BorderColorRoundedIcon }
 export { StyledFavoriteBorderRoundedIcon as FavoriteBorderRoundedIcon }
 export { StyledPersonOutlineRoundedIcon as PersonOutlineRoundedIcon }
