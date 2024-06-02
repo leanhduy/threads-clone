@@ -60,7 +60,7 @@ const Home = () => {
                 </NewThread>
                 {/* List of Posts */}
                 {data?.feedForYou?.map((post) => (
-                    <Post post={post} />
+                    <Post key={post.id} post={post} />
                 ))}
                 {/* Feed mode toggle button */}
                 <FeedModeToggleButton

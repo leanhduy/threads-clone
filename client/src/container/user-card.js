@@ -1,65 +1,50 @@
 import styled from '@emotion/styled'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import {
-    ChatBubbleOutlineRoundedIcon,
-    LikeIcon,
-    MoreHorizIcon,
-    RepostIcon,
-    SendRoundedIcon,
-    colors,
-} from '../styles'
-import { Button, IconButton } from '@mui/material'
-import { formatDistanceToNowStrict } from 'date-fns'
-import { Image } from 'mui-image'
+import { colors } from '../styles'
+import { Button } from '@mui/material'
+import abbreviate from 'number-abbreviate'
 
-const Post = ({ post }) => {
-    const { id, body, createdAt, author, postImages, likeCount, replyCount } =
-        post
+// Mock data
+const mockUser = {
+    id: '1',
+    username: 'netninja',
+    fullname: 'Shaun Pelling',
+    bio: 'Coding tutorials & courses | #netninja | youtube.com/thenetninja',
+    followerCount: 1,
+    profileImage: {
+        url: 'https://avatars.githubusercontent.com/u/9838872?v=4',
+    },
+}
+
+const UserCard = ({ user }) => {
+    const { id, username, fullname, bio, followerCount, profileImage } = user
     return (
         <Content>
             <ContentSide>
-                <PostAvatarImage
-                    src={author?.profileImage?.url}
-                    alt="user avatar"
-                />
+                <PostAvatarImage src={profileImage?.url} alt="user avatar" />
             </ContentSide>
             <ContentMain>
-                <ContentMainHeader>
-                    <Title>{author.username}</Title>
-                    <Subtitle>
-                        {formatDistanceToNowStrict(new Date(createdAt))}
-                    </Subtitle>
-                </ContentMainHeader>
                 <ContentMainBody>
-                    <LinkContainer to={'/search'}>
-                        <PostText>{body}</PostText>
-                        {postImages?.map((i) => (
-                            <PostImage key={i.id} src={i.url} />
-                        ))}
+                    <LinkContainer to={'/profile'}>
+                        <Title>{username}</Title>
+                        <Subtitle>{bio}</Subtitle>
                     </LinkContainer>
                 </ContentMainBody>
                 <ContentMainFooter>
-                    <PostAction startIcon={<LikeIcon />}>
-                        {likeCount}
-                    </PostAction>
-                    <PostAction startIcon={<ChatBubbleOutlineRoundedIcon />}>
-                        {replyCount}
-                    </PostAction>
-                    <PostAction startIcon={<RepostIcon />} />
-                    <PostAction startIcon={<SendRoundedIcon />} />
+                    {`${new String(
+                        abbreviate(followerCount, 2)
+                    ).toUpperCase()} followers`}
                 </ContentMainFooter>
             </ContentMain>
             <ContentSide>
-                <IconButton>
-                    <MoreHorizIcon />
-                </IconButton>
+                <FollowButton variant="outlined">Follow</FollowButton>
             </ContentSide>
         </Content>
     )
 }
 
-export default Post
+export default UserCard
 
 const LinkContainer = styled(Link)({
     color: colors.black,
@@ -86,7 +71,9 @@ const Content = styled.div({
     },
 })
 
-const ContentSide = styled.div({})
+const ContentSide = styled.div({
+    marginRight: '.5rem',
+})
 
 const ContentMain = styled.div({
     alignItems: 'flex-start',
@@ -110,6 +97,7 @@ const ContentMainBody = styled.div({
 })
 
 const ContentMainFooter = styled.div({
+    fontSize: '.875rem',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -142,4 +130,20 @@ const PostAction = styled(Button)({
     height: '2rem',
 })
 
-const PostText = styled.div({})
+const ImageContainer = styled.div({
+    display: 'flex',
+    flexDirection: 'row',
+    justifyItems: 'flex-start',
+    width: '100%',
+})
+
+const FollowButton = styled(Button)({
+    width: '110px',
+    '&.MuiButton-outlined': {
+        borderColor: colors.silver.darker,
+        borderRadius: '10px',
+        color: colors.black.base,
+        fontWeight: 'bold',
+        textTransform: 'none',
+    },
+})
