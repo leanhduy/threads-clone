@@ -117,6 +117,286 @@ const userData = [
       ],
     },
   },
+  {
+    username: 'elonmusk',
+    fullname: 'Elon Musk',
+    bio: 'Technoking of Tesla | SpaceX | Neuralink | Boring Company 🚀',
+    followerCount: 0,
+    followingCount: 0,
+    postCount: 1,
+    profileImage: {
+      create: {
+        url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE96oXuB1-wvAWe_rG7eAgEf4iGs6Dt3EJRQ&s',
+      },
+    },
+    posts: {
+      create: [
+        {
+          body: 'Announcing the latest Tesla Model X upgrade! #Tesla #ElectricVehicles',
+          postImages: {
+            create: [
+              {
+                url: 'https://images.news18.com/ibnlive/uploads/2020/07/1595688994_tesla-ceo-elon-musk-model-x.jpg?impolicy=website&width=640&height=480',
+                caption: 'Tesla Model X',
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+  {
+    username: 'taylorswift',
+    fullname: 'Taylor Swift',
+    bio: 'Singer-songwriter | Lover of cats | 📷 by you',
+    followerCount: 0,
+    followingCount: 0,
+    postCount: 1,
+    profileImage: {
+      create: {
+        url: 'https://i.pinimg.com/736x/bc/39/ef/bc39ef07bfbd9d2ecd8df176666b3744.jpg',
+      },
+    },
+    posts: {
+      create: [
+        {
+          body: 'New album out now! 💕 #folklore #newmusic',
+          postImages: {
+            create: [
+              {
+                url: 'https://i0.wp.com/radio.rutgers.edu/wp-content/uploads/2020/10/folklore.jpg?resize=360%2C360',
+                caption: 'Folklore Album Cover',
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+  {
+    username: 'leomessi',
+    fullname: 'Lionel Messi',
+    bio: 'Professional footballer ⚽ | FC Barcelona | Argentina 🇦🇷',
+    followerCount: 0,
+    followingCount: 0,
+    postCount: 1,
+    profileImage: {
+      create: {
+        url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLQVYWtXykQrsxeoTqmfOPz4O_zdWN34nnrw&s',
+      },
+    },
+    posts: {
+      create: [
+        {
+          body: 'Training hard for the next match! 💪 #football #Barcelona',
+          postImages: {
+            create: [
+              {
+                url: 'https://pbs.twimg.com/media/EYJhq5KVcAE6G3Y.jpg',
+                caption: 'Training Session',
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+  {
+    username: 'alexandriaoc',
+    fullname: 'Alexandria Ocasio-Cortez',
+    bio: 'Congresswoman for NY-14 | Progressive Democrat | Advocate for social justice 🌱',
+    followerCount: 0,
+    followingCount: 0,
+    postCount: 1,
+    profileImage: {
+      create: {
+        url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrtVh3GY5Wf2x3WBj2AXsFxD7fNcqXoP8UFw&s',
+      },
+    },
+    posts: {
+      create: [
+        {
+          body: 'Fighting for a Green New Deal! 🌎 #climateaction #AOC',
+          postImages: {
+            create: [
+              {
+                url: 'https://hips.hearstapps.com/hmg-prod/images/representative-alexandria-ocasio-cortez-democrat-of-new-news-photo-1094968460-1550239505.jpg?crop=0.643xw:1.00xh;0.179xw,0&resize=1200:*',
+                caption: 'Climate Rally',
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+  {
+    username: 'kendalljenner',
+    fullname: 'Kendall Jenner',
+    bio: 'Model | Entrepreneur | Lover of life 🌟',
+    followerCount: 0,
+    followingCount: 0,
+    postCount: 1,
+    profileImage: {
+      create: {
+        url: 'https://i.pinimg.com/280x280_RS/44/c6/60/44c6604ec5e092c5432b1aaa6756a0d6.jpg',
+      },
+    },
+    posts: {
+      create: [
+        {
+          body: 'New campaign shoot with @CalvinKlein! 📸 #ModelLife #CalvinKlein',
+          postImages: {
+            create: [
+              {
+                url: 'https://hips.hearstapps.com/hmg-prod/images/fa23-kendall-jenner-5-photo-credit-inez-and-vinoodh-64da303970218.jpg',
+                caption: 'Calvin Klein Shoot',
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+  {
+    username: 'markzuckerberg',
+    fullname: 'Mark Zuckerberg',
+    bio: 'Co-founder of Facebook | Building the metaverse 🧑‍💻',
+    followerCount: 0,
+    followingCount: 0,
+    postCount: 1,
+    profileImage: {
+      create: {
+        url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvTjskvm_jjZj0mMdPsSOmMmjwgWegx0icEA&s',
+      },
+    },
+    posts: {
+      create: [
+        {
+          body: 'Excited to share our vision for the metaverse! 🌐 #Facebook #Metaverse',
+          postImages: {
+            create: [
+              {
+                url: 'https://static01.nyt.com/images/2021/10/28/business/28facebook-handouts-10/28facebook-handouts-10-superJumbo.jpg',
+                caption: 'Metaverse Concept',
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+  {
+    username: 'arianagrande',
+    fullname: 'Ariana Grande',
+    bio: 'Singer | Actress | Sweetener | Thank U, Next 🌸',
+    followerCount: 0,
+    followingCount: 0,
+    postCount: 1,
+    profileImage: {
+      create: {
+        url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFAJohC4uUU9IioYfneyQXLucVu83WwTikdw&s',
+      },
+    },
+    posts: {
+      create: [
+        {
+          body: 'Thank U, Next music video is out now! 💖 #ThankUNext #NewMusic',
+          postImages: {
+            create: [
+              {
+                url: 'https://hips.hearstapps.com/hmg-prod/images/gedzlqgxgaamun7-65a806ec0da7a.jpeg',
+                caption: 'Thank U, Next Video',
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+  {
+    username: 'gordonramsay',
+    fullname: 'Gordon Ramsay',
+    bio: 'Chef | Restauranteur | MasterChef | Hell’s Kitchen 🍽️',
+    followerCount: 0,
+    followingCount: 0,
+    postCount: 1,
+    profileImage: {
+      create: {
+        url: 'https://substackcdn.com/image/fetch/f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff6ccabba-ea38-411f-a673-04f26b5e919c_980x980.jpeg',
+      },
+    },
+    posts: {
+      create: [
+        {
+          body: 'Just cooked the perfect Beef Wellington! 🥩 #MasterChef #Cooking',
+          postImages: {
+            create: [
+              {
+                url: 'https://pbs.twimg.com/media/FyLJfxhWAAMkh4z.jpg',
+                caption: 'Beef Wellington',
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+  {
+    username: 'neildegrassetyson',
+    fullname: 'Neil deGrasse Tyson',
+    bio: 'Astrophysicist | Author | Science Communicator 🔭',
+    followerCount: 0,
+    followingCount: 0,
+    postCount: 1,
+    profileImage: {
+      create: {
+        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Neil_deGrasse_Tyson_in_June_2017_%28cropped%29.jpg/800px-Neil_deGrasse_Tyson_in_June_2017_%28cropped%29.jpg',
+      },
+    },
+    posts: {
+      create: [
+        {
+          body: 'Exploring the cosmos in my latest book  ! 🌌 #Astrophysics #Science',
+          postImages: {
+            create: [
+              {
+                url: 'https://lh3.googleusercontent.com/proxy/vh6MU4obqdgC43ORNBOjqTrCG_nOrdXP0-I7cMtEdXgTAiJ5pvzJlG3LjDg85mu8xEZFruJnlb_eSp4Xo5JxQL2C5GcEa-57JNpL8S4Lj-vvGfl1hVibdmqo6JU1psmP9iG0Y654vVgr9lcTOTVeJCUtncKLa4IHjuc1RFE',
+                caption: 'Cosmos Book Cover',
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
+  {
+    username: 'billieeilish',
+    fullname: 'Billie Eilish',
+    bio: 'Singer-songwriter | Happier Than Ever | 🌱 Vegan',
+    followerCount: 0,
+    followingCount: 0,
+    postCount: 1,
+    profileImage: {
+      create: {
+        url: 'https://image.tienphong.vn/w890/Uploaded/2024/zaugtn/2021_06_22/tien-phong-billieeilish-6083.jpeg',
+      },
+    },
+    posts: {
+      create: [
+        {
+          body: 'New single "Your Power" out now! 🎶 #HappierThanEver',
+          postImages: {
+            create: [
+              {
+                url: 'https://m.media-amazon.com/images/I/71Nv8nuGwhL._AC_UF1000,1000_QL80_.jpg',
+                caption: 'Your Power Single',
+              },
+            ],
+          },
+        },
+      ],
+    },
+  },
 ]
 
 module.exports = { userData }
