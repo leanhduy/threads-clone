@@ -1,24 +1,25 @@
-import styled from '@emotion/styled'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { colors } from '../styles'
-import { Button } from '@mui/material'
+import { Button, Popover, Typography } from '@mui/material'
+import styled from '@emotion/styled'
 import abbreviate from 'number-abbreviate'
+import UserCardPopover from './user-card-popover'
 
 // Mock data
-const mockUser = {
-    id: '1',
-    username: 'netninja',
-    fullname: 'Shaun Pelling',
-    bio: 'Coding tutorials & courses | #netninja | youtube.com/thenetninja',
-    followerCount: 1,
-    profileImage: {
-        url: 'https://avatars.githubusercontent.com/u/9838872?v=4',
-    },
-}
 
 const UserCard = ({ user }) => {
-    const { id, username, fullname, bio, followerCount, profileImage } = user
+    const [anchorEl, setAnchorEl] = useState(null)
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+    const handlePopoverOpen = (e) => {
+        setAnchorEl(e.currentTarget)
+        setIsPopoverOpen(true)
+    }
+    const handlePopoverClose = () => {
+        setAnchorEl(null)
+    }
+
+    const { username, bio, followerCount, profileImage } = user
     return (
         <Content>
             <ContentSide>
@@ -27,7 +28,9 @@ const UserCard = ({ user }) => {
             <ContentMain>
                 <ContentMainBody>
                     <LinkContainer to={'/profile'}>
-                        <Title>{username}</Title>
+                        <Title onMouseEnter={handlePopoverOpen}>
+                            {username}
+                        </Title>
                         <Subtitle>{bio}</Subtitle>
                     </LinkContainer>
                 </ContentMainBody>
@@ -40,11 +43,40 @@ const UserCard = ({ user }) => {
             <ContentSide>
                 <FollowButton variant="outlined">Follow</FollowButton>
             </ContentSide>
+            {/* Popover component */}
+            <StyledPopover
+                id="card-popover"
+                open={isPopoverOpen}
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}
+                onClose={() => {
+                    setIsPopoverOpen(false)
+                }}
+                disableRestoreFocus
+            >
+                <UserCardPopover
+                    user={null}
+                    setIsPopoverOpen={setIsPopoverOpen}
+                />
+            </StyledPopover>
         </Content>
     )
 }
 
 export default UserCard
+
+const StyledPopover = styled(Popover)({
+    '& .MuiPaper-root': {
+        borderRadius: '10px',
+    },
+})
 
 const LinkContainer = styled(Link)({
     color: colors.black,
@@ -84,13 +116,6 @@ const ContentMain = styled.div({
     wordBreak: 'break-word',
 })
 
-const ContentMainHeader = styled.div({
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'row',
-    columnGap: '.5rem',
-})
-
 const ContentMainBody = styled.div({
     display: 'flex',
     flexDirection: 'column',
@@ -108,33 +133,19 @@ const PostAvatarImage = styled.img({
     objectFit: 'cover',
     width: 40,
     height: 40,
-    filter: 'grayscale(60%)',
 })
 
-const PostImage = styled.img({
-    margin: '1rem 0',
-    maxWidth: '70%',
-    height: 'auto',
+const Title = styled.h5({
+    display: 'inline-block',
+    ':hover': {
+        textDecoration: 'underline',
+    },
 })
-
-const Title = styled.h5({})
 
 const Subtitle = styled.span({
     color: colors.grey.light,
     fontSize: '.875rem',
-})
-
-const PostAction = styled(Button)({
-    color: colors.black.base,
-    whiteSpace: 'nowrap',
-    height: '2rem',
-})
-
-const ImageContainer = styled.div({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyItems: 'flex-start',
-    width: '100%',
+    display: 'block',
 })
 
 const FollowButton = styled(Button)({

@@ -96,7 +96,6 @@ const PostAvatarImage = styled.img({
     objectFit: 'cover',
     width: 40,
     height: 40,
-    filter: 'grayscale(60%)',
     ':hover': {
         cursor: 'pointer',
     },

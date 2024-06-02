@@ -22,10 +22,17 @@ const mockUser = {
     },
 }
 
-const UserCardPopover = ({ user }) => {
+const UserCardPopover = ({ user, setIsPopoverOpen }) => {
     // const { id, username, fullname, bio, followerCount, profileImage } = user
     return (
-        <UserCardContainer>
+        <UserCardContainer
+            onMouseEnter={() => {
+                setIsPopoverOpen(true)
+            }}
+            onMouseLeave={() => {
+                setIsPopoverOpen(false)
+            }}
+        >
             <CardHeader>
                 <CardHeaderLeft>
                     <CardUsername>{mockUser.username}</CardUsername>
@@ -41,10 +48,6 @@ const UserCardPopover = ({ user }) => {
                 </CardHeaderRight>
             </CardHeader>
             <StyledCardContent>
-                {/* <CardUsername>{mockUser.username}</CardUsername>
-                <CardFullname variant="h5" component="div">
-                    {mockUser.fullname}
-                </CardFullname> */}
                 <CardBio>{mockUser.bio}</CardBio>
                 <CardFollower>{`${new String(
                     abbreviate(mockUser.followerCount, 2)
@@ -117,6 +120,14 @@ const FollowButton = styled(Button)({
     fontWeight: 'bold',
     marginBottom: '.75rem',
     textTransform: 'none',
+    transition: 'transform 0.1s ease-in-out',
+    ':hover': {
+        backgroundColor: colors.black.base,
+        color: colors.white,
+    },
+    ':active': {
+        transform: 'scale(0.95)',
+    },
 })
 
 const PostAvatarImage = styled.img({
@@ -124,5 +135,4 @@ const PostAvatarImage = styled.img({
     objectFit: 'cover',
     width: 56,
     height: 56,
-    filter: 'grayscale(60%)',
 })

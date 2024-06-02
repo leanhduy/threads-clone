@@ -24,6 +24,7 @@ const GET_USERS = gql`
 
 const Search = () => {
     const { loading, error, data } = useQuery(GET_USERS)
+
     return (
         <Layout grid>
             <QueryResult loading={loading} error={error} data={data}>
@@ -52,7 +53,6 @@ const Search = () => {
                     {data?.users?.map((u) => (
                         <UserCard key={u.id} user={u} />
                     ))}
-                    <UserCardPopover user={null} />
                 </Container>
             </QueryResult>
         </Layout>

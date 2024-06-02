@@ -11,11 +11,9 @@ import {
 } from '../styles'
 import { Button, IconButton } from '@mui/material'
 import { formatDistanceToNowStrict } from 'date-fns'
-import { Image } from 'mui-image'
 
 const Post = ({ post }) => {
-    const { id, body, createdAt, author, postImages, likeCount, replyCount } =
-        post
+    const { body, createdAt, author, postImages, likeCount, replyCount } = post
     return (
         <Content>
             <ContentSide>
@@ -120,7 +118,6 @@ const PostAvatarImage = styled.img({
     objectFit: 'cover',
     width: 40,
     height: 40,
-    filter: 'grayscale(60%)',
 })
 
 const PostImage = styled.img({
