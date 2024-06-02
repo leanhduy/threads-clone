@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { colors } from '../styles'
 import {
     Typography,
@@ -9,21 +9,13 @@ import {
     CardContent,
 } from '@mui/material'
 import abbreviate from 'number-abbreviate'
+import { UserContext } from '../context'
 
-// Mock data
-const mockUser = {
-    id: '1',
-    username: 'netninja',
-    fullname: 'Shaun Pelling',
-    bio: 'Coding tutorials & courses | #netninja | youtube.com/thenetninja',
-    followerCount: 12500,
-    profileImage: {
-        url: 'https://avatars.githubusercontent.com/u/9838872?v=4',
-    },
-}
+const UserCardPopover = ({ user, isFollowing, setIsPopoverOpen }) => {
+    const { username, fullname, bio, followerCount, followedBy, profileImage } =
+        user
+    const currentUser = useContext(UserContext)
 
-const UserCardPopover = ({ user, setIsPopoverOpen }) => {
-    // const { id, username, fullname, bio, followerCount, profileImage } = user
     return (
         <UserCardContainer
             onMouseEnter={() => {
@@ -35,26 +27,31 @@ const UserCardPopover = ({ user, setIsPopoverOpen }) => {
         >
             <CardHeader>
                 <CardHeaderLeft>
-                    <CardUsername>{mockUser.username}</CardUsername>
+                    <CardUsername>{username}</CardUsername>
                     <CardFullname variant="h5" component="div">
-                        {mockUser.fullname}
+                        {fullname}
                     </CardFullname>
                 </CardHeaderLeft>
                 <CardHeaderRight>
                     <PostAvatarImage
-                        src={mockUser.profileImage?.url}
+                        src={profileImage?.url}
                         alt="user avatar"
                     />
                 </CardHeaderRight>
             </CardHeader>
             <StyledCardContent>
-                <CardBio>{mockUser.bio}</CardBio>
+                <CardBio>{bio}</CardBio>
                 <CardFollower>{`${new String(
-                    abbreviate(mockUser.followerCount, 2)
+                    abbreviate(followerCount, 2)
                 ).toUpperCase()} followers`}</CardFollower>
             </StyledCardContent>
             <StyledCardAction>
-                <FollowButton fullWidth>Follow</FollowButton>
+                <FollowButton
+                    fullWidth
+                    className={isFollowing ? 'following' : 'not-following'}
+                >
+                    {isFollowing ? 'Following' : 'Follow'}
+                </FollowButton>
             </StyledCardAction>
         </UserCardContainer>
     )
@@ -113,17 +110,28 @@ const StyledCardAction = styled(CardActions)({
 })
 
 const FollowButton = styled(Button)({
-    backgroundColor: colors.black.base,
+    border: `1px solid ${colors.silver.dark}`,
     borderRadius: '10px',
-    color: colors.white,
     fontSize: '0.9rem',
     fontWeight: 'bold',
     marginBottom: '.75rem',
     textTransform: 'none',
     transition: 'transform 0.1s ease-in-out',
-    ':hover': {
-        backgroundColor: colors.black.base,
+    '&.following': {
+        color: colors.black.light,
+        backgroundColor: colors.white,
+        ':hover': {
+            color: colors.black.light,
+            backgroundColor: colors.white,
+        },
+    },
+    '&.not-following': {
         color: colors.white,
+        backgroundColor: colors.black.base,
+        ':hover': {
+            color: colors.white,
+            backgroundColor: colors.black.base,
+        },
     },
     ':active': {
         transform: 'scale(0.95)',

@@ -1,24 +1,105 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { colors } from '../styles'
-import { Button, Popover, Typography } from '@mui/material'
+import { Button, Popover } from '@mui/material'
 import styled from '@emotion/styled'
 import abbreviate from 'number-abbreviate'
 import UserCardPopover from './user-card-popover'
-
-// Mock data
+import { useMutation } from '@apollo/client'
+import { FOLLOW_USER, UNFOLLOW_USER } from '../utils'
+import { UserContext } from '../context'
 
 const UserCard = ({ user }) => {
+    const currentUser = useContext(UserContext)
     const [anchorEl, setAnchorEl] = useState(null)
     const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+    const [isFollowing, setIsFollowing] = useState(false)
+    const [followUser, { _, followData }] = useMutation(FOLLOW_USER, {
+        variables: {
+            followerId: Number(currentUser.id),
+            followingId: Number(user?.id),
+        },
+        onCompleted: (data) => {
+            if (data) {
+                setIsFollowing(true)
+            }
+            if (followData) {
+                console.log(followData)
+            }
+        },
+        onError: (error) => {
+            console.error(error)
+        },
+    })
+
+    const [unfollowUser] = useMutation(UNFOLLOW_USER, {
+        variables: {
+            followerId: Number(currentUser.id),
+            followingId: Number(user?.id),
+        },
+        onCompleted: (data) => {
+            if (data) {
+                setIsFollowing(false)
+            }
+        },
+        onError: (error) => {
+            console.error(error)
+        },
+    })
+    const [hoverTimeout, setHoverTimeout] = useState(null) // ? For tracking the hover duration on a title, before open the user-card
+
+    // * Side-effects
+    useEffect(() => {
+        // ? Set up the following status of the current logged in user with other users
+        if (user) {
+            const followerIds = user.followedBy.map((u) => u.id)
+            if (followerIds.includes(currentUser.id)) {
+                setIsFollowing(true)
+            }
+        }
+    }, [user, currentUser.id])
+
+    useEffect(() => {}, [isFollowing])
+
+    // * Event handlers
+    const handleFollowing = async () => {
+        try {
+            if (isFollowing) {
+                await unfollowUser()
+            } else {
+                await followUser()
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const handleMouseEnter = (e) => {
+        // ? Only trigger the popover if user have the mouse over the title for 300ms or more, prevent popover pops up randomly while user viewing the page
+        const timeoutId = setTimeout(() => {
+            handlePopoverOpen(e)
+        }, 300)
+        setHoverTimeout(timeoutId)
+    }
+
+    const handleMouseLeave = (e) => {
+        if (hoverTimeout) {
+            clearTimeout(hoverTimeout)
+            setHoverTimeout(null)
+        }
+    }
+
     const handlePopoverOpen = (e) => {
-        setAnchorEl(e.currentTarget)
+        // ? param `e`: SyntheticEvent obj passed from the `handleMouseEnter` event handler
+        setAnchorEl(e.nativeEvent.toElement)
         setIsPopoverOpen(true)
     }
+
     const handlePopoverClose = () => {
         setAnchorEl(null)
     }
 
+    // * Info of the user to be followed / unfollowed
     const { username, bio, followerCount, profileImage } = user
     return (
         <Content>
@@ -28,7 +109,10 @@ const UserCard = ({ user }) => {
             <ContentMain>
                 <ContentMainBody>
                     <LinkContainer to={'/profile'}>
-                        <Title onMouseEnter={handlePopoverOpen}>
+                        <Title
+                            onMouseEnter={handleMouseEnter}
+                            onMouseLeave={handleMouseLeave}
+                        >
                             {username}
                         </Title>
                         <Subtitle>{bio}</Subtitle>
@@ -41,7 +125,13 @@ const UserCard = ({ user }) => {
                 </ContentMainFooter>
             </ContentMain>
             <ContentSide>
-                <FollowButton variant="outlined">Follow</FollowButton>
+                <FollowButton
+                    variant="outlined"
+                    onClick={handleFollowing}
+                    className={isFollowing ? 'following' : 'not-following'}
+                >
+                    {isFollowing ? 'Following' : 'Follow'}
+                </FollowButton>
             </ContentSide>
             {/* Popover component */}
             <StyledPopover
@@ -57,12 +147,14 @@ const UserCard = ({ user }) => {
                     horizontal: 'left',
                 }}
                 onClose={() => {
+                    handlePopoverClose()
                     setIsPopoverOpen(false)
                 }}
                 disableRestoreFocus
             >
                 <UserCardPopover
-                    user={null}
+                    user={user}
+                    isFollowing={isFollowing}
                     setIsPopoverOpen={setIsPopoverOpen}
                 />
             </StyledPopover>
@@ -151,9 +243,14 @@ const Subtitle = styled.span({
 const FollowButton = styled(Button)({
     width: '110px',
     '&.MuiButton-outlined': {
+        '&.following': {
+            color: colors.grey.light,
+        },
+        '&.not-following': {
+            color: colors.black.base,
+        },
         borderColor: colors.silver.darker,
         borderRadius: '10px',
-        color: colors.black.base,
         fontWeight: 'bold',
         textTransform: 'none',
     },

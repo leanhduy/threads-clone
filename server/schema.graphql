@@ -7,10 +7,23 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+type Follow {
+  followedBy: User!
+  followedById: Int!
+  following: User!
+  followingId: Int!
+}
+
+type FollowUserResponse {
+  code: Int!
+  following: User
+  message: String!
+  success: Boolean!
+}
+
 type Mutation {
-  addUser(userCreateInput: UserCreateInput!): User
-  createPost(authorId: ID!, data: PostCreateInput!): Post
-  updatePost(data: PostCreateInput!, postId: ID!): Post
+  followUser(followerId: Int!, followingId: Int!): FollowUserResponse
+  unfollowUser(followerId: Int!, followingId: Int!): FollowUserResponse
 }
 
 type Post {
@@ -58,6 +71,7 @@ input ProfileImageCreateInput {
 type Query {
   feedFollowing(userId: Int): [Post]
   feedForYou: [Post]
+  follows: [Follow!]
   postByUser(userId: Int): [Post]
   posts: [Post]
   profileImages: [ProfileImage!]!

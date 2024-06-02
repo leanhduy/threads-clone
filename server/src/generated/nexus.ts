@@ -64,6 +64,16 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  Follow: { // root type
+    followedById: number; // Int!
+    followingId: number; // Int!
+  }
+  FollowUserResponse: { // root type
+    code: number; // Int!
+    following?: NexusGenRootTypes['User'] | null; // User
+    message: string; // String!
+    success: boolean; // Boolean!
+  }
   Mutation: {};
   Post: { // root type
     body: string; // String!
@@ -107,10 +117,21 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  Follow: { // field return type
+    followedBy: NexusGenRootTypes['User']; // User!
+    followedById: number; // Int!
+    following: NexusGenRootTypes['User']; // User!
+    followingId: number; // Int!
+  }
+  FollowUserResponse: { // field return type
+    code: number; // Int!
+    following: NexusGenRootTypes['User'] | null; // User
+    message: string; // String!
+    success: boolean; // Boolean!
+  }
   Mutation: { // field return type
-    addUser: NexusGenRootTypes['User'] | null; // User
-    createPost: NexusGenRootTypes['Post'] | null; // Post
-    updatePost: NexusGenRootTypes['Post'] | null; // Post
+    followUser: NexusGenRootTypes['FollowUserResponse'] | null; // FollowUserResponse
+    unfollowUser: NexusGenRootTypes['FollowUserResponse'] | null; // FollowUserResponse
   }
   Post: { // field return type
     author: NexusGenRootTypes['User']; // User!
@@ -139,6 +160,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     feedFollowing: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
     feedForYou: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
+    follows: NexusGenRootTypes['Follow'][] | null; // [Follow!]
     postByUser: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
     posts: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
     profileImages: NexusGenRootTypes['ProfileImage'][]; // [ProfileImage!]!
@@ -163,10 +185,21 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  Follow: { // field return type name
+    followedBy: 'User'
+    followedById: 'Int'
+    following: 'User'
+    followingId: 'Int'
+  }
+  FollowUserResponse: { // field return type name
+    code: 'Int'
+    following: 'User'
+    message: 'String'
+    success: 'Boolean'
+  }
   Mutation: { // field return type name
-    addUser: 'User'
-    createPost: 'Post'
-    updatePost: 'Post'
+    followUser: 'FollowUserResponse'
+    unfollowUser: 'FollowUserResponse'
   }
   Post: { // field return type name
     author: 'User'
@@ -195,6 +228,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     feedFollowing: 'Post'
     feedForYou: 'Post'
+    follows: 'Follow'
     postByUser: 'Post'
     posts: 'Post'
     profileImages: 'ProfileImage'
@@ -220,16 +254,13 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
-    addUser: { // args
-      userCreateInput: NexusGenInputs['UserCreateInput']; // UserCreateInput!
+    followUser: { // args
+      followerId: number; // Int!
+      followingId: number; // Int!
     }
-    createPost: { // args
-      authorId: string; // ID!
-      data: NexusGenInputs['PostCreateInput']; // PostCreateInput!
-    }
-    updatePost: { // args
-      data: NexusGenInputs['PostCreateInput']; // PostCreateInput!
-      postId: string; // ID!
+    unfollowUser: { // args
+      followerId: number; // Int!
+      followingId: number; // Int!
     }
   }
   Query: {

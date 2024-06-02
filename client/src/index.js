@@ -1,9 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './components/App'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import Pages from './pages'
 import GlobalStyles from './styles'
+import UserContext from './context/UserContext'
+import { mockUser } from './mock'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 const client = new ApolloClient({
@@ -14,8 +15,11 @@ const client = new ApolloClient({
 root.render(
     <React.StrictMode>
         <ApolloProvider client={client}>
-            <GlobalStyles />
-            <Pages />
+            <UserContext.Provider value={mockUser}>
+                {/* Currently using mock user to simulate the logged in user. Replace with the logged in user later when Authentication feature is implemented */}
+                <GlobalStyles />
+                <Pages />
+            </UserContext.Provider>
         </ApolloProvider>
     </React.StrictMode>
 )
