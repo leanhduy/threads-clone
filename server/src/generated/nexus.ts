@@ -165,6 +165,7 @@ export interface NexusGenFieldTypes {
     posts: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
     profileImages: NexusGenRootTypes['ProfileImage'][]; // [ProfileImage!]!
     userById: NexusGenRootTypes['User'] | null; // User
+    userByUsername: NexusGenRootTypes['User'] | null; // User
     userProfileImage: NexusGenRootTypes['ProfileImage']; // ProfileImage!
     users: NexusGenRootTypes['User'][]; // [User!]!
   }
@@ -233,6 +234,7 @@ export interface NexusGenFieldTypeNames {
     posts: 'Post'
     profileImages: 'ProfileImage'
     userById: 'User'
+    userByUsername: 'User'
     userProfileImage: 'ProfileImage'
     users: 'User'
   }
@@ -272,6 +274,9 @@ export interface NexusGenArgTypes {
     }
     userById: { // args
       id?: number | null; // Int
+    }
+    userByUsername: { // args
+      username?: string | null; // String
     }
   }
 }

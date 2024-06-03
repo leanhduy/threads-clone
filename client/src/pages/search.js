@@ -30,6 +30,11 @@ const Search = () => {
         }
     }, [data, searchTerm])
 
+    // TODO: Extract the content inside the <QueryResult> into a separate file, e.g., SearchDetails to achieve consistent ui pattern.
+    //  ? WHY: Achieve separate of concern
+    //  ?    <Page> component should only query and pass the data to its child components via <QueryResult>
+    //  ?    Children component should only display query data, or if execute any mutation, should redirect back to the parent component
+
     return (
         <Layout grid>
             <QueryResult loading={loading} error={error} data={data}>

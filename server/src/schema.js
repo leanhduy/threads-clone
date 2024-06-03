@@ -7,6 +7,7 @@ const {
   asNexusMethod,
   makeSchema,
   intArg,
+  stringArg,
 } = require('nexus')
 
 const { DateTimeResolver } = require('graphql-scalars')
@@ -443,6 +444,32 @@ const Query = objectType({
       resolve: (parent, _args, context) => {
         return context.prisma.profileImage.findUnique({
           where: { id: parent.id || undefined },
+        })
+      },
+    })
+
+    // * Get a user by its username
+    t.field('userByUsername', {
+      type: User,
+      args: {
+        username: stringArg(),
+      },
+      select: {
+        id: true,
+        fullname: true,
+        username: true,
+        followerCount: true,
+        profileImage: {
+          select: {
+            url: true,
+          },
+        },
+      },
+      resolve: (_, args, context) => {
+        return context.prisma.user.findUnique({
+          where: {
+            username: args.username,
+          },
         })
       },
     })

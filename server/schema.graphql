@@ -76,6 +76,7 @@ type Query {
   posts: [Post]
   profileImages: [ProfileImage!]!
   userById(id: Int): User
+  userByUsername(username: String): User
   userProfileImage: ProfileImage!
   users: [User!]!
 }
