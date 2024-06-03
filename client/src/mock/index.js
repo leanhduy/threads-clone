@@ -1,1 +1,1 @@
-export { mockUser } from './mockData.js'
+export { mockUser, mockPostsWithAuthor } from './mockData.js'

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 /** importing our pages */
 import Home from './home'
 import Search from './search'
+import Profile from './profile'
 
 export default function Pages() {
     return (
@@ -10,6 +11,7 @@ export default function Pages() {
             <Routes>
                 <Route element={<Home />} path="/" />
                 <Route element={<Search />} path="/search" />
+                <Route element={<Profile />} path="/profile/:username" />
             </Routes>
         </BrowserRouter>
     )
