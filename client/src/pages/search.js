@@ -1,34 +1,40 @@
-import React from 'react'
-import { gql, useQuery } from '@apollo/client'
+import React, { useContext, useEffect, useState } from 'react'
+import { useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
 import { QueryResult } from '../components'
 import { Layout } from '../components'
 import { colors, SearchRoundedSmallIcon } from '../styles'
 import { InputAdornment, TextField } from '@mui/material'
-import { UserCard, UserCardPopover } from '../container'
-
-const GET_USERS = gql`
-    query Users {
-        users {
-            id
-            username
-            fullname
-            bio
-            followerCount
-            profileImage {
-                url
-            }
-        }
-    }
-`
+import { UserCard } from '../container'
+import { searchString } from '../utils'
+import { UserContext } from '../context'
+import { GET_USERS } from '../utils'
 
 const Search = () => {
+    const [filteredUsers, setFilteredUsers] = useState([])
+    const [searchTerm, setSearchTerm] = useState('')
     const { loading, error, data } = useQuery(GET_USERS)
+    const currentUser = useContext(UserContext)
+
+    useEffect(() => {
+        if (data) {
+            const result = data.users.filter(
+                (u) =>
+                    (searchString(u.username, searchTerm) ||
+                        searchString(u.bio, searchTerm)) &&
+                    u.id !== currentUser.id
+            )
+            setFilteredUsers([...result])
+        } else {
+            setFilteredUsers([])
+        }
+    }, [data, searchTerm])
+
     return (
         <Layout grid>
             <QueryResult loading={loading} error={error} data={data}>
-                {/* Page Title = Search*/}
                 <Container>
+                    {/* Page Title = Search*/}
                     <PageTitle>Search</PageTitle>
                     {/* Search Bar */}
                     <SearchBar>
@@ -46,13 +52,27 @@ const Search = () => {
                                     </InputAdornment>
                                 ),
                             }}
+                            onChange={(e) => {
+                                setSearchTerm(e.currentTarget.value)
+                            }}
                         />
                     </SearchBar>
                     {/* List of account with Follow button */}
-                    {data?.users?.map((u) => (
-                        <UserCard key={u.id} user={u} />
-                    ))}
-                    <UserCardPopover user={null} />
+                    {filteredUsers.length > 0 &&
+                        filteredUsers.map((u) => (
+                            <UserCard key={u.id} user={u} />
+                        ))}
+                    {filteredUsers.length === 0 && (
+                        <FallbackContainer>
+                            <FallbackTitle>
+                                No results available at this time
+                            </FallbackTitle>
+                            <FallbackDescription>
+                                There are no results to show at this time. Try
+                                another keyword.
+                            </FallbackDescription>
+                        </FallbackContainer>
+                    )}
                 </Container>
             </QueryResult>
         </Layout>
@@ -99,4 +119,23 @@ const SearchInput = styled(TextField)({
             },
         },
     },
+})
+
+const FallbackContainer = styled.div({
+    border: `1px solid ${colors.grey.lighter}`,
+    borderTop: 'none',
+    borderRadius: '0 0 30px 30px',
+    backgroundColor: colors.white,
+    padding: '1.5rem 2rem',
+    textAlign: 'center',
+    width: '100%',
+})
+
+const FallbackTitle = styled.h3({
+    fontSize: '1.25rem',
+})
+
+const FallbackDescription = styled.p({
+    color: colors.grey.light,
+    fontSize: '.875rem',
 })

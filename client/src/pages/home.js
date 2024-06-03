@@ -1,50 +1,19 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from '@emotion/styled'
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { NewPostButton, Layout, QueryResult } from '../components'
 import { Post } from '../container'
 import { colors, ToggleIcon } from '../styles'
 import { Button } from '@mui/material'
 import { Link } from 'react-router-dom'
-
-// ? QUERY
-const FEED_FOR_YOU = gql`
-    query FeedForYou {
-        feedForYou {
-            id
-            body
-            createdAt
-            likeCount
-            replyCount
-            author {
-                id
-                username
-                bio
-                fullname
-                profileImage {
-                    id
-                    url
-                }
-            }
-            postImages {
-                id
-                url
-                caption
-            }
-        }
-    }
-`
-
-// TODO: Replace this mockCurrentUser with logged in user via Context
-const mockCurrentUser = {
-    id: '1',
-    profileImage: {
-        url: 'https://avatars.githubusercontent.com/u/9838872?v=4',
-    },
-}
+import { FEED_FOR_YOU } from '../utils'
+import { UserContext } from '../context'
 
 const Home = () => {
     const { loading, error, data } = useQuery(FEED_FOR_YOU)
+    // TODO: Replace this mockCurrentUser with logged in user via Context
+    const mockCurrentUser = useContext(UserContext)
+
     return (
         <Layout grid>
             <QueryResult loading={loading} error={error} data={data}>
@@ -52,7 +21,7 @@ const Home = () => {
                 <NewThread>
                     <LinkContainer to={'/profile'}>
                         <PostAvatarImage
-                            src={mockCurrentUser.profileImage.url}
+                            src={mockCurrentUser?.profileImage?.url}
                         />
                     </LinkContainer>
                     <TextButton>Start a thread...</TextButton>
@@ -96,7 +65,6 @@ const PostAvatarImage = styled.img({
     objectFit: 'cover',
     width: 40,
     height: 40,
-    filter: 'grayscale(60%)',
     ':hover': {
         cursor: 'pointer',
     },

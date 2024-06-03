@@ -31,31 +31,211 @@ async function getFollowingUsers(userId, context) {
   return followingUsers
 }
 
+// * RESPONSE TYPES FOR MUTATION
+const FollowUserResponse = objectType({
+  name: 'FollowUserResponse',
+  definition(t) {
+    // ? Similar to HTTP status code, represents the status of the mutation
+    t.nonNull.int('code')
+    // ? Indicates whether the mutation was successful
+    t.nonNull.boolean('success')
+    // ? Human-readable message for the UI
+    t.nonNull.string('message')
+    // ? Newly updated track after a successful mutation"
+    t.field('following', {
+      type: 'User',
+    })
+  },
+})
+
 const Mutation = objectType({
   name: 'Mutation',
   definition(t) {
-    t.field('addUser', {
-      type: User,
+    /**
+     * * When following a user, 3 actions will be taken
+     *    * 1. Add new record to the join table `Follows`
+     *    * 2. Update the following user, increase followerCount by 1
+     *    * 3. Update the follower user, increase followingCount by 1
+     */
+    t.field('followUser', {
+      type: FollowUserResponse,
       args: {
-        userCreateInput: arg({ type: nonNull(UserCreateInput) }),
+        followerId: nonNull(intArg()),
+        followingId: nonNull(intArg()),
+      },
+      resolve: async (_, args, context) => {
+        // ! Error handing: Prevent user to follow themselves
+        if (args.followerId === args.followingId) {
+          return {
+            code: 404,
+            success: false,
+            message: 'User cannot follow themselves',
+            following: null,
+          }
+        }
+
+        // Find the user to follow
+        const followingUser = await context.prisma.user.findUnique({
+          where: {
+            id: args.followingId,
+          },
+        })
+
+        try {
+          // ! Invalid following user
+          if (!followingUser) {
+            const err = new Error('User to follow not found')
+            return {
+              code: err.code,
+              success: false,
+              message: err.message,
+              following: null,
+            }
+            // throw new Error('User to follow not found')
+          }
+
+          // Add a new row in `Follows` table
+          await context.prisma.follows.create({
+            data: {
+              followedById: args.followerId,
+              followingId: args.followingId,
+            },
+          })
+
+          // Update the following user, increase the follower count to 1
+          const following = await context.prisma.user.update({
+            where: { id: args.followingId },
+            data: { followerCount: { increment: 1 } },
+          })
+
+          // Update the follower user, increase the following count to 1
+          const follower = await context.prisma.user.update({
+            where: { id: args.followerId },
+            data: { followingCount: { increment: 1 } },
+          })
+          return {
+            code: 200,
+            success: true,
+            message: 'Followed successfully!',
+            following: following,
+          }
+        } catch (err) {
+          return {
+            code: err.extensions.response.status || 404,
+            success: false,
+            message: err.extensions.response.body,
+            following: null,
+          }
+        }
       },
     })
-    t.field('createPost', {
-      type: Post,
+
+    /**
+     * * When unfollowing a user, 3 actions will be taken
+     *    * 1. Remove a record in the join table `Follows`
+     *    * 2. Update the following user, decrease followerCount by 1
+     *    * 3. Update the follower user, decrease followingCount by 1
+     */
+    t.field('unfollowUser', {
+      type: FollowUserResponse,
       args: {
-        authorId: nonNull(idArg()),
-        data: arg({ type: nonNull(PostCreateInput) }),
+        followerId: nonNull(intArg()),
+        followingId: nonNull(intArg()),
       },
-    })
-    t.field('updatePost', {
-      type: Post,
-      args: {
-        postId: nonNull(idArg()),
-        data: arg({ type: nonNull(PostCreateInput) }),
+      resolve: async (_, args, context) => {
+        // ! Error handing: Prevent user to follow themselves
+        if (args.followerId === args.followingId) {
+          return {
+            code: 404,
+            success: false,
+            message: 'User cannot unfollow themselves',
+            following: null,
+          }
+        }
+
+        try {
+          // Find the user to follow
+          const followingUser = await context.prisma.user.findUnique({
+            where: {
+              id: args.followingId,
+            },
+          })
+
+          // ! Invalid following user
+          if (!followingUser) {
+            return {
+              code: 404,
+              success: false,
+              message: 'User to follow not found',
+              following: null,
+            }
+          }
+
+          // Delete a row in `Follows` table
+          await context.prisma.follows.delete({
+            where: {
+              followingId_followedById: {
+                followedById: args.followerId,
+                followingId: args.followingId,
+              },
+            },
+          })
+
+          // Update the following user, increase the follower count to 1
+          const following = await context.prisma.user.update({
+            where: { id: args.followingId },
+            data: { followerCount: { decrement: 1 } },
+          })
+
+          // Update the follower user, increase the following count to 1
+          const follower = await context.prisma.user.update({
+            where: { id: args.followerId },
+            data: { followingCount: { decrement: 1 } },
+          })
+
+          return {
+            code: 200,
+            success: true,
+            message: 'Unfollowed Successfully!',
+            following: following,
+          }
+        } catch (err) {
+          return {
+            code: err.extensions.response.status,
+            success: false,
+            message: err.extensions.response.body,
+            following: null,
+          }
+        }
       },
     })
   },
 })
+
+const Follow = objectType({
+  name: 'Follow',
+  definition(t) {
+    t.nonNull.int('followedById')
+    t.nonNull.int('followingId')
+    t.nonNull.field('followedBy', {
+      type: 'User',
+      resolve: (parent, _, context) => {
+        return context.prisma.user.findUnique({
+          where: { id: parent.followedById },
+        })
+      },
+    })
+    t.nonNull.field('following', {
+      type: 'User',
+      resolve: (parent, _, context) => {
+        return context.prisma.user.findUnique({
+          where: { id: parent.followingId },
+        })
+      },
+    })
+  },
+})
+
 const Post = objectType({
   name: 'Post',
   definition(t) {
@@ -99,6 +279,7 @@ const Post = objectType({
     })
   },
 })
+
 const PostImage = objectType({
   name: 'PostImage',
   definition(t) {
@@ -114,6 +295,7 @@ const PostImage = objectType({
     })
   },
 })
+
 const ProfileImage = objectType({
   name: 'ProfileImage',
   definition(t) {
@@ -129,17 +311,29 @@ const ProfileImage = objectType({
     })
   },
 })
+
 const Query = objectType({
   name: 'Query',
   definition(t) {
-    // Get all users
+    // * Get all users, order by follower count (desc)
     t.nonNull.list.nonNull.field('users', {
       type: User,
       resolve: (_parent, _args, context) => {
-        return context.prisma.user.findMany()
+        return context.prisma.user.findMany({
+          orderBy: [{ followerCount: 'desc' }],
+        })
       },
     })
-    // Get a user by id
+
+    // * Get all followed-following pair of users
+    t.list.nonNull.field('follows', {
+      type: Follow,
+      resolve: async (_, __, context) => {
+        return await context.prisma.follows.findMany()
+      },
+    })
+
+    // * Get a user by id
     t.nullable.field('userById', {
       type: User,
       args: {
@@ -151,7 +345,8 @@ const Query = objectType({
         })
       },
     })
-    // Get all posts
+
+    // * Get all posts
     t.list.field('posts', {
       type: Post,
       resolve: (_parent, _args, context) => {
@@ -159,7 +354,7 @@ const Query = objectType({
       },
     })
 
-    // ? Posts in "FOR YOU" mode
+    // * Posts in "FOR YOU" mode
     t.list.field('feedForYou', {
       type: Post,
       resolve: (_parent, _args, context) => {
@@ -183,7 +378,7 @@ const Query = objectType({
       },
     })
 
-    // ? Posts in "FOLLOWING" mode
+    // * Posts in "FOLLOWING" mode
     t.list.field('feedFollowing', {
       type: Post,
       args: {
@@ -221,7 +416,7 @@ const Query = objectType({
       },
     })
 
-    // Get all posts of a user
+    // * Get all posts of a user
     t.list.field('postByUser', {
       type: Post,
       args: {
@@ -233,12 +428,16 @@ const Query = objectType({
         })
       },
     })
+
+    // * Get all profile images
     t.nonNull.list.nonNull.field('profileImages', {
       type: ProfileImage,
       resolve: (_parent, _args, context) => {
         return context.prisma.profileImage.findMany()
       },
     })
+
+    // * Get the profile image of a specific user
     t.nonNull.field('userProfileImage', {
       type: ProfileImage,
       resolve: (parent, _args, context) => {
@@ -249,6 +448,7 @@ const Query = objectType({
     })
   },
 })
+
 const User = objectType({
   name: 'User',
   definition(t) {
@@ -327,6 +527,7 @@ const ProfileImageCreateInput = inputObjectType({
     t.nonNull.string('url')
   },
 })
+
 const UserCreateInput = inputObjectType({
   name: 'UserCreateInput',
   definition(t) {
@@ -345,6 +546,7 @@ const schema = makeSchema({
     Query,
     Mutation,
     User,
+    Follow,
     ProfileImage,
     Post,
     PostImage,
