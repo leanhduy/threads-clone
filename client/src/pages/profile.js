@@ -8,17 +8,25 @@ import {
 } from '../components'
 import { useParams } from 'react-router-dom'
 import { mockUser } from '../mock'
+import { GET_USER_BY_USERNAME } from '../utils'
 
 const Profile = () => {
     const { username } = useParams()
-
-    // TODO: Use real user data when implementing the business logic
+    const {
+        loading,
+        error,
+        data: user,
+    } = useQuery(GET_USER_BY_USERNAME, {
+        variables: {
+            username,
+        },
+    })
 
     return (
         <Layout grid>
             {/* TODO: Update loading, error, data when implementing the business logic */}
-            <QueryResult loading={false} error={null} data={mockUser}>
-                <ProfileDetails user={mockUser} />
+            <QueryResult loading={loading} error={error} data={user}>
+                <ProfileDetails user={user?.userByUsername} />
             </QueryResult>
             <NewPostButton />
         </Layout>

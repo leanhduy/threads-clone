@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { colors } from '../styles'
 import { Button, Popover } from '@mui/material'
 import styled from '@emotion/styled'
@@ -10,6 +10,7 @@ import { FOLLOW_USER, UNFOLLOW_USER } from '../utils'
 import { UserContext } from '../context'
 
 const UserCard = ({ user }) => {
+    const navigate = useNavigate()
     const currentUser = useContext(UserContext)
     const [anchorEl, setAnchorEl] = useState(null)
     const [isPopoverOpen, setIsPopoverOpen] = useState(false)
@@ -22,9 +23,6 @@ const UserCard = ({ user }) => {
         onCompleted: (data) => {
             if (data) {
                 setIsFollowing(true)
-            }
-            if (followData) {
-                console.log(followData)
             }
         },
         onError: (error) => {
@@ -104,19 +102,24 @@ const UserCard = ({ user }) => {
     return (
         <Content>
             <ContentSide>
-                <PostAvatarImage src={profileImage?.url} alt="user avatar" />
+                <LinkContainer to={`/profile/${username}`}>
+                    <PostAvatarImage
+                        src={profileImage?.url}
+                        alt="user avatar"
+                    />
+                </LinkContainer>
             </ContentSide>
             <ContentMain>
                 <ContentMainBody>
-                    <LinkContainer to={'/profile'}>
+                    <LinkContainer to={`/profile/${username}`}>
                         <Title
                             onMouseEnter={handleMouseEnter}
                             onMouseLeave={handleMouseLeave}
                         >
                             {username}
                         </Title>
-                        <Subtitle>{bio}</Subtitle>
                     </LinkContainer>
+                    <Subtitle>{bio}</Subtitle>
                 </ContentMainBody>
                 <ContentMainFooter>
                     {`${new String(

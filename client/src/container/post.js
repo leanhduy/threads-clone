@@ -17,19 +17,22 @@ const Post = ({ post }) => {
     return (
         <Content>
             <ContentSide>
-                <PostAvatarImage
-                    src={author?.profileImage?.url}
-                    alt="user avatar"
-                />
+                <LinkContainer to={`/profile/${author?.username}`}>
+                    <PostAvatarImage
+                        src={author?.profileImage?.url}
+                        alt="user avatar"
+                    />
+                </LinkContainer>
             </ContentSide>
             <ContentMain>
                 <ContentMainHeader>
-                    <Title>{author.username}</Title>
+                    <Title>{author?.username}</Title>
                     <Subtitle>
                         {formatDistanceToNowStrict(new Date(createdAt))}
                     </Subtitle>
                 </ContentMainHeader>
                 <ContentMainBody>
+                    {/* TODO: Replace with the path to the post detail page */}
                     <LinkContainer to={'/search'}>
                         <PostText>{body}</PostText>
                         {postImages?.map((i) => (
