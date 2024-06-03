@@ -50,6 +50,31 @@ export const mockUser = {
     profileImage: {
         url: 'https://avatars.githubusercontent.com/u/9838872?v=4',
     },
+    followedBy: [
+        {
+            id: '3',
+        },
+    ],
+    following: [
+        {
+            id: '2',
+        },
+        {
+            id: '13',
+        },
+        {
+            id: '8',
+        },
+        {
+            id: '4',
+        },
+        {
+            id: '10',
+        },
+        {
+            id: '9',
+        },
+    ],
 }
 
 export const mockPostsWithAuthor = [

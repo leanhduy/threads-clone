@@ -13,12 +13,16 @@ import { Link } from 'react-router-dom'
 import logo from '../assets/threads.png'
 import { IconButton } from '@mui/material'
 import BorderColorRounded from '@mui/icons-material/BorderColorRounded'
+import { mockUser } from '../mock'
 
 /**
  * Header renders the top navigation
  * for this particular tutorial level, it only holds the home button
  */
 const Navbar = ({ children }) => {
+    // TODO: Replace with the logged in user when Authentication feature is implemented
+    const loggedInUser = mockUser
+
     return (
         <HeaderBar>
             <LeftContainer>
@@ -53,7 +57,7 @@ const Navbar = ({ children }) => {
                         <FavoriteBorderRoundedIcon />
                     </IconButton>
                 </HomeLink>
-                <HomeLink to="/profile">
+                <HomeLink to={`/profile/${loggedInUser.username}`}>
                     <IconButton aria-label="more">
                         <PersonOutlineRoundedIcon />
                     </IconButton>

@@ -4,16 +4,22 @@ import { colors } from '../styles'
 import { Button } from '@mui/material'
 import abbreviate from 'number-abbreviate'
 import { Post } from '../container'
-import { mockPostsWithAuthor } from '../mock'
+import { mockUser } from '../mock'
 
 const filters = ['post', 'replies', 'reposts']
+// TODO: Replace with the logged in user when Authenticate (Login/Logout) feature is implemented
+const loggedInUser = mockUser
+const followerIds = loggedInUser.followedBy.map((f) => f.id)
+const followingIds = loggedInUser.following.map((f) => f.id)
+
+console.log(followerIds)
+console.log(followingIds)
 
 const ProfileDetails = ({ user }) => {
-    // TODO: Replace with real data queries when implementing business logic
-    const mockPosts = mockPostsWithAuthor.filter((p) => p.author.id === user.id)
-
     // * Filter state
     const [filter, setFilter] = useState('post')
+    console.log(user.id)
+    console.log(followerIds.includes(user.id))
 
     // * Event handlers
     const handleToggleFilter = (e) => {
@@ -23,17 +29,17 @@ const ProfileDetails = ({ user }) => {
     return (
         <Container>
             {/* Page Title = <username>*/}
-            <PageTitle>{user.username}</PageTitle>
+            <PageTitle>{user?.username}</PageTitle>
             {/* User Info section */}
             <ProfileUserInfo>
                 <ProfileUserInfoTop>
                     <ProfileUserInfoLeft>
-                        <UserInfoFullname>{user.fullname}</UserInfoFullname>
-                        <UserInfoUsername>{user.username}</UserInfoUsername>
-                        <UserInfoBio>{user.bio}</UserInfoBio>
+                        <UserInfoFullname>{user?.fullname}</UserInfoFullname>
+                        <UserInfoUsername>{user?.username}</UserInfoUsername>
+                        <UserInfoBio>{user?.bio}</UserInfoBio>
                         <UserInfoFollowerCount>
                             {`${new String(
-                                abbreviate(user.followerCount, 2)
+                                abbreviate(user?.followerCount, 2)
                             ).toUpperCase()} followers`}
                         </UserInfoFollowerCount>
                     </ProfileUserInfoLeft>
@@ -45,41 +51,64 @@ const ProfileDetails = ({ user }) => {
                     </ProfileUserInfoRight>
                 </ProfileUserInfoTop>
                 <ProfileUserInfoBottom>
-                    <FollowButton>Follow</FollowButton>
-                    <MentionButton>Mention</MentionButton>
+                    {loggedInUser.id === user.id ? (
+                        <EditButton>Edit Profile</EditButton>
+                    ) : (
+                        <>
+                            <FollowButton
+                                className={
+                                    followingIds.includes(user.id)
+                                        ? 'following'
+                                        : ''
+                                }
+                            >
+                                {followingIds.includes(user.id)
+                                    ? 'Following'
+                                    : followerIds.includes(user.id)
+                                    ? 'Follow back'
+                                    : 'Follow'}
+                            </FollowButton>
+                            <MentionButton>Mention</MentionButton>
+                        </>
+                    )}
                 </ProfileUserInfoBottom>
             </ProfileUserInfo>
             {/* List of posts, replies, or reposts */}
-            {user.posts.length > 0 && (
+            <Tabs>
+                {filters.map((f) => (
+                    <TabOption
+                        key={f}
+                        className={filter === f ? 'selected' : ''}
+                        onClick={handleToggleFilter}
+                        disableRipple
+                    >
+                        {f}
+                    </TabOption>
+                ))}
+            </Tabs>
+            {user?.posts?.length > 0 && (
                 <>
-                    <Tabs>
-                        {filters.map((f) => (
-                            <TabOption
-                                key={f}
-                                className={filter === f ? 'selected' : ''}
-                                onClick={handleToggleFilter}
-                                disableRipple
-                            >
-                                {f}
-                            </TabOption>
-                        ))}
-                    </Tabs>
                     <div className="PostList">
-                        {mockPosts.map((p) => (
+                        {user?.posts.map((p) => (
                             <Post key={p.id} post={p} />
                         ))}
                     </div>
                 </>
             )}
-            {user.posts.length === 0 && (
+            {user.posts.length > 0 && (
                 <FallbackContainer>
-                    <FallbackTitle>
-                        No results available at this time
-                    </FallbackTitle>
-                    <FallbackDescription>
-                        There are no results to show at this time. Try another
-                        keyword.
-                    </FallbackDescription>
+                    {/* If this is not the current user, display No posts yet, otherwise display the 'Start Your First Thread' button */}
+                    {loggedInUser.id === user.id ? (
+                        <MentionButton>Start your first thread</MentionButton>
+                    ) : (
+                        <FallbackDescription>
+                            {filter === 'post'
+                                ? 'No posts yet.'
+                                : filter === 'replies'
+                                ? 'No replies yet.'
+                                : 'No reposts yet.'}
+                        </FallbackDescription>
+                    )}
                 </FallbackContainer>
             )}
         </Container>
@@ -159,10 +188,12 @@ const AvatarImage = styled.img({
 })
 
 const FallbackContainer = styled.div({
+    alignContent: 'center',
     border: `1px solid ${colors.grey.lighter}`,
     borderTop: 'none',
     borderRadius: '0 0 30px 30px',
     backgroundColor: colors.white,
+    flexGrow: 1,
     padding: '1.5rem 2rem',
     textAlign: 'center',
     width: '100%',
@@ -174,7 +205,6 @@ const FallbackTitle = styled.h3({
 
 const FallbackDescription = styled.p({
     color: colors.grey.light,
-    fontSize: '.875rem',
 })
 
 const FollowButton = styled(Button)({
@@ -188,6 +218,10 @@ const FollowButton = styled(Button)({
     textTransform: 'none',
     transition: 'transform 0.1s ease-in-out',
     width: '50%',
+    '&.following': {
+        backgroundColor: colors.white,
+        color: colors.black.base,
+    },
     ':hover': {
         backgroundColor: colors.black.light,
         color: colors.white,
@@ -208,6 +242,26 @@ const MentionButton = styled(Button)({
     width: '50%',
     color: colors.black.light,
     backgroundColor: colors.white,
+    ':hover': {
+        color: colors.black.light,
+        backgroundColor: colors.white,
+    },
+    ':active': {
+        transform: 'scale(0.95)',
+    },
+})
+
+const EditButton = styled(Button)({
+    backgroundColor: colors.white,
+    border: `1px solid ${colors.silver.dark}`,
+    borderRadius: '15px',
+    color: colors.black.light,
+    fontSize: '1rem',
+    fontWeight: 'bold',
+    marginBottom: '.75rem',
+    textTransform: 'none',
+    transition: 'transform 0.1s ease-in-out',
+    width: '100%',
     ':hover': {
         color: colors.black.light,
         backgroundColor: colors.white,
