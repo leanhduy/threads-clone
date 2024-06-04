@@ -1,5 +1,5 @@
-import React from 'react'
-import { Navbar } from '../components'
+import React, { useState } from 'react'
+import { Navbar, NewPostButton, NewPostDialog } from '../components'
 import styled from '@emotion/styled'
 import { widths, unit } from '../styles'
 
@@ -8,12 +8,25 @@ import { widths, unit } from '../styles'
  * with header, Page container and footer
  */
 const Layout = ({ fullWidth, children, grid }) => {
+    // State for open the create post dialog
+    const [open, setOpen] = useState(true)
+
+    const handleOpenDialog = () => {
+        setOpen(true)
+    }
+
+    const handleCloseDialog = () => {
+        setOpen(false)
+    }
+
     return (
         <>
-            <Navbar />
+            <Navbar openNewPostDialog={handleOpenDialog} />
             <PageContainer fullWidth={fullWidth} grid={grid}>
                 {children}
             </PageContainer>
+            <NewPostButton />
+            <NewPostDialog open={open} onClose={handleCloseDialog} />
         </>
     )
 }

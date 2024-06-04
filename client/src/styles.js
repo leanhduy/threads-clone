@@ -11,6 +11,7 @@ import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded'
 import ChatBubbleOutlineRoundedIcon from '@mui/icons-material/ChatBubbleOutlineRounded'
 import SendRoundedIcon from '@mui/icons-material/SendRounded'
 import ScreenRotationAltRoundedIcon from '@mui/icons-material/ScreenRotationAltRounded'
+import FilterRoundedIcon from '@mui/icons-material/FilterRounded'
 import SyncAltIcon from '@mui/icons-material/SyncAlt'
 import AddIcon from '@mui/icons-material/Add'
 import { styled } from '@mui/material/styles'
@@ -239,6 +240,11 @@ const StyledPersonOutlineRoundedIcon = styled(PersonOutlineRoundedIcon)(() => ({
 const StyledLikeIcon = styled(FavoriteBorderRoundedIcon)(() => ({
     color: colors.black.base,
 }))
+const StyledFilterRoundedIconSm = styled(FilterRoundedIcon)(() => ({
+    width: 20,
+    height: 20,
+    color: colors.grey.lighter,
+}))
 
 export { StyledHomeRoundedIcon as HomeRoundedIcon }
 export { StyledPostAddRoundedIcon as PostAddRoundedIcon }
@@ -255,3 +261,4 @@ export { StyledRepostIcon as RepostIcon }
 export { StyledLikeIcon as LikeIcon }
 export { StyledAddIcon as AddIcon }
 export { StyledSyncAltIcon as ToggleIcon }
+export { StyledFilterRoundedIconSm as ImageUploadSmIcon }
