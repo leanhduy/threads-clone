@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
     colors,
     widths,
@@ -19,7 +19,7 @@ import { mockUser } from '../mock'
  * Header renders the top navigation
  * for this particular tutorial level, it only holds the home button
  */
-const Navbar = ({ children }) => {
+const Navbar = ({ children, openNewPostDialog }) => {
     // TODO: Replace with the logged in user when Authentication feature is implemented
     const loggedInUser = mockUser
 
@@ -49,7 +49,7 @@ const Navbar = ({ children }) => {
                     </IconButton>
                 </HomeLink>
                 {/* THIS WILL OPEN A CREATE POST DIALOG */}
-                <IconButton aria-label="more">
+                <IconButton aria-label="more" onClick={openNewPostDialog}>
                     <BorderColorRounded />
                 </IconButton>
                 <HomeLink to="/activity">

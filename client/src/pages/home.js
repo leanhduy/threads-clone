@@ -1,7 +1,7 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { useQuery } from '@apollo/client'
-import { NewPostButton, Layout, QueryResult } from '../components'
+import { Layout, QueryResult } from '../components'
 import { Post } from '../container'
 import { colors, ToggleIcon } from '../styles'
 import { Button } from '@mui/material'
@@ -19,7 +19,7 @@ const Home = () => {
             <QueryResult loading={loading} error={error} data={data}>
                 {/* New Thread */}
                 <NewThread>
-                    <LinkContainer to={'/profile'}>
+                    <LinkContainer to={`/profile/${mockCurrentUser.username}`}>
                         <PostAvatarImage
                             src={mockCurrentUser?.profileImage?.url}
                         />
@@ -40,7 +40,6 @@ const Home = () => {
                     Following
                 </FeedModeToggleButton>
             </QueryResult>
-            <NewPostButton />
         </Layout>
     )
 }

@@ -12,14 +12,9 @@ const loggedInUser = mockUser
 const followerIds = loggedInUser.followedBy.map((f) => f.id)
 const followingIds = loggedInUser.following.map((f) => f.id)
 
-console.log(followerIds)
-console.log(followingIds)
-
 const ProfileDetails = ({ user }) => {
     // * Filter state
     const [filter, setFilter] = useState('post')
-    console.log(user.id)
-    console.log(followerIds.includes(user.id))
 
     // * Event handlers
     const handleToggleFilter = (e) => {
@@ -95,7 +90,7 @@ const ProfileDetails = ({ user }) => {
                     </div>
                 </>
             )}
-            {user.posts.length > 0 && (
+            {user.posts.length === 0 && (
                 <FallbackContainer>
                     {/* If this is not the current user, display No posts yet, otherwise display the 'Start Your First Thread' button */}
                     {loggedInUser.id === user.id ? (

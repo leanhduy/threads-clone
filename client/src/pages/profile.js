@@ -1,13 +1,7 @@
 import React from 'react'
 import { useQuery } from '@apollo/client'
-import {
-    NewPostButton,
-    Layout,
-    QueryResult,
-    ProfileDetails,
-} from '../components'
+import { Layout, QueryResult, ProfileDetails } from '../components'
 import { useParams } from 'react-router-dom'
-import { mockUser } from '../mock'
 import { GET_USER_BY_USERNAME } from '../utils'
 
 const Profile = () => {
@@ -28,7 +22,6 @@ const Profile = () => {
             <QueryResult loading={loading} error={error} data={user}>
                 <ProfileDetails user={user?.userByUsername} />
             </QueryResult>
-            <NewPostButton />
         </Layout>
     )
 }
