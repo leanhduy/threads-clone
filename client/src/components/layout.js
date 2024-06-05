@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
-import { Navbar, NewPostButton, NewPostDialog } from '../components'
+import React, { useMemo, useState } from 'react'
+import { Navbar, QuickNewPostButton, NewPostDialog } from '../components'
 import styled from '@emotion/styled'
 import { widths, unit } from '../styles'
+import { NewPostContext } from '../context'
 
 /**
  * Layout renders the full page content:
@@ -9,24 +10,29 @@ import { widths, unit } from '../styles'
  */
 const Layout = ({ fullWidth, children, grid }) => {
     // State for open the create post dialog
-    const [open, setOpen] = useState(true)
+    const [isCreatingNewPost, setIsCreatingNewPost] = useState(false)
 
-    const handleOpenDialog = () => {
-        setOpen(true)
+    const handleOpenNewPostDialog = () => {
+        setIsCreatingNewPost(true)
     }
 
-    const handleCloseDialog = () => {
-        setOpen(false)
+    const handleCloseNewPostDialog = () => {
+        setIsCreatingNewPost(false)
     }
 
     return (
         <>
-            <Navbar openNewPostDialog={handleOpenDialog} />
+            <Navbar openNewPostDialog={handleOpenNewPostDialog} />
             <PageContainer fullWidth={fullWidth} grid={grid}>
-                {children}
+                <NewPostContext.Provider value={handleOpenNewPostDialog}>
+                    {children}
+                </NewPostContext.Provider>
             </PageContainer>
-            <NewPostButton />
-            <NewPostDialog open={open} onClose={handleCloseDialog} />
+            <QuickNewPostButton openNewPostDialog={handleOpenNewPostDialog} />
+            <NewPostDialog
+                isCreateNewPost={isCreatingNewPost}
+                closeNewPostDialog={handleCloseNewPostDialog}
+            />
         </>
     )
 }

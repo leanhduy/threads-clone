@@ -2,16 +2,26 @@ import React, { useState } from 'react'
 import { Button } from '@mui/material'
 import { ImageUploadSmIcon } from '../styles'
 import styled from '@emotion/styled'
+import { generateUniqueID } from '../utils'
 
-const ImageUploadButton = () => {
-    const [selectedFile, setSelectedFile] = useState(null)
+const ImageUploadButton = ({ addImage }) => {
+    // * Event handlers
 
     const handleFileChange = (event) => {
         const file = event.target.files[0]
+
         if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
-            setSelectedFile(file)
-            // Handle the file for uploading, e.g., send to a server
-            console.log('Selected file:', file)
+            addImage({
+                id: generateUniqueID(),
+                url: URL.createObjectURL(file),
+                caption: 'No caption',
+            })
+
+            /**
+             * TODO
+             * * 1. UPLOAD TO THE CLOUDINARY SERVER USING HTTP POST REQUEST (AXIOS)
+             * * 2. AFTER GETTING THE URL OF THE IMAGE, WRITE INTO THE POSTIMAGE TABLE
+             */
         } else {
             console.error('Please select a valid image file (JPEG or PNG)')
         }

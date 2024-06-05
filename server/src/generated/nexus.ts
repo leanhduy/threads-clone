@@ -29,6 +29,7 @@ declare global {
 
 export interface NexusGenInputs {
   PostCreateInput: { // input type
+    authorId: number; // Int!
     body: string; // String!
     postImages?: Array<NexusGenInputs['PostImageCreateInput'] | null> | null; // [PostImageCreateInput]
   }
@@ -64,6 +65,12 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  AddPostResponse: { // root type
+    code: number; // Int!
+    message: string; // String!
+    post?: NexusGenRootTypes['Post'] | null; // Post
+    success: boolean; // Boolean!
+  }
   Follow: { // root type
     followedById: number; // Int!
     followingId: number; // Int!
@@ -117,6 +124,12 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  AddPostResponse: { // field return type
+    code: number; // Int!
+    message: string; // String!
+    post: NexusGenRootTypes['Post'] | null; // Post
+    success: boolean; // Boolean!
+  }
   Follow: { // field return type
     followedBy: NexusGenRootTypes['User']; // User!
     followedById: number; // Int!
@@ -130,6 +143,7 @@ export interface NexusGenFieldTypes {
     success: boolean; // Boolean!
   }
   Mutation: { // field return type
+    addpost: NexusGenRootTypes['AddPostResponse'] | null; // AddPostResponse
     followUser: NexusGenRootTypes['FollowUserResponse'] | null; // FollowUserResponse
     unfollowUser: NexusGenRootTypes['FollowUserResponse'] | null; // FollowUserResponse
   }
@@ -186,6 +200,12 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  AddPostResponse: { // field return type name
+    code: 'Int'
+    message: 'String'
+    post: 'Post'
+    success: 'Boolean'
+  }
   Follow: { // field return type name
     followedBy: 'User'
     followedById: 'Int'
@@ -199,6 +219,7 @@ export interface NexusGenFieldTypeNames {
     success: 'Boolean'
   }
   Mutation: { // field return type name
+    addpost: 'AddPostResponse'
     followUser: 'FollowUserResponse'
     unfollowUser: 'FollowUserResponse'
   }
@@ -256,6 +277,9 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    addpost: { // args
+      post?: NexusGenInputs['PostCreateInput'] | null; // PostCreateInput
+    }
     followUser: { // args
       followerId: number; // Int!
       followingId: number; // Int!

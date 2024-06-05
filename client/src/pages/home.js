@@ -1,7 +1,7 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import { useQuery } from '@apollo/client'
-import { Layout, QueryResult } from '../components'
+import { Layout, NewPostDialog, QueryResult } from '../components'
 import { Post } from '../container'
 import { colors, ToggleIcon } from '../styles'
 import { Button } from '@mui/material'
@@ -10,9 +10,19 @@ import { FEED_FOR_YOU } from '../utils'
 import { UserContext } from '../context'
 
 const Home = () => {
-    const { loading, error, data } = useQuery(FEED_FOR_YOU)
+    // TODO: OPTIMIZE TO REMOVE THE REDUNDANCY NEWPOSTDIALOG BETWEEN COMPONENTS
+    const [isCreatingNewPost, setIsCreatingNewPost] = useState(false)
+
+    const handleOpenNewPostDialog = () => {
+        setIsCreatingNewPost(true)
+    }
+
+    const handleCloseNewPostDialog = () => {
+        setIsCreatingNewPost(false)
+    }
     // TODO: Replace this mockCurrentUser with logged in user via Context
     const mockCurrentUser = useContext(UserContext)
+    const { loading, error, data } = useQuery(FEED_FOR_YOU)
 
     return (
         <Layout grid>
@@ -24,8 +34,15 @@ const Home = () => {
                             src={mockCurrentUser?.profileImage?.url}
                         />
                     </LinkContainer>
-                    <TextButton>Start a thread...</TextButton>
-                    <StyledButton variant="outlined">Post</StyledButton>
+                    <TextButton onClick={handleOpenNewPostDialog}>
+                        Start a thread...
+                    </TextButton>
+                    <StyledButton
+                        variant="outlined"
+                        onClick={handleOpenNewPostDialog}
+                    >
+                        Post
+                    </StyledButton>
                 </NewThread>
                 {/* List of Posts */}
                 {data?.feedForYou?.map((post) => (
@@ -39,6 +56,10 @@ const Home = () => {
                 >
                     Following
                 </FeedModeToggleButton>
+                <NewPostDialog
+                    isCreateNewPost={isCreatingNewPost}
+                    closeNewPostDialog={handleCloseNewPostDialog}
+                />
             </QueryResult>
         </Layout>
     )

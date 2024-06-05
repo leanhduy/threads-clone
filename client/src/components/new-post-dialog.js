@@ -1,88 +1,27 @@
 import styled from '@emotion/styled'
-import {
-    Button,
-    Dialog,
-    TextField,
-    Popover,
-    ImageList,
-    ImageListItem,
-} from '@mui/material'
-import React, { useState } from 'react'
+import { Button, Dialog, TextField, Popover } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import { colors } from '../styles'
 import { mockUser } from '../mock'
 import { Link } from 'react-router-dom'
-import { ImageUploadButton } from '../components'
+import { ImageUploadButton, Spinner } from '../components'
+import { PostImage } from '../container'
+import { ToastContainer } from 'react-toastify'
+import { createPostToastr } from '../utils'
 
 const PostScopes = {
     ANYONE: 'anyone',
     FOLLOWER: 'follower',
 }
 
-// TODO: REPLACE THIS WITH THE REAL DATA FROM SERVER WHEN IMPLEMENTING THE LOGIC
-const images = [
-    {
-        img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-        title: 'Breakfast',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-        title: 'Burger',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-        title: 'Camera',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-        title: 'Coffee',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-        title: 'Hats',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-        title: 'Honey',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-        title: 'Basketball',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-        title: 'Fern',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-        title: 'Mushrooms',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-        title: 'Tomato basil',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-        title: 'Sea star',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-        title: 'Bike',
-    },
-]
-
-const NewPostDialog = (props) => {
-    const { onClose, open } = props
+const NewPostDialog = ({ isCreateNewPost, closeNewPostDialog }) => {
     const [scope, setScope] = useState(PostScopes.ANYONE)
     const [anchorEl, setAnchorEl] = useState(null)
+    const [isPostContentAvail, setIsPostContentAvail] = useState(false) // Check if post content is available
+    const [postText, setPostText] = useState('')
+    const [postImages, setPostImages] = useState([])
 
     // * Handler functions
-    const handleScopeChange = (e) => {
-        setScope(e.target.value)
-    }
-
-    const handleCloseDialog = () => {
-        onClose()
-    }
 
     const handleOpenOption = (e) => {
         setAnchorEl(e.currentTarget)
@@ -97,10 +36,44 @@ const NewPostDialog = (props) => {
         handleCloseOption()
     }
 
+    const addImage = (src) => {
+        setPostImages((postImages) => [...postImages, { ...src }])
+    }
+
+    const updateImage = (img) => {
+        const updatedImages = postImages.map((i) => {
+            if (i.id === img.id) {
+                return img
+            }
+            return i
+        })
+        setPostImages(updatedImages)
+    }
+
+    const removeImage = (id) => {
+        setPostImages((imgs) => [...imgs.filter((img) => img.id !== id)])
+    }
+
+    const handleCreatePost = () => {
+        // TODO: REMOVE AFTER TESTING
+        createPostToastr(Spinner)
+    }
+
+    // * #region Side-effects
+    // ? Keep track of the postText and postImages to enable/disable the Post button
+    useEffect(() => {
+        if (postText.trim() !== '' || postImages.length > 0) {
+            setIsPostContentAvail(true)
+        } else {
+            setIsPostContentAvail(false)
+        }
+    }, [postText, postImages])
+
+    // * Others
     const openOption = Boolean(anchorEl)
 
     return (
-        <CreateDialog onClose={handleCloseDialog} open={open}>
+        <CreateDialog onClose={closeNewPostDialog} open={isCreateNewPost}>
             <DialogContainer>
                 <Top>
                     <TopLeft>
@@ -121,26 +94,27 @@ const NewPostDialog = (props) => {
                                     multiline
                                     variant="standard"
                                     placeholder="Start a thread..."
+                                    onChange={(e) => {
+                                        setPostText(e.target.value)
+                                    }}
                                 />
                             </PostBody>
-                            <PostImages>
-                                <ImageList>
-                                    {images.map((item) => (
-                                        <ImageListItem key={item.img}>
-                                            <img
-                                                srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                                                src={`${item.img}?w=248&fit=crop&auto=format`}
-                                                alt={item.title}
-                                                loading="lazy"
+                            {postImages.length > 0 && (
+                                <PostImages>
+                                    {postImages.map((i) => (
+                                        <ImageContainer key={i.id}>
+                                            <PostImage
+                                                imageProp={i}
+                                                remove={removeImage}
+                                                update={updateImage}
                                             />
-                                        </ImageListItem>
+                                        </ImageContainer>
                                     ))}
-                                </ImageList>
-                            </PostImages>
+                                </PostImages>
+                            )}
                         </PostContent>
-                        {/* <ImageUploadSmIcon sx={{ display: 'block' }} /> */}
                         {/* Image upload button */}
-                        <ImageUploadButton />
+                        <ImageUploadButton addImage={addImage} />
                     </TopRight>
                 </Top>
                 <Bottom>
@@ -167,19 +141,26 @@ const NewPostDialog = (props) => {
                             </ScopeOption>
                         </ScopeOptionContainer>
                     </Popover>
-                    <PostButton disabled>Post</PostButton>
+                    <PostButton
+                        disabled={!isPostContentAvail}
+                        onClick={handleCreatePost}
+                    >
+                        Post
+                    </PostButton>
                 </Bottom>
             </DialogContainer>
+            <ToastContainer />
         </CreateDialog>
     )
 }
 
 export default NewPostDialog
 
+// #region Styled-components
 const CreateDialog = styled(Dialog)({
     '& .MuiPaper-root': {
         padding: '2rem',
-        width: '80%',
+        width: '800%',
     },
 })
 
@@ -188,20 +169,26 @@ const DialogContainer = styled.div({
     flexDirection: 'column',
     rowGap: '2rem',
 })
+
 const Top = styled.div({
     display: 'flex',
     columnGap: '1rem',
+    width: '100%',
 })
+
 const Bottom = styled.div({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
 })
+
 const TopLeft = styled.div({})
+
 const TopRight = styled.div({
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
+    overflow: 'auto',
 })
 
 const PostAvatarImage = styled.img({
@@ -224,26 +211,28 @@ const Username = styled.h5({
 const PostContent = styled.div({
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'auto',
 })
 
 const PostBody = styled.div({})
 
 const PostImages = styled.div({
     display: 'flex',
-    flexDirection: 'row',
-    overflowX: 'auto', // Enable horizontal scrolling
-    height: '248px',
     width: '100%',
-    '& .MuiImageList-root': {
-        display: 'flex',
-        flexDirection: 'row',
-        overflowX: 'auto',
-        width: '100%',
-    },
-    '& .MuiImageListItem-root': {
-        flex: '0 0 auto', // Prevent shrinking and maintain item size
-    },
+    overflowX: 'auto',
+    whiteSpace: 'nowrap',
+})
+
+const ImageContainer = styled.div({
+    display: 'inline-block',
+    color: colors.white,
+    textAlign: 'center',
+    padding: '14px',
+    textDecoration: 'none',
+})
+
+const StyledImg = styled.img({
+    height: '278px',
+    width: 'auto',
 })
 
 const PostInput = styled(TextField)({
@@ -301,3 +290,5 @@ const PostButton = styled(Button)({
     fontWeight: 'bold',
     textTransform: 'none',
 })
+
+// #endregion Styled-components

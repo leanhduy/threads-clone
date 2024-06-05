@@ -2,6 +2,13 @@
 ### Do not make changes to this file directly
 
 
+type AddPostResponse {
+  code: Int!
+  message: String!
+  post: Post
+  success: Boolean!
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
@@ -22,6 +29,7 @@ type FollowUserResponse {
 }
 
 type Mutation {
+  addpost(post: PostCreateInput): AddPostResponse
   followUser(followerId: Int!, followingId: Int!): FollowUserResponse
   unfollowUser(followerId: Int!, followingId: Int!): FollowUserResponse
 }
@@ -41,6 +49,7 @@ type Post {
 }
 
 input PostCreateInput {
+  authorId: Int!
   body: String!
   postImages: [PostImageCreateInput]
 }
