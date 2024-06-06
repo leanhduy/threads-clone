@@ -4,15 +4,15 @@ import { AddIcon } from '../styles'
 import React from 'react'
 import { colors } from '../styles'
 
-const NewPostButton = () => {
+const QuickNewPostButton = ({ openNewPostDialog }) => {
     return (
-        <StyledButton>
+        <StyledButton onClick={openNewPostDialog}>
             <AddIcon />
         </StyledButton>
     )
 }
 
-export default NewPostButton
+export default QuickNewPostButton
 
 const StyledButton = styled(Button)({
     backgroundColor: colors.white,

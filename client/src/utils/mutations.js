@@ -42,3 +42,23 @@ export const UNFOLLOW_USER = gql`
         }
     }
 `
+
+// * ADD POST
+export const ADD_POST = gql`
+    mutation AddPost($post: PostCreateInput) {
+        addpost(post: $post) {
+            code
+            success
+            message
+            post {
+                id
+                body
+                createdAt
+                updatedAt
+                likeCount
+                repostCount
+                replyCount
+            }
+        }
+    }
+`

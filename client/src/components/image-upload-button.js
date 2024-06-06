@@ -2,16 +2,26 @@ import React, { useState } from 'react'
 import { Button } from '@mui/material'
 import { ImageUploadSmIcon } from '../styles'
 import styled from '@emotion/styled'
+import { generateUniqueID } from '../utils'
 
-const ImageUploadButton = () => {
-    const [selectedFile, setSelectedFile] = useState(null)
+const ImageUploadButton = ({ addImage }) => {
+    // * Event handlers
 
     const handleFileChange = (event) => {
         const file = event.target.files[0]
-        if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
-            setSelectedFile(file)
-            // Handle the file for uploading, e.g., send to a server
-            console.log('Selected file:', file)
+
+        if (
+            file &&
+            (file.type === 'image/jpeg' ||
+                file.type === 'image/png' ||
+                file.type === 'image/gif')
+        ) {
+            addImage({
+                id: generateUniqueID(),
+                url: URL.createObjectURL(file),
+                caption: 'No caption',
+                file: file,
+            })
         } else {
             console.error('Please select a valid image file (JPEG or PNG)')
         }
@@ -22,7 +32,7 @@ const ImageUploadButton = () => {
             <StyledButton component="label" startIcon={<ImageUploadSmIcon />}>
                 <HiddenInput
                     type="file"
-                    accept="image/jpeg, image/png"
+                    accept="image/jpeg, image/png, image/gif"
                     onChange={handleFileChange}
                 />
             </StyledButton>

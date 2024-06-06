@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom/client'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import Pages from './pages'
 import GlobalStyles from './styles'
-import UserContext from './context/UserContext'
+import { UserContext } from './context'
 import { mockUser } from './mock'
+import 'react-toastify/dist/ReactToastify.css'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 const client = new ApolloClient({

@@ -42,9 +42,25 @@ const FollowUserResponse = objectType({
     t.nonNull.boolean('success')
     // ? Human-readable message for the UI
     t.nonNull.string('message')
-    // ? Newly updated track after a successful mutation"
+    // ? Updated User after a successful mutation"
     t.field('following', {
       type: 'User',
+    })
+  },
+})
+
+const AddPostResponse = objectType({
+  name: 'AddPostResponse',
+  definition(t) {
+    // ? Similar to HTTP status code, represents the status of the mutation
+    t.nonNull.int('code')
+    // ? Indicates whether the mutation was successful
+    t.nonNull.boolean('success')
+    // ? Human-readable message for the UI
+    t.nonNull.string('message')
+    // ? Newly created Post after a successful mutation"
+    t.field('post', {
+      type: 'Post',
     })
   },
 })
@@ -53,6 +69,7 @@ const Mutation = objectType({
   name: 'Mutation',
   definition(t) {
     /**
+     * * FOLLOW A USER
      * * When following a user, 3 actions will be taken
      *    * 1. Add new record to the join table `Follows`
      *    * 2. Update the following user, increase followerCount by 1
@@ -132,6 +149,7 @@ const Mutation = objectType({
     })
 
     /**
+     * * UNFOLLOW A USER
      * * When unfollowing a user, 3 actions will be taken
      *    * 1. Remove a record in the join table `Follows`
      *    * 2. Update the following user, decrease followerCount by 1
@@ -206,6 +224,51 @@ const Mutation = objectType({
             success: false,
             message: err.extensions.response.body,
             following: null,
+          }
+        }
+      },
+    })
+
+    /**
+     * * ADD A NEW POST
+     * * 1. Create new post in the Post table
+     * * 2. Create new post images in the PostImage table
+     */
+    t.field('addpost', {
+      type: AddPostResponse,
+      args: {
+        post: PostCreateInput,
+      },
+      resolve: async (_, args, context) => {
+        try {
+          // ? Create the post record
+          const newPost = await context.prisma.post.create({
+            data: {
+              body: args.post.body,
+              authorId: args.post.authorId,
+              postImages: {
+                create: args.post.postImages.map((img) => ({
+                  url: img.url,
+                  caption: img.caption,
+                })),
+              },
+            },
+          })
+
+          // Return the response
+          return {
+            code: 201,
+            success: true,
+            message: 'Post created successfully!',
+            post: newPost,
+          }
+        } catch (error) {
+          console.log(error)
+          return {
+            code: 500,
+            success: false,
+            message: 'Error during post creation!',
+            post: null,
           }
         }
       },
@@ -538,8 +601,10 @@ const PostCreateInput = inputObjectType({
   definition(t) {
     t.nonNull.string('body')
     t.list.field('postImages', { type: PostImageCreateInput })
+    t.nonNull.int('authorId')
   },
 })
+
 const PostImageCreateInput = inputObjectType({
   name: 'PostImageCreateInput',
   definition(t) {
@@ -547,6 +612,7 @@ const PostImageCreateInput = inputObjectType({
     t.string('caption')
   },
 })
+
 const ProfileImageCreateInput = inputObjectType({
   name: 'ProfileImageCreateInput',
   definition(t) {

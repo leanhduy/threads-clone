@@ -1,10 +1,11 @@
 import styled from '@emotion/styled'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { colors } from '../styles'
 import { Button } from '@mui/material'
 import abbreviate from 'number-abbreviate'
 import { Post } from '../container'
 import { mockUser } from '../mock'
+import { NewPostContext } from '../context'
 
 const filters = ['post', 'replies', 'reposts']
 // TODO: Replace with the logged in user when Authenticate (Login/Logout) feature is implemented
@@ -15,6 +16,9 @@ const followingIds = loggedInUser.following.map((f) => f.id)
 const ProfileDetails = ({ user }) => {
     // * Filter state
     const [filter, setFilter] = useState('post')
+
+    // * Access the setOpen from the NewPost context to open the creat new dialog, use by calling `openDialog(true)`
+    const openNewPostDialog = useContext(NewPostContext)
 
     // * Event handlers
     const handleToggleFilter = (e) => {
@@ -94,7 +98,9 @@ const ProfileDetails = ({ user }) => {
                 <FallbackContainer>
                     {/* If this is not the current user, display No posts yet, otherwise display the 'Start Your First Thread' button */}
                     {loggedInUser.id === user.id ? (
-                        <MentionButton>Start your first thread</MentionButton>
+                        <MentionButton onClick={openNewPostDialog}>
+                            Start your first thread
+                        </MentionButton>
                     ) : (
                         <FallbackDescription>
                             {filter === 'post'
@@ -112,6 +118,7 @@ const ProfileDetails = ({ user }) => {
 
 export default ProfileDetails
 
+//#region Styled-components
 const Container = styled.div({
     display: 'flex',
     flexDirection: 'column',
@@ -301,3 +308,4 @@ const TabOption = styled(Button)({
         borderBottom: `1px solid ${colors.black.base}`,
     },
 })
+//#endregion

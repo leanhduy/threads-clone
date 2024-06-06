@@ -18,7 +18,6 @@ const Profile = () => {
 
     return (
         <Layout grid>
-            {/* TODO: Update loading, error, data when implementing the business logic */}
             <QueryResult loading={loading} error={error} data={user}>
                 <ProfileDetails user={user?.userByUsername} />
             </QueryResult>
