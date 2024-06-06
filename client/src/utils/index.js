@@ -1,4 +1,12 @@
-export { searchString, generateUniqueID, createPostToastr } from './helpers.js'
+export {
+    searchString,
+    generateUniqueID,
+    createPostToast,
+    toastSuccess,
+    toastError,
+    removeToast,
+    uploadImageToHostingServer,
+} from './helpers.js'
 export {
     GET_USER_BY_ID,
     GET_USERS,

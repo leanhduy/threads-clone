@@ -13,6 +13,7 @@
         "@emotion/styled": "^11.3.0",
         "@mui/icons-material": "^5.15.19",
         "@mui/material": "^5.15.19",
+        "axios": "^1.7.2",
         "date-fns": "^3.6.0",
         "graphql": "^16.8.1",
         "mui-image": "^1.0.7",

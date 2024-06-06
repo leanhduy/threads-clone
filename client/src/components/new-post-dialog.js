@@ -1,25 +1,65 @@
 import styled from '@emotion/styled'
 import { Button, Dialog, TextField, Popover } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { colors } from '../styles'
 import { mockUser } from '../mock'
 import { Link } from 'react-router-dom'
 import { ImageUploadButton, Spinner } from '../components'
 import { PostImage } from '../container'
 import { ToastContainer } from 'react-toastify'
-import { createPostToastr } from '../utils'
+import {
+    ADD_POST,
+    createPostToast,
+    removeToast,
+    toastSuccess,
+    toastError,
+    uploadImageToHostingServer,
+} from '../utils'
+import { useMutation } from '@apollo/client'
+import { UserContext } from '../context'
 
 const PostScopes = {
     ANYONE: 'anyone',
     FOLLOWER: 'follower',
 }
 
-const NewPostDialog = ({ isCreateNewPost, closeNewPostDialog }) => {
+const NewPostDialog = ({
+    isCreateNewPost,
+    closeNewPostDialog,
+    refetchPosts,
+}) => {
+    // * Top-level States / Variables
     const [scope, setScope] = useState(PostScopes.ANYONE)
     const [anchorEl, setAnchorEl] = useState(null)
     const [isPostContentAvail, setIsPostContentAvail] = useState(false) // Check if post content is available
     const [postText, setPostText] = useState('')
     const [postImages, setPostImages] = useState([])
+    const loggedInUser = useContext(UserContext) // TODO: Replace with logged in user id when authentication feats are implement (login, signup)
+
+    // * Hooks
+    const [createPost] = useMutation(ADD_POST, {
+        onCompleted: async () => {
+            // ? When the mutation is done! The content for the post draft need to be cleared (body & images)
+            setPostImages([])
+            setPostText('')
+
+            // ? Display success toast
+            removeToast()
+            toastSuccess('Post created successfully!')
+
+            // * Refetch posts
+            await refetchPosts()
+        },
+        onError: (error) => {
+            // ? When the mutation is done! The content for the post draft need to be cleared (body & images)
+            setPostImages([])
+            setPostText('')
+
+            // ? Display error toast
+            removeToast()
+            toastError('Could not create post!', error)
+        },
+    })
 
     // * Handler functions
 
@@ -54,9 +94,42 @@ const NewPostDialog = ({ isCreateNewPost, closeNewPostDialog }) => {
         setPostImages((imgs) => [...imgs.filter((img) => img.id !== id)])
     }
 
-    const handleCreatePost = () => {
-        // TODO: REMOVE AFTER TESTING
-        createPostToastr(Spinner)
+    const handleCreatePost = async () => {
+        try {
+            // 1. Display loading spinner 'create-post-toast'
+            createPostToast(Spinner)
+
+            // 2. Upload image to the Cloudinary and get the list of image urls
+            let uploadedImages = await Promise.all(
+                postImages.map(async (img) => {
+                    return await uploadImageToHostingServer(img)
+                })
+            )
+            // Form the data body for the `postImages` field in the mutation variables
+            uploadedImages = uploadedImages.map((img) => ({
+                url: img.url,
+                caption: img.caption,
+            }))
+
+            // 3. Call the mutation function
+            await createPost({
+                variables: {
+                    post: {
+                        body: postText,
+                        authorId: Number(loggedInUser.id),
+                        postImages: uploadedImages,
+                    },
+                },
+            })
+        } catch (error) {
+            removeToast()
+            toastError(error)
+        } finally {
+            // Close the dialog
+            setTimeout(() => {
+                closeNewPostDialog()
+            }, 2000)
+        }
     }
 
     // * #region Side-effects
@@ -149,7 +222,7 @@ const NewPostDialog = ({ isCreateNewPost, closeNewPostDialog }) => {
                     </PostButton>
                 </Bottom>
             </DialogContainer>
-            <ToastContainer />
+            <ToastContainer containerId={1} />
         </CreateDialog>
     )
 }

@@ -22,7 +22,7 @@ const Home = () => {
     }
     // TODO: Replace this mockCurrentUser with logged in user via Context
     const mockCurrentUser = useContext(UserContext)
-    const { loading, error, data } = useQuery(FEED_FOR_YOU)
+    const { loading, error, data, refetch } = useQuery(FEED_FOR_YOU)
 
     return (
         <Layout grid>
@@ -59,6 +59,7 @@ const Home = () => {
                 <NewPostDialog
                     isCreateNewPost={isCreatingNewPost}
                     closeNewPostDialog={handleCloseNewPostDialog}
+                    refetchPosts={refetch}
                 />
             </QueryResult>
         </Layout>

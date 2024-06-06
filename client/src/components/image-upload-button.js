@@ -10,18 +10,18 @@ const ImageUploadButton = ({ addImage }) => {
     const handleFileChange = (event) => {
         const file = event.target.files[0]
 
-        if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
+        if (
+            file &&
+            (file.type === 'image/jpeg' ||
+                file.type === 'image/png' ||
+                file.type === 'image/gif')
+        ) {
             addImage({
                 id: generateUniqueID(),
                 url: URL.createObjectURL(file),
                 caption: 'No caption',
+                file: file,
             })
-
-            /**
-             * TODO
-             * * 1. UPLOAD TO THE CLOUDINARY SERVER USING HTTP POST REQUEST (AXIOS)
-             * * 2. AFTER GETTING THE URL OF THE IMAGE, WRITE INTO THE POSTIMAGE TABLE
-             */
         } else {
             console.error('Please select a valid image file (JPEG or PNG)')
         }
@@ -32,7 +32,7 @@ const ImageUploadButton = ({ addImage }) => {
             <StyledButton component="label" startIcon={<ImageUploadSmIcon />}>
                 <HiddenInput
                     type="file"
-                    accept="image/jpeg, image/png"
+                    accept="image/jpeg, image/png, image/gif"
                     onChange={handleFileChange}
                 />
             </StyledButton>
