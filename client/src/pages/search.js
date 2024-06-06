@@ -6,15 +6,21 @@ import { Layout } from '../components'
 import { colors, SearchRoundedSmallIcon } from '../styles'
 import { InputAdornment, TextField } from '@mui/material'
 import { UserCard } from '../container'
-import { searchString } from '../utils'
+import { GET_USERS, GET_USER_BY_ID, searchString } from '../utils'
 import { UserContext } from '../context'
-import { GET_USERS } from '../utils'
 
 const Search = () => {
     const [filteredUsers, setFilteredUsers] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
     const { loading, error, data, refetch } = useQuery(GET_USERS)
     const currentUser = useContext(UserContext)
+    // * Get the current logged in user
+    // TODO: When authentication features are implement (login), remove this code and replace with the authenticated user (e.g., via Context API)
+    const { data: loggedInUser } = useQuery(GET_USER_BY_ID, {
+        variables: {
+            id: 1,
+        },
+    })
 
     useEffect(() => {
         if (data) {
@@ -37,7 +43,12 @@ const Search = () => {
 
     return (
         <Layout grid>
-            <QueryResult loading={loading} error={error} data={data}>
+            <QueryResult
+                loading={loading}
+                error={error}
+                data={data}
+                loggedInUser={loggedInUser}
+            >
                 <Container>
                     {/* Page Title = Search*/}
                     <PageTitle>Search</PageTitle>
@@ -68,6 +79,7 @@ const Search = () => {
                             <UserCard
                                 key={u.id}
                                 user={u}
+                                loggedInUser={loggedInUser?.userById}
                                 refetchUsers={refetch}
                             />
                         ))}

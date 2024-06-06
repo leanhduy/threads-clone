@@ -9,11 +9,15 @@ import { useMutation } from '@apollo/client'
 import { FOLLOW_USER, UNFOLLOW_USER } from '../utils'
 import { UserContext } from '../context'
 
-const UserCard = ({ user, refetchUsers }) => {
+const UserCard = ({ user, loggedInUser, refetchUsers }) => {
+    // * TOP-LEVEL STATES / VARIABLES
     const currentUser = useContext(UserContext)
     const [anchorEl, setAnchorEl] = useState(null)
     const [isPopoverOpen, setIsPopoverOpen] = useState(false)
     const [isFollowing, setIsFollowing] = useState(false)
+    const followerIds = loggedInUser.followedBy.map((f) => f.id)
+    const followingIds = loggedInUser.following.map((f) => f.id)
+
     const [followUser] = useMutation(FOLLOW_USER, {
         variables: {
             followerId: Number(currentUser.id),
@@ -65,7 +69,7 @@ const UserCard = ({ user, refetchUsers }) => {
     // * Event handlers
     const handleFollowing = async () => {
         try {
-            if (isFollowing) {
+            if (followingIds.includes(user.id)) {
                 await unfollowUser()
             } else {
                 await followUser()
@@ -132,11 +136,16 @@ const UserCard = ({ user, refetchUsers }) => {
             </ContentMain>
             <ContentSide>
                 <FollowButton
-                    variant="outlined"
+                    className={
+                        followingIds.includes(user.id) ? 'following' : ''
+                    }
                     onClick={handleFollowing}
-                    className={isFollowing ? 'following' : 'not-following'}
                 >
-                    {isFollowing ? 'Following' : 'Follow'}
+                    {followingIds.includes(user.id)
+                        ? 'Following'
+                        : followerIds.includes(user.id)
+                        ? 'Follow back'
+                        : 'Follow'}
                 </FollowButton>
             </ContentSide>
             {/* Popover component */}
@@ -161,6 +170,13 @@ const UserCard = ({ user, refetchUsers }) => {
                 <UserCardPopover
                     user={user}
                     isFollowing={isFollowing}
+                    followButtonText={
+                        followingIds.includes(user.id)
+                            ? 'Following'
+                            : followerIds.includes(user.id)
+                            ? 'Follow back'
+                            : 'Follow'
+                    }
                     setIsPopoverOpen={setIsPopoverOpen}
                     handleFollowing={handleFollowing}
                 />
@@ -248,17 +264,25 @@ const Subtitle = styled.span({
 })
 
 const FollowButton = styled(Button)({
+    border: `1px solid ${colors.silver.dark}`,
+    borderRadius: '15px',
+    backgroundColor: colors.black.light,
+    color: colors.white,
+    fontSize: '1rem',
+    fontWeight: 'bold',
+    marginBottom: '.75rem',
+    textTransform: 'none',
+    transition: 'transform 0.1s ease-in-out',
     width: '110px',
-    '&.MuiButton-outlined': {
-        '&.following': {
-            color: colors.grey.light,
-        },
-        '&.not-following': {
-            color: colors.black.base,
-        },
-        borderColor: colors.silver.darker,
-        borderRadius: '10px',
-        fontWeight: 'bold',
-        textTransform: 'none',
+    '&.following': {
+        backgroundColor: colors.white,
+        color: colors.black.base,
+    },
+    ':hover': {
+        backgroundColor: colors.black.light,
+        color: colors.white,
+    },
+    ':active': {
+        transform: 'scale(0.95)',
     },
 })

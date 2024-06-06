@@ -4,8 +4,8 @@ import { gql } from '@apollo/client'
 
 // * Get a specific user by id
 export const GET_USER_BY_ID = gql`
-    query UserById($userByIdId: Int) {
-        userById(id: $userByIdId) {
+    query UserById($id: Int) {
+        userById(id: $id) {
             id
             username
             bio
@@ -14,9 +14,22 @@ export const GET_USER_BY_ID = gql`
             followerCount
             followingCount
             postCount
+            profileImage {
+                id
+                url
+            }
+            followedBy {
+                id
+                username
+            }
+            following {
+                id
+                username
+            }
         }
     }
 `
+
 // * Get all users
 export const GET_USERS = gql`
     query Users {

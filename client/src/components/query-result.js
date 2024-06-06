@@ -7,7 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress'
  * Query Results conditionally renders Apollo useQuery hooks states:
  * loading, error or its children when data is ready
  */
-const QueryResult = ({ loading, error, data, children }) => {
+const QueryResult = ({ loading, error, data, loggedInUser, children }) => {
     if (error) {
         return (
             <FallbackContainer>
@@ -25,10 +25,11 @@ const QueryResult = ({ loading, error, data, children }) => {
             </SpinnerContainer>
         )
     }
-    if (!data) {
+    // TODO: Refactor this code to removed the simulated loggedInUser after authentication feature is implemented
+    if (!data || !loggedInUser) {
         return <p>Nothing to show...</p>
     }
-    if (data) {
+    if (data && loggedInUser) {
         return children
     }
 }

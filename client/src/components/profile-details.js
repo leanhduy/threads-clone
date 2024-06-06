@@ -4,25 +4,77 @@ import { colors } from '../styles'
 import { Button } from '@mui/material'
 import abbreviate from 'number-abbreviate'
 import { Post } from '../container'
-import { mockUser } from '../mock'
 import { NewPostContext } from '../context'
+import { useMutation } from '@apollo/client'
+import { FOLLOW_USER, UNFOLLOW_USER } from '../utils'
 
 const filters = ['post', 'replies', 'reposts']
-// TODO: Replace with the logged in user when Authenticate (Login/Logout) feature is implemented
-const loggedInUser = mockUser
-const followerIds = loggedInUser.followedBy.map((f) => f.id)
-const followingIds = loggedInUser.following.map((f) => f.id)
 
-const ProfileDetails = ({ user }) => {
-    // * Filter state
+const ProfileDetails = ({
+    user,
+    loggedInUser,
+    refetchUser,
+    refetchLoggedInUser,
+}) => {
+    // * TOP-LEVEL STATES / VARIABLES
     const [filter, setFilter] = useState('post')
+    const followerIds = loggedInUser.followedBy.map((f) => f.id)
+    const followingIds = loggedInUser.following.map((f) => f.id)
 
     // * Access the setOpen from the NewPost context to open the creat new dialog, use by calling `openDialog(true)`
     const openNewPostDialog = useContext(NewPostContext)
 
+    // * MUTATIONS
+    // TODO: MIGHT NEED REFACTOR (REDUNDANT WITH user-card.js code)
+    const [followUser] = useMutation(FOLLOW_USER, {
+        variables: {
+            followerId: Number(loggedInUser.id),
+            followingId: Number(user?.id),
+        },
+        onCompleted: async () => {
+            // ? Refetch the current user
+            await refetchUser()
+            // ? Refetch the logged in user
+            // TODO: Might need to remove after authentication feature is implemented
+            await refetchLoggedInUser()
+        },
+        onError: (error) => {
+            console.error('Follow Error: ', error)
+        },
+    })
+
+    const [unfollowUser] = useMutation(UNFOLLOW_USER, {
+        variables: {
+            followerId: Number(loggedInUser.id),
+            followingId: Number(user?.id),
+        },
+        onCompleted: async () => {
+            // ? Refetch the current user
+            await refetchUser()
+            // ? Refetch the logged in user
+            // TODO: Might need to remove after authentication feature is implemented
+            await refetchLoggedInUser()
+        },
+        onError: (error) => {
+            console.error('Unfollow Error: ', error)
+        },
+    })
+
     // * Event handlers
     const handleToggleFilter = (e) => {
         setFilter(e.currentTarget.textContent)
+    }
+
+    const handleFollowing = async () => {
+        try {
+            if (followingIds.includes(user.id)) {
+                await unfollowUser()
+            } else {
+                await followUser()
+            }
+        } catch (err) {
+            console.error(err)
+        }
     }
 
     return (
@@ -60,6 +112,7 @@ const ProfileDetails = ({ user }) => {
                                         ? 'following'
                                         : ''
                                 }
+                                onClick={handleFollowing}
                             >
                                 {followingIds.includes(user.id)
                                     ? 'Following'
