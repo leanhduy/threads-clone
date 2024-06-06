@@ -17,7 +17,7 @@ const ProfileDetails = ({ user }) => {
     // * Filter state
     const [filter, setFilter] = useState('post')
 
-    // Access the setOpen from the NewPost context to open the creat new dialog, use by calling `openDialog(true)`
+    // * Access the setOpen from the NewPost context to open the creat new dialog, use by calling `openDialog(true)`
     const openNewPostDialog = useContext(NewPostContext)
 
     // * Event handlers

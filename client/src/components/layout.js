@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { Navbar, QuickNewPostButton, NewPostDialog } from '../components'
 import styled from '@emotion/styled'
 import { widths, unit } from '../styles'

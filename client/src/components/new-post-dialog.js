@@ -47,7 +47,7 @@ const NewPostDialog = ({
             removeToast()
             toastSuccess('Post created successfully!')
 
-            // * Refetch posts
+            // ? Refetch posts
             await refetchPosts()
         },
         onError: (error) => {
@@ -233,7 +233,7 @@ export default NewPostDialog
 const CreateDialog = styled(Dialog)({
     '& .MuiPaper-root': {
         padding: '2rem',
-        width: '800%',
+        width: '80%',
     },
 })
 
