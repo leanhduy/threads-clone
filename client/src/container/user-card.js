@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { colors } from '../styles'
 import { Button, Popover } from '@mui/material'
 import styled from '@emotion/styled'
@@ -10,12 +10,11 @@ import { FOLLOW_USER, UNFOLLOW_USER } from '../utils'
 import { UserContext } from '../context'
 
 const UserCard = ({ user, refetchUsers }) => {
-    const navigate = useNavigate()
     const currentUser = useContext(UserContext)
     const [anchorEl, setAnchorEl] = useState(null)
     const [isPopoverOpen, setIsPopoverOpen] = useState(false)
     const [isFollowing, setIsFollowing] = useState(false)
-    const [followUser, { _, followData }] = useMutation(FOLLOW_USER, {
+    const [followUser] = useMutation(FOLLOW_USER, {
         variables: {
             followerId: Number(currentUser.id),
             followingId: Number(user?.id),
@@ -84,7 +83,7 @@ const UserCard = ({ user, refetchUsers }) => {
         setHoverTimeout(timeoutId)
     }
 
-    const handleMouseLeave = (e) => {
+    const handleMouseLeave = () => {
         if (hoverTimeout) {
             clearTimeout(hoverTimeout)
             setHoverTimeout(null)
@@ -163,6 +162,7 @@ const UserCard = ({ user, refetchUsers }) => {
                     user={user}
                     isFollowing={isFollowing}
                     setIsPopoverOpen={setIsPopoverOpen}
+                    handleFollowing={handleFollowing}
                 />
             </StyledPopover>
         </Content>

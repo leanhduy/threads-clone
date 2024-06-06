@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React, { useState, useEffect, useContext } from 'react'
+import React from 'react'
 import { colors } from '../styles'
 import {
     Typography,
@@ -9,12 +9,14 @@ import {
     CardContent,
 } from '@mui/material'
 import abbreviate from 'number-abbreviate'
-import { UserContext } from '../context'
 
-const UserCardPopover = ({ user, isFollowing, setIsPopoverOpen }) => {
-    const { username, fullname, bio, followerCount, followedBy, profileImage } =
-        user
-    const currentUser = useContext(UserContext)
+const UserCardPopover = ({
+    user,
+    isFollowing,
+    setIsPopoverOpen,
+    handleFollowing,
+}) => {
+    const { username, fullname, bio, followerCount, profileImage } = user
 
     return (
         <UserCardContainer
@@ -49,6 +51,7 @@ const UserCardPopover = ({ user, isFollowing, setIsPopoverOpen }) => {
                 <FollowButton
                     fullWidth
                     className={isFollowing ? 'following' : 'not-following'}
+                    onClick={handleFollowing}
                 >
                     {isFollowing ? 'Following' : 'Follow'}
                 </FollowButton>

@@ -1,8 +1,6 @@
 const {
   objectType,
-  arg,
   nonNull,
-  idArg,
   inputObjectType,
   asNexusMethod,
   makeSchema,
@@ -127,10 +125,6 @@ const Mutation = objectType({
           })
 
           // Update the follower user, increase the following count to 1
-          const follower = await context.prisma.user.update({
-            where: { id: args.followerId },
-            data: { followingCount: { increment: 1 } },
-          })
           return {
             code: 200,
             success: true,
@@ -207,10 +201,6 @@ const Mutation = objectType({
           })
 
           // Update the follower user, increase the following count to 1
-          const follower = await context.prisma.user.update({
-            where: { id: args.followerId },
-            data: { followingCount: { decrement: 1 } },
-          })
 
           return {
             code: 200,
@@ -384,7 +374,7 @@ const Query = objectType({
       type: User,
       resolve: (_parent, _args, context) => {
         return context.prisma.user.findMany({
-          orderBy: [{ followerCount: 'desc' }],
+          orderBy: [{ id: 'asc' }],
         })
       },
     })
