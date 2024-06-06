@@ -13,7 +13,7 @@ import { GET_USERS } from '../utils'
 const Search = () => {
     const [filteredUsers, setFilteredUsers] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
-    const { loading, error, data } = useQuery(GET_USERS)
+    const { loading, error, data, refetch } = useQuery(GET_USERS)
     const currentUser = useContext(UserContext)
 
     useEffect(() => {
@@ -65,7 +65,11 @@ const Search = () => {
                     {/* List of account with Follow button */}
                     {filteredUsers.length > 0 &&
                         filteredUsers.map((u) => (
-                            <UserCard key={u.id} user={u} />
+                            <UserCard
+                                key={u.id}
+                                user={u}
+                                refetchUsers={refetch}
+                            />
                         ))}
                     {filteredUsers.length === 0 && (
                         <FallbackContainer>

@@ -9,7 +9,7 @@ import { useMutation } from '@apollo/client'
 import { FOLLOW_USER, UNFOLLOW_USER } from '../utils'
 import { UserContext } from '../context'
 
-const UserCard = ({ user }) => {
+const UserCard = ({ user, refetchUsers }) => {
     const navigate = useNavigate()
     const currentUser = useContext(UserContext)
     const [anchorEl, setAnchorEl] = useState(null)
@@ -20,7 +20,9 @@ const UserCard = ({ user }) => {
             followerId: Number(currentUser.id),
             followingId: Number(user?.id),
         },
-        onCompleted: (data) => {
+        onCompleted: async (data) => {
+            // ? Refetch the list of users
+            await refetchUsers()
             if (data) {
                 setIsFollowing(true)
             }
@@ -35,7 +37,9 @@ const UserCard = ({ user }) => {
             followerId: Number(currentUser.id),
             followingId: Number(user?.id),
         },
-        onCompleted: (data) => {
+        onCompleted: async (data) => {
+            // ? Refetch the list of users
+            await refetchUsers()
             if (data) {
                 setIsFollowing(false)
             }
