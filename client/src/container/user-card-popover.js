@@ -13,6 +13,7 @@ import abbreviate from 'number-abbreviate'
 const UserCardPopover = ({
     user,
     isFollowing,
+    followButtonText,
     setIsPopoverOpen,
     handleFollowing,
 }) => {
@@ -53,7 +54,7 @@ const UserCardPopover = ({
                     className={isFollowing ? 'following' : 'not-following'}
                     onClick={handleFollowing}
                 >
-                    {isFollowing ? 'Following' : 'Follow'}
+                    {followButtonText}
                 </FollowButton>
             </StyledCardAction>
         </UserCardContainer>

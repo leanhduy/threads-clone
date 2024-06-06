@@ -6,12 +6,19 @@ import { Post } from '../container'
 import { colors, ToggleIcon } from '../styles'
 import { Button } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { FEED_FOR_YOU } from '../utils'
+import { FEED_FOR_YOU, GET_USER_BY_ID } from '../utils'
 import { UserContext } from '../context'
 
 const Home = () => {
     // TODO: OPTIMIZE TO REMOVE THE REDUNDANCY NEWPOSTDIALOG BETWEEN COMPONENTS
     const [isCreatingNewPost, setIsCreatingNewPost] = useState(false)
+    // * Get the current logged in user
+    // TODO: When authentication features are implement (login), remove this code and replace with the authenticated user (e.g., via Context API)
+    const { data: loggedInUser } = useQuery(GET_USER_BY_ID, {
+        variables: {
+            id: 1,
+        },
+    })
 
     const handleOpenNewPostDialog = () => {
         setIsCreatingNewPost(true)
@@ -26,7 +33,12 @@ const Home = () => {
 
     return (
         <Layout grid>
-            <QueryResult loading={loading} error={error} data={data}>
+            <QueryResult
+                loading={loading}
+                error={error}
+                data={data}
+                loggedInUser={loggedInUser?.userById}
+            >
                 {/* New Thread */}
                 <NewThread>
                     <LinkContainer to={`/profile/${mockCurrentUser.username}`}>
