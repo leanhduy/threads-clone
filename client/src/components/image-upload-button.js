@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Button } from '@mui/material'
 import { ImageUploadSmIcon } from '../styles'
 import styled from '@emotion/styled'

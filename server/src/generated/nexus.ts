@@ -71,6 +71,10 @@ export interface NexusGenObjects {
     post?: NexusGenRootTypes['Post'] | null; // Post
     success: boolean; // Boolean!
   }
+  FeedQueryResponse: { // root type
+    cursorId?: number | null; // Int
+    posts?: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
+  }
   Follow: { // root type
     followedById: number; // Int!
     followingId: number; // Int!
@@ -130,6 +134,10 @@ export interface NexusGenFieldTypes {
     post: NexusGenRootTypes['Post'] | null; // Post
     success: boolean; // Boolean!
   }
+  FeedQueryResponse: { // field return type
+    cursorId: number | null; // Int
+    posts: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
+  }
   Follow: { // field return type
     followedBy: NexusGenRootTypes['User']; // User!
     followedById: number; // Int!
@@ -173,7 +181,7 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     feedFollowing: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
-    feedForYou: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
+    feedForYou: NexusGenRootTypes['FeedQueryResponse'] | null; // FeedQueryResponse
     follows: NexusGenRootTypes['Follow'][] | null; // [Follow!]
     postByUser: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
     posts: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
@@ -205,6 +213,10 @@ export interface NexusGenFieldTypeNames {
     message: 'String'
     post: 'Post'
     success: 'Boolean'
+  }
+  FeedQueryResponse: { // field return type name
+    cursorId: 'Int'
+    posts: 'Post'
   }
   Follow: { // field return type name
     followedBy: 'User'
@@ -249,7 +261,7 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     feedFollowing: 'Post'
-    feedForYou: 'Post'
+    feedForYou: 'FeedQueryResponse'
     follows: 'Follow'
     postByUser: 'Post'
     posts: 'Post'
@@ -292,6 +304,9 @@ export interface NexusGenArgTypes {
   Query: {
     feedFollowing: { // args
       userId?: number | null; // Int
+    }
+    feedForYou: { // args
+      skip?: number | null; // Int
     }
     postByUser: { // args
       userId?: number | null; // Int

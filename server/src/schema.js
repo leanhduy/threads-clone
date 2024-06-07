@@ -63,6 +63,14 @@ const AddPostResponse = objectType({
   },
 })
 
+const FeedQueryResponse = objectType({
+  name: 'FeedQueryResponse',
+  definition(t) {
+    t.list.field('posts', { type: 'Post' })
+    t.int('cursorId')
+  },
+})
+
 const Mutation = objectType({
   name: 'Mutation',
   definition(t) {
@@ -409,10 +417,15 @@ const Query = objectType({
     })
 
     // * Posts in "FOR YOU" mode
-    t.list.field('feedForYou', {
-      type: Post,
-      resolve: (_parent, _args, context) => {
-        return context.prisma.post.findMany({
+    t.field('feedForYou', {
+      type: 'FeedQueryResponse',
+      args: {
+        skip: intArg(),
+      },
+      resolve: async (_, args, context) => {
+        const posts = await context.prisma.post.findMany({
+          take: 2,
+          skip: args.skip,
           include: {
             author: {
               select: {
@@ -427,8 +440,12 @@ const Query = objectType({
               },
             },
           },
-          orderBy: [{ createdAt: 'desc' }],
+          orderBy: [{ id: 'asc' }],
         })
+        return {
+          posts: posts,
+          cursorId: posts.length > 0 ? posts[posts.length - 1].id : null,
+        }
       },
     })
 
@@ -637,6 +654,9 @@ const schema = makeSchema({
     PostCreateInput,
     ProfileImageCreateInput,
     PostImageCreateInput,
+    FeedQueryResponse,
+    AddPostResponse,
+    FollowUserResponse,
     DateTime,
   ],
   outputs: {

@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import styled from '@emotion/styled'
 import { useQuery } from '@apollo/client'
-import { Layout, NewPostDialog, QueryResult } from '../components'
+import { Layout, NewPostDialog } from '../components'
 import { Post } from '../container'
 import { colors, ToggleIcon } from '../styles'
 import { Button } from '@mui/material'
@@ -10,11 +10,15 @@ import { FEED_FOR_YOU, GET_USER_BY_ID } from '../utils'
 import { UserContext } from '../context'
 
 const Home = () => {
+    const [skip, setSkip] = useState(0)
+    const [posts, setPosts] = useState([])
+    const ref = useRef()
+
     // TODO: OPTIMIZE TO REMOVE THE REDUNDANCY NEWPOSTDIALOG BETWEEN COMPONENTS
     const [isCreatingNewPost, setIsCreatingNewPost] = useState(false)
     // * Get the current logged in user
     // TODO: When authentication features are implement (login), remove this code and replace with the authenticated user (e.g., via Context API)
-    const { data: loggedInUser } = useQuery(GET_USER_BY_ID, {
+    useQuery(GET_USER_BY_ID, {
         variables: {
             id: 1,
         },
@@ -29,51 +33,77 @@ const Home = () => {
     }
     // TODO: Replace this mockCurrentUser with logged in user via Context
     const mockCurrentUser = useContext(UserContext)
-    const { loading, error, data, refetch } = useQuery(FEED_FOR_YOU)
+    const { data, refetch } = useQuery(FEED_FOR_YOU, {
+        variables: { skip: skip },
+    })
+
+    useEffect(() => {
+        if (data) {
+            if (posts.length === 0) {
+                setPosts(data.feedForYou.posts)
+            } else {
+                setPosts([...posts, ...data.feedForYou.posts])
+            }
+        }
+        console.log(data?.feedForYou)
+    }, [data])
+
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            const entry = entries[0]
+            if (entry.isIntersecting) {
+                if (data) {
+                    setSkip(data.feedForYou.cursorId)
+                }
+            }
+        })
+
+        if (ref.current) {
+            observer.observe(ref.current)
+        }
+
+        return () => {
+            if (ref.current) {
+                observer.unobserve(ref.current)
+            }
+        }
+    }, [posts])
 
     return (
         <Layout grid>
-            <QueryResult
-                loading={loading}
-                error={error}
-                data={data}
-                loggedInUser={loggedInUser?.userById}
-            >
-                {/* New Thread */}
-                <NewThread>
-                    <LinkContainer to={`/profile/${mockCurrentUser.username}`}>
-                        <PostAvatarImage
-                            src={mockCurrentUser?.profileImage?.url}
-                        />
-                    </LinkContainer>
-                    <TextButton onClick={handleOpenNewPostDialog}>
-                        Start a thread...
-                    </TextButton>
-                    <StyledButton
-                        variant="outlined"
-                        onClick={handleOpenNewPostDialog}
-                    >
-                        Post
-                    </StyledButton>
-                </NewThread>
-                {/* List of Posts */}
-                {data?.feedForYou?.map((post) => (
-                    <Post key={post.id} post={post} />
-                ))}
-                {/* Feed mode toggle button */}
-                <FeedModeToggleButton
-                    disableRipple
+            {/* New Thread */}
+            <NewThread>
+                <LinkContainer to={`/profile/${mockCurrentUser.username}`}>
+                    <PostAvatarImage src={mockCurrentUser?.profileImage?.url} />
+                </LinkContainer>
+                <TextButton onClick={handleOpenNewPostDialog}>
+                    Start a thread...
+                </TextButton>
+                <StyledButton
                     variant="outlined"
-                    startIcon={<ToggleIcon />}
+                    onClick={handleOpenNewPostDialog}
                 >
-                    Following
-                </FeedModeToggleButton>
-                <NewPostDialog
-                    isCreateNewPost={isCreatingNewPost}
-                    closeNewPostDialog={handleCloseNewPostDialog}
-                    refetchPosts={refetch}
-                />
-            </QueryResult>
+                    Post
+                </StyledButton>
+            </NewThread>
+            {/* List of Posts */}
+            {posts.map((post) => (
+                <Post key={post.id} post={post} />
+            ))}
+            <p ref={ref}></p>
+            {/* Feed mode toggle button */}
+            <FeedModeToggleButton
+                disableRipple
+                variant="outlined"
+                startIcon={<ToggleIcon />}
+            >
+                Following
+            </FeedModeToggleButton>
+            <NewPostDialog
+                isCreateNewPost={isCreatingNewPost}
+                closeNewPostDialog={handleCloseNewPostDialog}
+                refetchPosts={refetch}
+            />
         </Layout>
     )
 }
