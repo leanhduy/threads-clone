@@ -63,11 +63,19 @@ const AddPostResponse = objectType({
   },
 })
 
+// ? The custom type for the result of the `feedForYou` query
 const FeedQueryResponse = objectType({
   name: 'FeedQueryResponse',
+  description: 'The custom type for the result of the `feedForYou` query',
   definition(t) {
-    t.list.field('posts', { type: 'Post' })
-    t.int('cursorId')
+    t.list.field('posts', {
+      type: 'Post',
+      description: 'A list of posts for the feed',
+    })
+    t.int('cursorId', {
+      description:
+        'The ID of the last item in the current feed batch, used for cursor-based pagination',
+    })
   },
 })
 
@@ -419,8 +427,9 @@ const Query = objectType({
     // * Posts in "FOR YOU" mode
     t.field('feedForYou', {
       type: 'FeedQueryResponse',
+      description: 'Get all posts from all users',
       args: {
-        skip: intArg(),
+        skip: intArg({ description: 'Number of posts to skip for pagination' }),
       },
       resolve: async (_, args, context) => {
         const posts = await context.prisma.post.findMany({

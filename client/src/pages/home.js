@@ -10,20 +10,32 @@ import { FEED_FOR_YOU, GET_USER_BY_ID } from '../utils'
 import { UserContext } from '../context'
 
 const Home = () => {
+    // * Top-level states / variables
+    // ? Indicates the number of posts to skip for the next query
     const [skip, setSkip] = useState(0)
+    // ? Stores the list of posts fetched in the current query
     const [posts, setPosts] = useState([])
+    // ? Ref to the element at the end of the post list for infinite scroll
     const ref = useRef()
 
-    // TODO: OPTIMIZE TO REMOVE THE REDUNDANCY NEWPOSTDIALOG BETWEEN COMPONENTS
+    // TODO: Optimize by removing redundant NewPostDialog component usage
     const [isCreatingNewPost, setIsCreatingNewPost] = useState(false)
-    // * Get the current logged in user
-    // TODO: When authentication features are implement (login), remove this code and replace with the authenticated user (e.g., via Context API)
-    useQuery(GET_USER_BY_ID, {
+
+    // * Client-side GraphQL queries
+    // TODO: Replace this with actual authentication context once login is implemented
+    // ? Fetch the current logged-in user (Temporary implementation)
+    const { data: mockCurrentUser } = useQuery(GET_USER_BY_ID, {
         variables: {
             id: 1,
         },
     })
 
+    // ? Fetch the posts gradually
+    const { data, refetch } = useQuery(FEED_FOR_YOU, {
+        variables: { skip: skip },
+    })
+
+    // * HANDLERS
     const handleOpenNewPostDialog = () => {
         setIsCreatingNewPost(true)
     }
@@ -31,12 +43,10 @@ const Home = () => {
     const handleCloseNewPostDialog = () => {
         setIsCreatingNewPost(false)
     }
-    // TODO: Replace this mockCurrentUser with logged in user via Context
-    const mockCurrentUser = useContext(UserContext)
-    const { data, refetch } = useQuery(FEED_FOR_YOU, {
-        variables: { skip: skip },
-    })
 
+    // * SIDE-EFFECTS
+
+    // ? Keep track of the fetched data of the GraphQL query and update the `posts` states
     useEffect(() => {
         if (data) {
             if (posts.length === 0) {
@@ -48,6 +58,7 @@ const Home = () => {
         console.log(data?.feedForYou)
     }, [data])
 
+    // ? Leverage the Intersection Observer API for fetching data using infinite scroll
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
             const entry = entries[0]
@@ -72,20 +83,26 @@ const Home = () => {
     return (
         <Layout grid>
             {/* New Thread */}
-            <NewThread>
-                <LinkContainer to={`/profile/${mockCurrentUser.username}`}>
-                    <PostAvatarImage src={mockCurrentUser?.profileImage?.url} />
-                </LinkContainer>
-                <TextButton onClick={handleOpenNewPostDialog}>
-                    Start a thread...
-                </TextButton>
-                <StyledButton
-                    variant="outlined"
-                    onClick={handleOpenNewPostDialog}
-                >
-                    Post
-                </StyledButton>
-            </NewThread>
+            {mockCurrentUser && (
+                <NewThread>
+                    <LinkContainer
+                        to={`/profile/${mockCurrentUser?.userById?.username}`}
+                    >
+                        <PostAvatarImage
+                            src={mockCurrentUser?.userById?.profileImage?.url}
+                        />
+                    </LinkContainer>
+                    <TextButton onClick={handleOpenNewPostDialog}>
+                        Start a thread...
+                    </TextButton>
+                    <StyledButton
+                        variant="outlined"
+                        onClick={handleOpenNewPostDialog}
+                    >
+                        Post
+                    </StyledButton>
+                </NewThread>
+            )}
             {/* List of Posts */}
             {posts.map((post) => (
                 <Post key={post.id} post={post} />
