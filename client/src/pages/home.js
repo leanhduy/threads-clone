@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import styled from '@emotion/styled'
 import { useQuery } from '@apollo/client'
-import { Layout, NewPostDialog, QueryResult } from '../components'
+import { Layout, NewPostDialog } from '../components'
 import { Post } from '../container'
 import { colors, ToggleIcon } from '../styles'
 import { Button } from '@mui/material'
@@ -10,16 +10,32 @@ import { FEED_FOR_YOU, GET_USER_BY_ID } from '../utils'
 import { UserContext } from '../context'
 
 const Home = () => {
-    // TODO: OPTIMIZE TO REMOVE THE REDUNDANCY NEWPOSTDIALOG BETWEEN COMPONENTS
+    // * Top-level states / variables
+    // ? Indicates the number of posts to skip for the next query
+    const [skip, setSkip] = useState(0)
+    // ? Stores the list of posts fetched in the current query
+    const [posts, setPosts] = useState([])
+    // ? Ref to the element at the end of the post list for infinite scroll
+    const ref = useRef()
+
+    // TODO: Optimize by removing redundant NewPostDialog component usage
     const [isCreatingNewPost, setIsCreatingNewPost] = useState(false)
-    // * Get the current logged in user
-    // TODO: When authentication features are implement (login), remove this code and replace with the authenticated user (e.g., via Context API)
-    const { data: loggedInUser } = useQuery(GET_USER_BY_ID, {
+
+    // * Client-side GraphQL queries
+    // TODO: Replace this with actual authentication context once login is implemented
+    // ? Fetch the current logged-in user (Temporary implementation)
+    const { data: mockCurrentUser } = useQuery(GET_USER_BY_ID, {
         variables: {
             id: 1,
         },
     })
 
+    // ? Fetch the posts gradually
+    const { data, refetch } = useQuery(FEED_FOR_YOU, {
+        variables: { skip: skip },
+    })
+
+    // * HANDLERS
     const handleOpenNewPostDialog = () => {
         setIsCreatingNewPost(true)
     }
@@ -27,23 +43,53 @@ const Home = () => {
     const handleCloseNewPostDialog = () => {
         setIsCreatingNewPost(false)
     }
-    // TODO: Replace this mockCurrentUser with logged in user via Context
-    const mockCurrentUser = useContext(UserContext)
-    const { loading, error, data, refetch } = useQuery(FEED_FOR_YOU)
+
+    // * SIDE-EFFECTS
+
+    // ? Keep track of the fetched data of the GraphQL query and update the `posts` states
+    useEffect(() => {
+        if (data) {
+            if (posts.length === 0) {
+                setPosts(data.feedForYou.posts)
+            } else {
+                setPosts([...posts, ...data.feedForYou.posts])
+            }
+        }
+        console.log(data?.feedForYou)
+    }, [data])
+
+    // ? Leverage the Intersection Observer API for fetching data using infinite scroll
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            const entry = entries[0]
+            if (entry.isIntersecting) {
+                if (data) {
+                    setSkip(data.feedForYou.cursorId)
+                }
+            }
+        })
+
+        if (ref.current) {
+            observer.observe(ref.current)
+        }
+
+        return () => {
+            if (ref.current) {
+                observer.unobserve(ref.current)
+            }
+        }
+    }, [posts])
 
     return (
         <Layout grid>
-            <QueryResult
-                loading={loading}
-                error={error}
-                data={data}
-                loggedInUser={loggedInUser?.userById}
-            >
-                {/* New Thread */}
+            {/* New Thread */}
+            {mockCurrentUser && (
                 <NewThread>
-                    <LinkContainer to={`/profile/${mockCurrentUser.username}`}>
+                    <LinkContainer
+                        to={`/profile/${mockCurrentUser?.userById?.username}`}
+                    >
                         <PostAvatarImage
-                            src={mockCurrentUser?.profileImage?.url}
+                            src={mockCurrentUser?.userById?.profileImage?.url}
                         />
                     </LinkContainer>
                     <TextButton onClick={handleOpenNewPostDialog}>
@@ -56,24 +102,25 @@ const Home = () => {
                         Post
                     </StyledButton>
                 </NewThread>
-                {/* List of Posts */}
-                {data?.feedForYou?.map((post) => (
-                    <Post key={post.id} post={post} />
-                ))}
-                {/* Feed mode toggle button */}
-                <FeedModeToggleButton
-                    disableRipple
-                    variant="outlined"
-                    startIcon={<ToggleIcon />}
-                >
-                    Following
-                </FeedModeToggleButton>
-                <NewPostDialog
-                    isCreateNewPost={isCreatingNewPost}
-                    closeNewPostDialog={handleCloseNewPostDialog}
-                    refetchPosts={refetch}
-                />
-            </QueryResult>
+            )}
+            {/* List of Posts */}
+            {posts.map((post) => (
+                <Post key={post.id} post={post} />
+            ))}
+            <p ref={ref}></p>
+            {/* Feed mode toggle button */}
+            <FeedModeToggleButton
+                disableRipple
+                variant="outlined"
+                startIcon={<ToggleIcon />}
+            >
+                Following
+            </FeedModeToggleButton>
+            <NewPostDialog
+                isCreateNewPost={isCreatingNewPost}
+                closeNewPostDialog={handleCloseNewPostDialog}
+                refetchPosts={refetch}
+            />
         </Layout>
     )
 }

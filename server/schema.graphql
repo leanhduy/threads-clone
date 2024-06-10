@@ -14,6 +14,17 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+"""The custom type for the result of the `feedForYou` query"""
+type FeedQueryResponse {
+  """
+  The ID of the last item in the current feed batch, used for cursor-based pagination
+  """
+  cursorId: Int
+
+  """A list of posts for the feed"""
+  posts: [Post]
+}
+
 type Follow {
   followedBy: User!
   followedById: Int!
@@ -79,7 +90,12 @@ input ProfileImageCreateInput {
 
 type Query {
   feedFollowing(userId: Int): [Post]
-  feedForYou: [Post]
+
+  """Get all posts from all users"""
+  feedForYou(
+    """Number of posts to skip for pagination"""
+    skip: Int
+  ): FeedQueryResponse
   follows: [Follow!]
   postByUser(userId: Int): [Post]
   posts: [Post]

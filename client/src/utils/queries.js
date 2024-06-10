@@ -54,28 +54,31 @@ export const GET_USERS = gql`
 
 // * Get all the posts
 export const FEED_FOR_YOU = gql`
-    query FeedForYou {
-        feedForYou {
-            id
-            body
-            createdAt
-            likeCount
-            replyCount
-            author {
+    query FeedForYou($skip: Int) {
+        feedForYou(skip: $skip) {
+            posts {
                 id
-                username
-                bio
-                fullname
-                profileImage {
+                body
+                createdAt
+                likeCount
+                replyCount
+                author {
+                    id
+                    username
+                    bio
+                    fullname
+                    profileImage {
+                        id
+                        url
+                    }
+                }
+                postImages {
                     id
                     url
+                    caption
                 }
             }
-            postImages {
-                id
-                url
-                caption
-            }
+            cursorId
         }
     }
 `
