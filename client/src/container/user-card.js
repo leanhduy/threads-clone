@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { colors } from '../styles'
 import { Button, Popover } from '@mui/material'
 import styled from '@emotion/styled'
@@ -9,7 +9,7 @@ import { useMutation } from '@apollo/client'
 import { FOLLOW_USER, UNFOLLOW_USER } from '../utils'
 import { UserContext } from '../context'
 
-const UserCard = ({ user, loggedInUser, refetchUsers }) => {
+const UserCard = ({ user, loggedInUser }) => {
     // * TOP-LEVEL STATES / VARIABLES
     const currentUser = useContext(UserContext)
     const [anchorEl, setAnchorEl] = useState(null)
@@ -17,6 +17,7 @@ const UserCard = ({ user, loggedInUser, refetchUsers }) => {
     const [isFollowing, setIsFollowing] = useState(false)
     const followerIds = loggedInUser.followedBy.map((f) => f.id)
     const followingIds = loggedInUser.following.map((f) => f.id)
+    const navigate = useNavigate()
 
     const [followUser] = useMutation(FOLLOW_USER, {
         variables: {
@@ -25,7 +26,7 @@ const UserCard = ({ user, loggedInUser, refetchUsers }) => {
         },
         onCompleted: async (data) => {
             // ? Refetch the list of users
-            await refetchUsers()
+            navigate(0)
             if (data) {
                 setIsFollowing(true)
             }
@@ -42,7 +43,7 @@ const UserCard = ({ user, loggedInUser, refetchUsers }) => {
         },
         onCompleted: async (data) => {
             // ? Refetch the list of users
-            await refetchUsers()
+            navigate(0)
             if (data) {
                 setIsFollowing(false)
             }

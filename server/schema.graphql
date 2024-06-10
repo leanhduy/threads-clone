@@ -9,12 +9,23 @@ type AddPostResponse {
   success: Boolean!
 }
 
+"""The custom type for the result of the `users` endpoint"""
+type AllUsersQueryResponse {
+  """
+  The ID of the last item in the current user batch, used for cursor-based pagination
+  """
+  cursorId: Int
+
+  """A list of users"""
+  users: [User]
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar DateTime
 
-"""The custom type for the result of the `feedForYou` query"""
+"""The custom type for the result of the `feedForYou` endpoint"""
 type FeedQueryResponse {
   """
   The ID of the last item in the current feed batch, used for cursor-based pagination
@@ -103,7 +114,17 @@ type Query {
   userById(id: Int): User
   userByUsername(username: String): User
   userProfileImage: ProfileImage!
-  users: [User!]!
+
+  """
+  Get all users, filtered by the searchBy value, and ordered by the user id
+  """
+  users(
+    """The search term inputted by users"""
+    searchBy: String
+
+    """Number of users to skip for pagination"""
+    skip: Int
+  ): AllUsersQueryResponse!
 }
 
 type User {

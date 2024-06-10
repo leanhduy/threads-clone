@@ -71,6 +71,10 @@ export interface NexusGenObjects {
     post?: NexusGenRootTypes['Post'] | null; // Post
     success: boolean; // Boolean!
   }
+  AllUsersQueryResponse: { // root type
+    cursorId?: number | null; // Int
+    users?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+  }
   FeedQueryResponse: { // root type
     cursorId?: number | null; // Int
     posts?: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
@@ -134,6 +138,10 @@ export interface NexusGenFieldTypes {
     post: NexusGenRootTypes['Post'] | null; // Post
     success: boolean; // Boolean!
   }
+  AllUsersQueryResponse: { // field return type
+    cursorId: number | null; // Int
+    users: Array<NexusGenRootTypes['User'] | null> | null; // [User]
+  }
   FeedQueryResponse: { // field return type
     cursorId: number | null; // Int
     posts: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
@@ -189,7 +197,7 @@ export interface NexusGenFieldTypes {
     userById: NexusGenRootTypes['User'] | null; // User
     userByUsername: NexusGenRootTypes['User'] | null; // User
     userProfileImage: NexusGenRootTypes['ProfileImage']; // ProfileImage!
-    users: NexusGenRootTypes['User'][]; // [User!]!
+    users: NexusGenRootTypes['AllUsersQueryResponse']; // AllUsersQueryResponse!
   }
   User: { // field return type
     bio: string | null; // String
@@ -213,6 +221,10 @@ export interface NexusGenFieldTypeNames {
     message: 'String'
     post: 'Post'
     success: 'Boolean'
+  }
+  AllUsersQueryResponse: { // field return type name
+    cursorId: 'Int'
+    users: 'User'
   }
   FeedQueryResponse: { // field return type name
     cursorId: 'Int'
@@ -269,7 +281,7 @@ export interface NexusGenFieldTypeNames {
     userById: 'User'
     userByUsername: 'User'
     userProfileImage: 'ProfileImage'
-    users: 'User'
+    users: 'AllUsersQueryResponse'
   }
   User: { // field return type name
     bio: 'String'
@@ -316,6 +328,10 @@ export interface NexusGenArgTypes {
     }
     userByUsername: { // args
       username?: string | null; // String
+    }
+    users: { // args
+      searchBy?: string | null; // String
+      skip?: number | null; // Int
     }
   }
 }

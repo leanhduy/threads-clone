@@ -24,7 +24,7 @@ const Home = () => {
     // * Client-side GraphQL queries
     // TODO: Replace this with actual authentication context once login is implemented
     // ? Fetch the current logged-in user (Temporary implementation)
-    const { data: mockCurrentUser } = useQuery(GET_USER_BY_ID, {
+    const { data: loggedInUser } = useQuery(GET_USER_BY_ID, {
         variables: {
             id: 1,
         },
@@ -55,7 +55,6 @@ const Home = () => {
                 setPosts([...posts, ...data.feedForYou.posts])
             }
         }
-        console.log(data?.feedForYou)
     }, [data])
 
     // ? Leverage the Intersection Observer API for fetching data using infinite scroll
@@ -83,13 +82,13 @@ const Home = () => {
     return (
         <Layout grid>
             {/* New Thread */}
-            {mockCurrentUser && (
+            {loggedInUser && (
                 <NewThread>
                     <LinkContainer
-                        to={`/profile/${mockCurrentUser?.userById?.username}`}
+                        to={`/profile/${loggedInUser?.userById?.username}`}
                     >
                         <PostAvatarImage
-                            src={mockCurrentUser?.userById?.profileImage?.url}
+                            src={loggedInUser?.userById?.profileImage?.url}
                         />
                     </LinkContainer>
                     <TextButton onClick={handleOpenNewPostDialog}>

@@ -11,6 +11,7 @@ const {
 const { DateTimeResolver } = require('graphql-scalars')
 
 const DateTime = asNexusMethod(DateTimeResolver, 'date')
+const { searchString } = require('./utils/helpers')
 
 /**
  * ? HELPER FUNCTIONS
@@ -63,10 +64,10 @@ const AddPostResponse = objectType({
   },
 })
 
-// ? The custom type for the result of the `feedForYou` query
+// * Custom type for the result of the `feedForYou` query
 const FeedQueryResponse = objectType({
   name: 'FeedQueryResponse',
-  description: 'The custom type for the result of the `feedForYou` query',
+  description: 'The custom type for the result of the `feedForYou` endpoint',
   definition(t) {
     t.list.field('posts', {
       type: 'Post',
@@ -75,6 +76,22 @@ const FeedQueryResponse = objectType({
     t.int('cursorId', {
       description:
         'The ID of the last item in the current feed batch, used for cursor-based pagination',
+    })
+  },
+})
+
+// * Custom type for the result of the `feedForYou` query
+const AllUsersQueryResponse = objectType({
+  name: 'AllUsersQueryResponse',
+  description: 'The custom type for the result of the `users` endpoint',
+  definition(t) {
+    t.list.field('users', {
+      type: 'User',
+      description: 'A list of users',
+    })
+    t.int('cursorId', {
+      description:
+        'The ID of the last item in the current user batch, used for cursor-based pagination',
     })
   },
 })
@@ -269,7 +286,6 @@ const Mutation = objectType({
             post: newPost,
           }
         } catch (error) {
-          console.log(error)
           return {
             code: 500,
             success: false,
@@ -385,13 +401,37 @@ const ProfileImage = objectType({
 const Query = objectType({
   name: 'Query',
   definition(t) {
-    // * Get all users, order by follower count (desc)
-    t.nonNull.list.nonNull.field('users', {
-      type: User,
-      resolve: (_parent, _args, context) => {
-        return context.prisma.user.findMany({
-          orderBy: [{ id: 'asc' }],
-        })
+    t.nonNull.field('users', {
+      type: 'AllUsersQueryResponse',
+      description:
+        'Get all users, filtered by the searchBy value, and ordered by the user id',
+      args: {
+        skip: intArg({ description: 'Number of users to skip for pagination' }),
+        searchBy: stringArg({
+          description: 'The search term inputted by users',
+        }),
+      },
+      resolve: async (_, args, context) => {
+        try {
+          const users = await context.prisma.user.findMany({
+            take: 8,
+            skip: args.skip,
+            orderBy: [{ id: 'asc' }],
+          })
+          return {
+            users: users.filter(
+              (u) =>
+                searchString(u.username, args.searchBy) ||
+                searchString(u.bio, args.searchBy),
+            ),
+            cursorId: users.length > 0 ? users[users.length - 1].id : null,
+          }
+        } catch (error) {
+          return {
+            users: [],
+            cursorId: null,
+          }
+        }
       },
     })
 
@@ -663,6 +703,7 @@ const schema = makeSchema({
     PostCreateInput,
     ProfileImageCreateInput,
     PostImageCreateInput,
+    AllUsersQueryResponse,
     FeedQueryResponse,
     AddPostResponse,
     FollowUserResponse,
