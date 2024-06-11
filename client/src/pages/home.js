@@ -22,7 +22,6 @@ const Home = () => {
     const [isCreatingNewPost, setIsCreatingNewPost] = useState(false)
 
     // * Client-side GraphQL queries
-    // TODO: Replace this with actual authentication context once login is implemented
     // ? Fetch the current logged-in user (Temporary implementation)
     const { data: loggedInUser } = useQuery(GET_USER_BY_ID, {
         variables: {

@@ -80,7 +80,7 @@ const FeedQueryResponse = objectType({
   },
 })
 
-// * Custom type for the result of the `feedForYou` query
+// * Custom type for the result of the `users` endpoint
 const AllUsersQueryResponse = objectType({
   name: 'AllUsersQueryResponse',
   description: 'The custom type for the result of the `users` endpoint',

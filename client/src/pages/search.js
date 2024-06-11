@@ -1,13 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import { useQuery, useReactiveVar } from '@apollo/client'
+import React, { useEffect, useRef, useState } from 'react'
+import { useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
-import { QueryResult } from '../components'
 import { Layout } from '../components'
 import { colors, SearchRoundedSmallIcon } from '../styles'
 import { InputAdornment, TextField } from '@mui/material'
 import { UserCard } from '../container'
-import { GET_USERS, GET_USER_BY_ID, searchString } from '../utils'
-import { UserContext } from '../context'
+import { GET_USERS, GET_USER_BY_ID } from '../utils'
 
 const Search = () => {
     // * Top-level states / variables
@@ -44,6 +42,12 @@ const Search = () => {
         }
     }, [loggedInUser, data])
 
+    // ? Set the initial list of users state to empty array and skip state to 0, while users is typing their search keyword
+    useEffect(() => {
+        setUsers([])
+        setSkip(0)
+    }, [searchTerm])
+
     // ? Leverage the Intersection Observer API to fetch more users in infinite scroll
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
@@ -64,11 +68,6 @@ const Search = () => {
             }
         }
     }, [users])
-
-    useEffect(() => {
-        setUsers([])
-        setSkip(0)
-    }, [searchTerm])
 
     // * JSX
     return (

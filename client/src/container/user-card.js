@@ -25,7 +25,7 @@ const UserCard = ({ user, loggedInUser }) => {
             followingId: Number(user?.id),
         },
         onCompleted: async (data) => {
-            // ? Refetch the list of users
+            // ? Reload the current page (Search page)
             navigate(0)
             if (data) {
                 setIsFollowing(true)
@@ -42,7 +42,7 @@ const UserCard = ({ user, loggedInUser }) => {
             followingId: Number(user?.id),
         },
         onCompleted: async (data) => {
-            // ? Refetch the list of users
+            // ? Reload the current page (Search page)
             navigate(0)
             if (data) {
                 setIsFollowing(false)
