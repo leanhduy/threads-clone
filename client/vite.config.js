@@ -1,11 +1,15 @@
 import { defineConfig } from 'vite'
 import fs from 'fs/promises'
-
+import react from '@vitejs/plugin-react'
 /*
   This override allows us to use .js files instead of exclusively .jsx.
   We should remove as soon as video updates can be prioritized.
 */
 export default defineConfig(() => ({
+    plugins: [react()],
+    build: {
+        outDir: 'dist', // Directory of the build output
+    },
     test: {
         globals: true,
         environment: 'happy-dom',
