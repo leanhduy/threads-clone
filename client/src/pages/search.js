@@ -1,101 +1,124 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
-import { QueryResult } from '../components'
 import { Layout } from '../components'
 import { colors, SearchRoundedSmallIcon } from '../styles'
 import { InputAdornment, TextField } from '@mui/material'
 import { UserCard } from '../container'
-import { GET_USERS, GET_USER_BY_ID, searchString } from '../utils'
-import { UserContext } from '../context'
+import { GET_USERS, GET_USER_BY_ID } from '../utils'
 
 const Search = () => {
-    const [filteredUsers, setFilteredUsers] = useState([])
+    // * Top-level states / variables
+    // ? The number of users to be skip in the next user fetching query
+    const [skip, setSkip] = useState(0)
+    // ? The element to detect to load more users
+    const fetchMoreRef = useRef()
+    // ? The list of users based on the search term
+    const [users, setUsers] = useState([])
     const [searchTerm, setSearchTerm] = useState('')
-    const { loading, error, data, refetch } = useQuery(GET_USERS)
-    const currentUser = useContext(UserContext)
-    // * Get the current logged in user
-    // TODO: When authentication features are implement (login), remove this code and replace with the authenticated user (e.g., via Context API)
+    // ? Fetch the list of users
+    const { data, refetch } = useQuery(GET_USERS, {
+        variables: {
+            skip: skip,
+            searchBy: searchTerm,
+        },
+    })
+
+    // ? Fetch the current logged-in user (Temporary implementation)
     const { data: loggedInUser } = useQuery(GET_USER_BY_ID, {
         variables: {
             id: 1,
         },
     })
 
+    // * Side-effects
     useEffect(() => {
-        if (data) {
-            const result = data.users.filter(
-                (u) =>
-                    (searchString(u.username, searchTerm) ||
-                        searchString(u.bio, searchTerm)) &&
-                    u.id !== currentUser.id
+        // ? Update the filtered list of users based on the inputted search term
+        if (loggedInUser != null && data != null) {
+            const filteredUsers = [...users, ...data.users.users].filter(
+                (u) => u.id !== loggedInUser.userById.id
             )
-            setFilteredUsers([...result])
-        } else {
-            setFilteredUsers([])
+            setUsers(filteredUsers)
         }
-    }, [data, searchTerm])
+    }, [loggedInUser, data])
 
-    // TODO: Extract the content inside the <QueryResult> into a separate file, e.g., SearchDetails to achieve consistent ui pattern.
-    //  ? WHY: Achieve separate of concern
-    //  ?    <Page> component should only query and pass the data to its child components via <QueryResult>
-    //  ?    Children component should only display query data, or if execute any mutation, should redirect back to the parent component
+    // ? Set the initial list of users state to empty array and skip state to 0, while users is typing their search keyword
+    useEffect(() => {
+        setUsers([])
+        setSkip(0)
+    }, [searchTerm])
 
+    // ? Leverage the Intersection Observer API to fetch more users in infinite scroll
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            const entry = entries[0]
+            if (data) {
+                if (entry.isIntersecting) {
+                    setSkip(data.users.cursorId)
+                }
+            }
+        })
+        if (fetchMoreRef.current) {
+            observer.observe(fetchMoreRef.current)
+        }
+
+        return () => {
+            if (fetchMoreRef.current) {
+                observer.unobserve(fetchMoreRef.current)
+            }
+        }
+    }, [users])
+
+    // * JSX
     return (
         <Layout grid>
-            <QueryResult
-                loading={loading}
-                error={error}
-                data={data}
-                loggedInUser={loggedInUser}
-            >
-                <Container>
-                    {/* Page Title = Search*/}
-                    <PageTitle>Search</PageTitle>
-                    {/* Search Bar */}
-                    <SearchBar>
-                        <SearchInput
-                            label=""
-                            placeholder="Search"
-                            id="search-input"
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment
-                                        position="start"
-                                        sx={{ color: colors.silver.darker }}
-                                    >
-                                        <SearchRoundedSmallIcon />
-                                    </InputAdornment>
-                                ),
-                            }}
-                            onChange={(e) => {
-                                setSearchTerm(e.currentTarget.value)
-                            }}
+            <Container>
+                {/* Page Title = Search*/}
+                <PageTitle>Search</PageTitle>
+                {/* Search Bar */}
+                <SearchBar>
+                    <SearchInput
+                        label=""
+                        placeholder="Search"
+                        id="search-input"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment
+                                    position="start"
+                                    sx={{ color: colors.silver.darker }}
+                                >
+                                    <SearchRoundedSmallIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                        value={searchTerm}
+                        onChange={(e) => {
+                            setSearchTerm(e.currentTarget.value)
+                        }}
+                    />
+                </SearchBar>
+                {/* List of account with Follow button */}
+                {users &&
+                    users.map((u) => (
+                        <UserCard
+                            key={u.id}
+                            user={u}
+                            loggedInUser={loggedInUser?.userById}
                         />
-                    </SearchBar>
-                    {/* List of account with Follow button */}
-                    {filteredUsers.length > 0 &&
-                        filteredUsers.map((u) => (
-                            <UserCard
-                                key={u.id}
-                                user={u}
-                                loggedInUser={loggedInUser?.userById}
-                                refetchUsers={refetch}
-                            />
-                        ))}
-                    {filteredUsers.length === 0 && (
-                        <FallbackContainer>
-                            <FallbackTitle>
-                                No results available at this time
-                            </FallbackTitle>
-                            <FallbackDescription>
-                                There are no results to show at this time. Try
-                                another keyword.
-                            </FallbackDescription>
-                        </FallbackContainer>
-                    )}
-                </Container>
-            </QueryResult>
+                    ))}
+                <FetchMoreDetector ref={fetchMoreRef} />
+                {users.length === 0 && (
+                    <FallbackContainer>
+                        <FallbackTitle>
+                            No results available at this time
+                        </FallbackTitle>
+                        <FallbackDescription>
+                            There are no results to show at this time. Try
+                            another keyword.
+                        </FallbackDescription>
+                    </FallbackContainer>
+                )}
+            </Container>
         </Layout>
     )
 }
@@ -159,4 +182,8 @@ const FallbackTitle = styled.h3({
 const FallbackDescription = styled.p({
     color: colors.grey.light,
     fontSize: '.875rem',
+})
+
+const FetchMoreDetector = styled.div({
+    width: '100%',
 })

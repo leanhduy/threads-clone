@@ -32,21 +32,24 @@ export const GET_USER_BY_ID = gql`
 
 // * Get all users
 export const GET_USERS = gql`
-    query Users {
-        users {
-            id
-            username
-            fullname
-            bio
-            followerCount
-            followedBy {
+    query Users($skip: Int, $searchBy: String) {
+        users(skip: $skip, searchBy: $searchBy) {
+            cursorId
+            users {
                 id
-            }
-            following {
-                id
-            }
-            profileImage {
-                url
+                username
+                fullname
+                bio
+                followerCount
+                followedBy {
+                    id
+                }
+                following {
+                    id
+                }
+                profileImage {
+                    url
+                }
             }
         }
     }
