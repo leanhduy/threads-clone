@@ -11,11 +11,10 @@ on:
 
 jobs:
   build-server:
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: server # Set the working directory to 'server'
-
-    runs-on: ubuntu-latest
 
     strategy:
       matrix:
