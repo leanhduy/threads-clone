@@ -16,27 +16,37 @@ jobs:
       matrix:
         node-version: [18.x]
 
-    defaults:
-      run:
-        working-directory: server  # Set the default working directory to 'server'
-
     steps:
       - uses: actions/checkout@v4
+
+      - name: Copy package files
+        run: |
+          cp server/package.json .
+          cp server/package-lock.json .
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-          
+
       - name: Install dependencies
         run: npm install
+        working-directory: server
 
       - name: Run CI
         run: npm run ci
+        working-directory: server
 
       - name: Build the project
         run: npm run build --if-present
+        working-directory: server
 
       - name: Run tests
         run: npm run test
+        working-directory: server
+
+      - name: Clean up package files
+        run: |
+          rm package.json
+          rm package-lock.json
