@@ -9,7 +9,7 @@
     "dev": "nodemon src/index",  
     "build": "prisma generate",  
     "start": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Info: No test specified at the moment. Will be added in the future.\"",
     "ci": "npm ci && npm run build && npm test"
   },
   "dependencies": {
