@@ -7,8 +7,15 @@ import { UserContext } from './context'
 import { mockUser } from './mock'
 import 'react-toastify/dist/ReactToastify.css'
 
-// Construct the GraphQL Server API
-const URI = import.meta.env.VITE_GRAPHQL_API_SERVER || 'http://localhost:4000/'
+// ? Determine if it is the Development environment (NODE_ENV is not set or has value of 'development')
+const isDevelopment =
+    !process.env.NODE_ENV === 'develoment' ||
+    process.env.NODE_ENV === 'development'
+
+// ? Construct the URI to GraphQL Server API
+const URI = isDevelopment
+    ? import.meta.env.VITE_GRAPHQL_API_SERVER_DEV
+    : import.meta.env.VITE_GRAPHQL_API_SERVER
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 const client = new ApolloClient({
