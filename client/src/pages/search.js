@@ -54,6 +54,7 @@ const Search = () => {
 
     // ? Leverage the Intersection Observer API to fetch more users in infinite scroll
     useEffect(() => {
+        setFilteredUserResult(users)
         const observer = new IntersectionObserver((entries) => {
             const entry = entries[0]
             if (entry.isIntersecting) {
@@ -75,15 +76,13 @@ const Search = () => {
     }, [users])
 
     useEffect(() => {
-        if (searchTerm) {
-            setFilteredUserResult(
-                users.filter(
-                    (u) =>
-                        searchString(u.username, searchTerm) ||
-                        searchString(u.bio, searchTerm)
-                )
+        setFilteredUserResult(
+            users.filter(
+                (u) =>
+                    searchString(u.username, searchTerm) ||
+                    searchString(u.bio, searchTerm)
             )
-        }
+        )
     }, [searchTerm])
 
     // * JSX
@@ -115,24 +114,17 @@ const Search = () => {
                     />
                 </SearchBar>
                 {/* List of account with Follow button */}
-                {searchTerm === ''
-                    ? users.map((u) => (
-                          <UserCard
-                              key={u.id}
-                              user={u}
-                              loggedInUser={loggedInUser?.userById}
-                          />
-                      ))
-                    : filteredUserResult.map((u) => (
-                          <UserCard
-                              key={u.id}
-                              user={u}
-                              loggedInUser={loggedInUser?.userById}
-                          />
-                      ))}
+                {filteredUserResult.length > 0 &&
+                    filteredUserResult.map((u) => (
+                        <UserCard
+                            key={u.id}
+                            user={u}
+                            loggedInUser={loggedInUser?.userById}
+                        />
+                    ))}
                 {/* UI Element to trigger the infinite scroll fetching*/}
                 <FetchMorePlaceHolder ref={fetchMoreRef}></FetchMorePlaceHolder>
-                {filteredUserResult.length === 0 && searchTerm !== '' && (
+                {filteredUserResult.length === 0 && searchTerm !== '' ? (
                     <FallbackContainer>
                         <FallbackTitle>
                             No results available at this time
@@ -142,6 +134,8 @@ const Search = () => {
                             another keyword.
                         </FallbackDescription>
                     </FallbackContainer>
+                ) : (
+                    ''
                 )}
             </Container>
         </Layout>
