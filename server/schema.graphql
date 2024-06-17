@@ -119,9 +119,6 @@ type Query {
   Get all users, filtered by the searchBy value, and ordered by the user id
   """
   users(
-    """The search term inputted by users"""
-    searchBy: String
-
     """Number of users to skip for pagination"""
     skip: Int
   ): AllUsersQueryResponse!

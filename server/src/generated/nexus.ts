@@ -330,7 +330,6 @@ export interface NexusGenArgTypes {
       username?: string | null; // String
     }
     users: { // args
-      searchBy?: string | null; // String
       skip?: number | null; // Int
     }
   }

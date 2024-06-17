@@ -11,7 +11,6 @@ const {
 const { DateTimeResolver } = require('graphql-scalars')
 
 const DateTime = asNexusMethod(DateTimeResolver, 'date')
-const { searchString } = require('./utils/helpers')
 
 /**
  * ? HELPER FUNCTIONS
@@ -407,9 +406,6 @@ const Query = objectType({
         'Get all users, filtered by the searchBy value, and ordered by the user id',
       args: {
         skip: intArg({ description: 'Number of users to skip for pagination' }),
-        searchBy: stringArg({
-          description: 'The search term inputted by users',
-        }),
       },
       resolve: async (_, args, context) => {
         try {
@@ -419,11 +415,7 @@ const Query = objectType({
             orderBy: [{ id: 'asc' }],
           })
           return {
-            users: users.filter(
-              (u) =>
-                searchString(u.username, args.searchBy) ||
-                searchString(u.bio, args.searchBy),
-            ),
+            users: users,
             cursorId: users.length > 0 ? users[users.length - 1].id : null,
           }
         } catch (error) {
