@@ -105,6 +105,7 @@ const Home = () => {
             {posts.map((post) => (
                 <Post key={post.id} post={post} />
             ))}
+            {/* UI Element to trigger the infinite scroll fetching*/}
             <p ref={ref}></p>
             {/* Feed mode toggle button */}
             <FeedModeToggleButton

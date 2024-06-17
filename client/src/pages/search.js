@@ -5,7 +5,7 @@ import { Layout } from '../components'
 import { colors, SearchRoundedSmallIcon } from '../styles'
 import { InputAdornment, TextField } from '@mui/material'
 import { UserCard } from '../container'
-import { GET_USERS, GET_USER_BY_ID } from '../utils'
+import { GET_USERS, GET_USER_BY_ID, searchString } from '../utils'
 
 const Search = () => {
     // * Top-level states / variables
@@ -13,14 +13,16 @@ const Search = () => {
     const [skip, setSkip] = useState(0)
     // ? The element to detect to load more users
     const fetchMoreRef = useRef()
-    // ? The list of users based on the search term
+    // ? The list of users
     const [users, setUsers] = useState([])
+    // ? The list of filtered users based on the search term
+    const [filteredUserResult, setFilteredUserResult] = useState([])
+    // ? Search term
     const [searchTerm, setSearchTerm] = useState('')
     // ? Fetch the list of users
-    const { data, refetch } = useQuery(GET_USERS, {
+    const { data } = useQuery(GET_USERS, {
         variables: {
             skip: skip,
-            searchBy: searchTerm,
         },
     })
 
@@ -35,26 +37,29 @@ const Search = () => {
     useEffect(() => {
         // ? Update the filtered list of users based on the inputted search term
         if (loggedInUser != null && data != null) {
-            const filteredUsers = [...users, ...data.users.users].filter(
-                (u) => u.id !== loggedInUser.userById.id
-            )
-            setUsers(filteredUsers)
+            let filteredUsers = []
+            if (users.length === 0) {
+                filteredUsers = data.users.users.filter(
+                    (u) => u.id !== loggedInUser.userById.id
+                )
+                setUsers(filteredUsers)
+            } else {
+                filteredUsers = [...users, ...data.users.users].filter(
+                    (u) => u.id !== loggedInUser.userById.id
+                )
+                setUsers(filteredUsers)
+            }
         }
     }, [loggedInUser, data])
-
-    // ? Set the initial list of users state to empty array and skip state to 0, while users is typing their search keyword
-    useEffect(() => {
-        setUsers([])
-        setSkip(0)
-    }, [searchTerm])
 
     // ? Leverage the Intersection Observer API to fetch more users in infinite scroll
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
             const entry = entries[0]
-            if (data) {
-                if (entry.isIntersecting) {
+            if (entry.isIntersecting) {
+                if (data) {
                     setSkip(data.users.cursorId)
+                    // setSkip(users.length)
                 }
             }
         })
@@ -68,6 +73,18 @@ const Search = () => {
             }
         }
     }, [users])
+
+    useEffect(() => {
+        if (searchTerm) {
+            setFilteredUserResult(
+                users.filter(
+                    (u) =>
+                        searchString(u.username, searchTerm) ||
+                        searchString(u.bio, searchTerm)
+                )
+            )
+        }
+    }, [searchTerm])
 
     // * JSX
     return (
@@ -98,16 +115,24 @@ const Search = () => {
                     />
                 </SearchBar>
                 {/* List of account with Follow button */}
-                {users &&
-                    users.map((u) => (
-                        <UserCard
-                            key={u.id}
-                            user={u}
-                            loggedInUser={loggedInUser?.userById}
-                        />
-                    ))}
-                <FetchMoreDetector ref={fetchMoreRef} />
-                {users.length === 0 && (
+                {searchTerm === ''
+                    ? users.map((u) => (
+                          <UserCard
+                              key={u.id}
+                              user={u}
+                              loggedInUser={loggedInUser?.userById}
+                          />
+                      ))
+                    : filteredUserResult.map((u) => (
+                          <UserCard
+                              key={u.id}
+                              user={u}
+                              loggedInUser={loggedInUser?.userById}
+                          />
+                      ))}
+                {/* UI Element to trigger the infinite scroll fetching*/}
+                <FetchMorePlaceHolder ref={fetchMoreRef}></FetchMorePlaceHolder>
+                {filteredUserResult.length === 0 && searchTerm !== '' && (
                     <FallbackContainer>
                         <FallbackTitle>
                             No results available at this time
@@ -184,6 +209,8 @@ const FallbackDescription = styled.p({
     fontSize: '.875rem',
 })
 
-const FetchMoreDetector = styled.div({
+const FetchMorePlaceHolder = styled.p({
+    margin: 0,
     width: '100%',
+    height: '.1px',
 })

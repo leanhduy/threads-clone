@@ -32,8 +32,8 @@ export const GET_USER_BY_ID = gql`
 
 // * Get all users
 export const GET_USERS = gql`
-    query Users($skip: Int, $searchBy: String) {
-        users(skip: $skip, searchBy: $searchBy) {
+    query Users($skip: Int) {
+        users(skip: $skip) {
             cursorId
             users {
                 id
