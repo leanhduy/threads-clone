@@ -62,7 +62,7 @@ const Home = () => {
             const entry = entries[0]
             if (entry.isIntersecting) {
                 if (data) {
-                    setSkip(data.feedForYou.cursorId)
+                    setSkip(posts.length)
                 }
             }
         })

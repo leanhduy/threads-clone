@@ -473,7 +473,7 @@ const Query = objectType({
       },
       resolve: async (_, args, context) => {
         const posts = await context.prisma.post.findMany({
-          take: 2,
+          take: 4,
           skip: args.skip,
           include: {
             author: {
@@ -489,7 +489,7 @@ const Query = objectType({
               },
             },
           },
-          orderBy: [{ id: 'asc' }],
+          orderBy: [{ id: 'desc' }],
         })
         return {
           posts: posts,
