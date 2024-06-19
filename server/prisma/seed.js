@@ -6,6 +6,7 @@ const prisma = new PrismaClient()
 const userData = [
   {
     username: 'netninja',
+    password: '$2a$10$9WUHQzWDgcEXuwskfV5C5Oxc3N0cYtvzoY6tcxT7aOQxXNbvu47ZS',
     fullname: 'Shaun Pelling',
     bio: 'Coding tutorials & courses | #netninja | youtube.com/thenetninja',
     followerCount: 1,
@@ -51,6 +52,7 @@ const userData = [
   },
   {
     username: 'serenawilliams',
+    password: '$2a$10$9WUHQzWDgcEXuwskfV5C5Oxc3N0cYtvzoY6tcxT7aOQxXNbvu47ZS',
     fullname: 'Serena Williams',
     bio: 'Tennis champion 🎾 | Entrepreneur | Mom | Advocate for change 💫',
     followerCount: 2,
@@ -91,6 +93,7 @@ const userData = [
   },
   {
     username: 'prof_einstein',
+    password: '$2a$10$9WUHQzWDgcEXuwskfV5C5Oxc3N0cYtvzoY6tcxT7aOQxXNbvu47ZS',
     fullname: 'Dr. Albert Einstein',
     bio: 'Theoretical physicist ⚛️ | Nobel laureate | Passionate about science and education 📚',
     followerCount: 1,
@@ -119,6 +122,7 @@ const userData = [
   },
   {
     username: 'elonmusk',
+    password: '$2a$10$9WUHQzWDgcEXuwskfV5C5Oxc3N0cYtvzoY6tcxT7aOQxXNbvu47ZS',
     fullname: 'Elon Musk',
     bio: 'Technoking of Tesla | SpaceX | Neuralink | Boring Company 🚀',
     followerCount: 0,
@@ -147,6 +151,7 @@ const userData = [
   },
   {
     username: 'taylorswift',
+    password: '$2a$10$9WUHQzWDgcEXuwskfV5C5Oxc3N0cYtvzoY6tcxT7aOQxXNbvu47ZS',
     fullname: 'Taylor Swift',
     bio: 'Singer-songwriter | Lover of cats | 📷 by you',
     followerCount: 0,
@@ -175,6 +180,7 @@ const userData = [
   },
   {
     username: 'leomessi',
+    password: '$2a$10$9WUHQzWDgcEXuwskfV5C5Oxc3N0cYtvzoY6tcxT7aOQxXNbvu47ZS',
     fullname: 'Lionel Messi',
     bio: 'Professional footballer ⚽ | FC Barcelona | Argentina 🇦🇷',
     followerCount: 0,
@@ -203,6 +209,7 @@ const userData = [
   },
   {
     username: 'alexandriaoc',
+    password: '$2a$10$9WUHQzWDgcEXuwskfV5C5Oxc3N0cYtvzoY6tcxT7aOQxXNbvu47ZS',
     fullname: 'Alexandria Ocasio-Cortez',
     bio: 'Congresswoman for NY-14 | Progressive Democrat | Advocate for social justice 🌱',
     followerCount: 0,
@@ -231,6 +238,7 @@ const userData = [
   },
   {
     username: 'kendalljenner',
+    password: '$2a$10$9WUHQzWDgcEXuwskfV5C5Oxc3N0cYtvzoY6tcxT7aOQxXNbvu47ZS',
     fullname: 'Kendall Jenner',
     bio: 'Model | Entrepreneur | Lover of life 🌟',
     followerCount: 0,
@@ -259,6 +267,7 @@ const userData = [
   },
   {
     username: 'markzuckerberg',
+    password: '$2a$10$9WUHQzWDgcEXuwskfV5C5Oxc3N0cYtvzoY6tcxT7aOQxXNbvu47ZS',
     fullname: 'Mark Zuckerberg',
     bio: 'Co-founder of Facebook | Building the metaverse 🧑‍💻',
     followerCount: 0,
@@ -287,6 +296,7 @@ const userData = [
   },
   {
     username: 'arianagrande',
+    password: '$2a$10$9WUHQzWDgcEXuwskfV5C5Oxc3N0cYtvzoY6tcxT7aOQxXNbvu47ZS',
     fullname: 'Ariana Grande',
     bio: 'Singer | Actress | Sweetener | Thank U, Next 🌸',
     followerCount: 0,
@@ -315,6 +325,7 @@ const userData = [
   },
   {
     username: 'gordonramsay',
+    password: '$2a$10$9WUHQzWDgcEXuwskfV5C5Oxc3N0cYtvzoY6tcxT7aOQxXNbvu47ZS',
     fullname: 'Gordon Ramsay',
     bio: 'Chef | Restauranteur | MasterChef | Hell’s Kitchen 🍽️',
     followerCount: 0,
@@ -343,6 +354,7 @@ const userData = [
   },
   {
     username: 'neildegrassetyson',
+    password: '$2a$10$9WUHQzWDgcEXuwskfV5C5Oxc3N0cYtvzoY6tcxT7aOQxXNbvu47ZS',
     fullname: 'Neil deGrasse Tyson',
     bio: 'Astrophysicist | Author | Science Communicator 🔭',
     followerCount: 0,
@@ -371,6 +383,7 @@ const userData = [
   },
   {
     username: 'billieeilish',
+    password: '$2a$10$9WUHQzWDgcEXuwskfV5C5Oxc3N0cYtvzoY6tcxT7aOQxXNbvu47ZS',
     fullname: 'Billie Eilish',
     bio: 'Singer-songwriter | Happier Than Ever | 🌱 Vegan',
     followerCount: 0,
