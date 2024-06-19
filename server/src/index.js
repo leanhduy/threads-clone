@@ -5,7 +5,7 @@ const { createContext } = require('./context.js')
 
 // ? Load environment variables for development
 if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config({ path: '.env.development' })
+  require('dotenv').config({ path: '.env' })
 }
 
 // ? Determine if it is Development environment
@@ -15,7 +15,7 @@ const isDevelopment =
 // ? Default to port 8001, but use the environment variable PORT if available
 const PORT = isDevelopment
   ? process.env.GRAPHQL_SERVER_PORT_DEV
-  : process.env.GRAPHQL_SERVER_PORT || 8001
+  : process.env.GRAPHQL_SERVER_PORT
 
 async function start() {
   // ? create server with nexus schema
@@ -25,7 +25,7 @@ async function start() {
     listen: { port: PORT },
   })
 
-  // Construct the base URL
+  // ? Construct the base URL
   const baseUrl = process.env.RENDER_EXTERNAL_URL || url
 
   console.log(`\
