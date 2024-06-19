@@ -335,7 +335,7 @@ const Mutation = objectType({
           }
 
           // ? Create the hash for the password
-          const hashPw = getHash(args.password)
+          const hashPw = await getHash(args.password)
 
           const newUser = await context.prisma.user.create({
             data: {
@@ -667,6 +667,7 @@ const User = objectType({
   definition(t) {
     t.nonNull.id('id')
     t.nonNull.string('username')
+    t.nonNull.string('password')
     t.string('bio')
     t.string('fullname')
     t.nonNull.field('joinedOn', { type: 'DateTime' })

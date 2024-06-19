@@ -126,6 +126,7 @@ export interface NexusGenObjects {
     fullname?: string | null; // String
     id: string; // ID!
     joinedOn: NexusGenScalars['DateTime']; // DateTime!
+    password: string; // String!
     postCount?: number | null; // Int
     username: string; // String!
   }
@@ -229,6 +230,7 @@ export interface NexusGenFieldTypes {
     fullname: string | null; // String
     id: string; // ID!
     joinedOn: NexusGenScalars['DateTime']; // DateTime!
+    password: string; // String!
     postCount: number | null; // Int
     posts: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
     profileImage: NexusGenRootTypes['ProfileImage'] | null; // ProfileImage
@@ -324,6 +326,7 @@ export interface NexusGenFieldTypeNames {
     fullname: 'String'
     id: 'ID'
     joinedOn: 'DateTime'
+    password: 'String'
     postCount: 'Int'
     posts: 'Post'
     profileImage: 'ProfileImage'

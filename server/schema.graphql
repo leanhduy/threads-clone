@@ -164,6 +164,7 @@ type User {
   fullname: String
   id: ID!
   joinedOn: DateTime!
+  password: String!
   postCount: Int
   posts: [Post]
   profileImage: ProfileImage
