@@ -75,6 +75,10 @@ export interface NexusGenObjects {
     cursorId?: number | null; // Int
     users?: Array<NexusGenRootTypes['User'] | null> | null; // [User]
   }
+  AuthPayload: { // root type
+    token?: string | null; // String
+    user?: NexusGenRootTypes['User'] | null; // User
+  }
   FeedQueryResponse: { // root type
     cursorId?: number | null; // Int
     posts?: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
@@ -109,6 +113,12 @@ export interface NexusGenObjects {
     url: string; // String!
   }
   Query: {};
+  SignUpResponse: { // root type
+    code: number; // Int!
+    message: string; // String!
+    payload: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    success: boolean; // Boolean!
+  }
   User: { // root type
     bio?: string | null; // String
     followerCount?: number | null; // Int
@@ -116,6 +126,7 @@ export interface NexusGenObjects {
     fullname?: string | null; // String
     id: string; // ID!
     joinedOn: NexusGenScalars['DateTime']; // DateTime!
+    password: string; // String!
     postCount?: number | null; // Int
     username: string; // String!
   }
@@ -142,6 +153,10 @@ export interface NexusGenFieldTypes {
     cursorId: number | null; // Int
     users: Array<NexusGenRootTypes['User'] | null> | null; // [User]
   }
+  AuthPayload: { // field return type
+    token: string | null; // String
+    user: NexusGenRootTypes['User'] | null; // User
+  }
   FeedQueryResponse: { // field return type
     cursorId: number | null; // Int
     posts: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
@@ -161,6 +176,7 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     addpost: NexusGenRootTypes['AddPostResponse'] | null; // AddPostResponse
     followUser: NexusGenRootTypes['FollowUserResponse'] | null; // FollowUserResponse
+    signup: NexusGenRootTypes['SignUpResponse'] | null; // SignUpResponse
     unfollowUser: NexusGenRootTypes['FollowUserResponse'] | null; // FollowUserResponse
   }
   Post: { // field return type
@@ -199,6 +215,12 @@ export interface NexusGenFieldTypes {
     userProfileImage: NexusGenRootTypes['ProfileImage']; // ProfileImage!
     users: NexusGenRootTypes['AllUsersQueryResponse']; // AllUsersQueryResponse!
   }
+  SignUpResponse: { // field return type
+    code: number; // Int!
+    message: string; // String!
+    payload: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    success: boolean; // Boolean!
+  }
   User: { // field return type
     bio: string | null; // String
     followedBy: Array<NexusGenRootTypes['User'] | null> | null; // [User]
@@ -208,6 +230,7 @@ export interface NexusGenFieldTypes {
     fullname: string | null; // String
     id: string; // ID!
     joinedOn: NexusGenScalars['DateTime']; // DateTime!
+    password: string; // String!
     postCount: number | null; // Int
     posts: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
     profileImage: NexusGenRootTypes['ProfileImage'] | null; // ProfileImage
@@ -225,6 +248,10 @@ export interface NexusGenFieldTypeNames {
   AllUsersQueryResponse: { // field return type name
     cursorId: 'Int'
     users: 'User'
+  }
+  AuthPayload: { // field return type name
+    token: 'String'
+    user: 'User'
   }
   FeedQueryResponse: { // field return type name
     cursorId: 'Int'
@@ -245,6 +272,7 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     addpost: 'AddPostResponse'
     followUser: 'FollowUserResponse'
+    signup: 'SignUpResponse'
     unfollowUser: 'FollowUserResponse'
   }
   Post: { // field return type name
@@ -283,6 +311,12 @@ export interface NexusGenFieldTypeNames {
     userProfileImage: 'ProfileImage'
     users: 'AllUsersQueryResponse'
   }
+  SignUpResponse: { // field return type name
+    code: 'Int'
+    message: 'String'
+    payload: 'AuthPayload'
+    success: 'Boolean'
+  }
   User: { // field return type name
     bio: 'String'
     followedBy: 'User'
@@ -292,6 +326,7 @@ export interface NexusGenFieldTypeNames {
     fullname: 'String'
     id: 'ID'
     joinedOn: 'DateTime'
+    password: 'String'
     postCount: 'Int'
     posts: 'Post'
     profileImage: 'ProfileImage'
@@ -307,6 +342,10 @@ export interface NexusGenArgTypes {
     followUser: { // args
       followerId: number; // Int!
       followingId: number; // Int!
+    }
+    signup: { // args
+      password: string; // String!
+      username: string; // String!
     }
     unfollowUser: { // args
       followerId: number; // Int!

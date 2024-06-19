@@ -2,6 +2,7 @@
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "username" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
     "bio" TEXT,
     "fullname" TEXT,
     "joinedOn" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

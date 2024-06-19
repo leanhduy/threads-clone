@@ -12,6 +12,7 @@ datasource db {
 model User {
   id             Int           @id @default(autoincrement())
   username       String        @unique
+  password       String        
   bio            String?
   fullname       String?
   joinedOn       DateTime      @default(now())
