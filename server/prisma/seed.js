@@ -416,55 +416,66 @@ module.exports = { userData }
 
 async function main() {
   console.log(`Start seeding...`)
-  let createdUsers = []
-  // 1. Create all users without connections
-  for (const user of userData) {
-    const createdUser = await prisma.user.create({
-      data: {
-        ...user,
-        followedBy: undefined, // Remove connections for initial creation
-        following: undefined,
-      },
-    })
-    createdUsers.push(createdUser)
-  }
+  // 0. Only seed data if the database is empty
+  // ADD CODE HERE
+  const users = await users.prisma.user.findMany()
 
-  // 2. Update the followedBy and following of each user
-  // ! NOTE: When update sample data, notice the duplicate in Follows table, when set up the `followed` and `following` field for User model
-  for (const user of userData) {
-    for (const followedByUser of user.followedBy || []) {
-      const followedUser = createdUsers.find((u) => u.id === followedByUser.id)
-      try {
-        await prisma.follows.create({
-          data: {
-            followedById: followedUser.id,
-            followingId: createdUsers.find((u) => u.username === user.username)
-              .id,
-          },
-        })
-      } catch (err) {
-        console.error(err)
-        continue
-      }
+  if (users.length === 0) {
+    let createdUsers = []
+    // 1. Create all users without connections
+    for (const user of userData) {
+      const createdUser = await prisma.user.create({
+        data: {
+          ...user,
+          followedBy: undefined, // Remove connections for initial creation
+          following: undefined,
+        },
+      })
+      createdUsers.push(createdUser)
     }
 
-    for (const followingByUsername of user.following || []) {
-      const followingUser = createdUsers.find(
-        (u) => u.id === followingByUsername.id,
-      )
-      try {
-        await prisma.follows.create({
-          data: {
-            followedById: createdUsers.find((u) => u.username === user.username)
-              .id,
-            followingId: followingUser.id,
-          },
-        })
-      } catch (err) {
-        console.error(err)
-        continue
+    // 2. Update the followedBy and following of each user
+    for (const user of userData) {
+      for (const followedByUser of user.followedBy || []) {
+        const followedUser = createdUsers.find(
+          (u) => u.id === followedByUser.id,
+        )
+        try {
+          await prisma.follows.create({
+            data: {
+              followedById: followedUser.id,
+              followingId: createdUsers.find(
+                (u) => u.username === user.username,
+              ).id,
+            },
+          })
+        } catch (err) {
+          console.error(err)
+          continue
+        }
+      }
+
+      for (const followingByUsername of user.following || []) {
+        const followingUser = createdUsers.find(
+          (u) => u.id === followingByUsername.id,
+        )
+        try {
+          await prisma.follows.create({
+            data: {
+              followedById: createdUsers.find(
+                (u) => u.username === user.username,
+              ).id,
+              followingId: followingUser.id,
+            },
+          })
+        } catch (err) {
+          console.error(err)
+          continue
+        }
       }
     }
+  } else {
+    console.log('Database is not empty. Skipping seeding data.')
   }
 }
 
