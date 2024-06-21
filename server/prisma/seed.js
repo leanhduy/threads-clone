@@ -418,7 +418,7 @@ async function main() {
   console.log(`Start seeding...`)
   // 0. Only seed data if the database is empty
   // ADD CODE HERE
-  const users = await users.prisma.user.findMany()
+  const users = await prisma.user.findMany()
 
   if (users.length === 0) {
     let createdUsers = []
