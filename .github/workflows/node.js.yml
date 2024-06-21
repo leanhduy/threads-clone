@@ -34,6 +34,10 @@ jobs:
         run: npm install
         working-directory: server
 
+      - name: Set up environment variables
+        run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+        working-directory: server
+
       - name: Run CI
         run: npm run ci
         working-directory: server
