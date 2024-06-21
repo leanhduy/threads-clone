@@ -4,7 +4,7 @@ import { UserContext } from '../context'
 const UserProvider = ({ children }) => {
     const [userId, setUserId] = useState(null)
 
-    // Load user from localStorage when app initializes
+    // * Load the user id from localStorage when app initializes
     useEffect(() => {
         const storedId = JSON.parse(localStorage.getItem('userId'))
         if (storedId) {
@@ -24,7 +24,7 @@ const UserProvider = ({ children }) => {
     }
 
     return (
-        <UserContext.Provider value={{ userId, login, logout }}>
+        <UserContext.Provider value={{ userId, setUserId, login, logout }}>
             {children}
         </UserContext.Provider>
     )

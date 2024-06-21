@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
+// * The placeholder image for the profile image of user that doesn't upload any profile image
 export const userProfilePlaceHolder = '/images/placeholder_avatar.png'
 
 // * Perform a case-insensitive search for `searchStr` in `str`

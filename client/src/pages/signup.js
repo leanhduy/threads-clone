@@ -11,10 +11,11 @@ import { UserContext } from '../context'
 
 const SignUp = () => {
     const navigate = useNavigate()
-    const { login } = useContext(UserContext)
+    const { setUserId, login } = useContext(UserContext)
     const [signUp] = useMutation(SIGN_UP, {
         onCompleted: async (data) => {
             // ? Set up the Context User
+            setUserId(data?.signup?.payload?.user?.id)
 
             // ? Store the JWT into localStorage
             localStorage.setItem('token', data?.signup?.payload.token)

@@ -6,6 +6,7 @@ export {
     toastError,
     removeToast,
     uploadImageToHostingServer,
+    userProfilePlaceHolder,
 } from './helpers.js'
 export {
     GET_USER_BY_ID,

@@ -14,12 +14,11 @@ import { Link } from 'react-router-dom'
 import logo from '../assets/threads.png'
 import { CircularProgress, IconButton } from '@mui/material'
 import { useQuery } from '@apollo/client'
-import { GET_USER_BY_ID } from '../utils'
+import { GET_USER_BY_ID, userProfilePlaceHolder } from '../utils'
 import { UserContext } from '../context'
-import { userProfilePlaceHolder } from '../utils/helpers'
 
 const Navbar = ({ children, openNewPostDialog }) => {
-    // The id of the logged in user
+    // * The fields and methods to handle the logged in user, from the UserContext
     const { userId, logout } = useContext(UserContext)
     const {
         loading,
@@ -80,7 +79,7 @@ const Navbar = ({ children, openNewPostDialog }) => {
                         />
                     </LinkContainer>
                 ) : (
-                    <HomeLink to="/signup">
+                    <HomeLink to="/signin">
                         <IconButton aria-label="profile">
                             <PersonOutlineRoundedIcon />
                         </IconButton>

@@ -6,8 +6,7 @@ import abbreviate from 'number-abbreviate'
 import { Post } from '../container'
 import { NewPostContext } from '../context'
 import { useMutation } from '@apollo/client'
-import { FOLLOW_USER, UNFOLLOW_USER } from '../utils'
-import { userProfilePlaceHolder } from '../utils/helpers'
+import { FOLLOW_USER, UNFOLLOW_USER, userProfilePlaceHolder } from '../utils'
 
 const filters = ['post', 'replies', 'reposts']
 
