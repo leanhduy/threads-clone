@@ -1,27 +1,39 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {
     colors,
     widths,
-    DragHandleRoundedIcon,
     HomeRoundedIcon,
     SearchRoundedIcon,
     FavoriteBorderRoundedIcon,
     PersonOutlineRoundedIcon,
+    BorderColorRoundedIcon,
+    LogoutIcon,
 } from '../styles'
 import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
 import logo from '../assets/threads.png'
-import { IconButton } from '@mui/material'
-import BorderColorRounded from '@mui/icons-material/BorderColorRounded'
-import { mockUser } from '../mock'
+import { CircularProgress, IconButton } from '@mui/material'
+import { useQuery } from '@apollo/client'
+import { GET_USER_BY_ID } from '../utils'
+import { UserContext } from '../context'
+import { userProfilePlaceHolder } from '../utils/helpers'
 
-/**
- * Header renders the top navigation
- * for this particular tutorial level, it only holds the home button
- */
 const Navbar = ({ children, openNewPostDialog }) => {
-    // TODO: Replace with the logged in user when Authentication feature is implemented
-    const loggedInUser = mockUser
+    // The id of the logged in user
+    const { userId, logout } = useContext(UserContext)
+    const {
+        loading,
+        error,
+        data: user,
+    } = useQuery(GET_USER_BY_ID, {
+        variables: {
+            id: parseInt(userId),
+        },
+    })
+
+    if (loading) {
+        return <CircularProgress />
+    }
 
     return (
         <HeaderBar>
@@ -39,39 +51,49 @@ const Navbar = ({ children, openNewPostDialog }) => {
             </LeftContainer>
             <Container>
                 <HomeLink to="/">
-                    <IconButton aria-label="more">
+                    <IconButton aria-label="home">
                         <HomeRoundedIcon />
                     </IconButton>
                 </HomeLink>
                 <HomeLink to="/search">
-                    <IconButton aria-label="more">
+                    <IconButton aria-label="search">
                         <SearchRoundedIcon />
                     </IconButton>
                 </HomeLink>
                 {/* THIS WILL OPEN A CREATE POST DIALOG */}
-                <IconButton aria-label="more" onClick={openNewPostDialog}>
-                    <BorderColorRounded />
+                <IconButton aria-label="edit" onClick={openNewPostDialog}>
+                    <BorderColorRoundedIcon />
                 </IconButton>
                 <HomeLink to="/activity">
-                    <IconButton aria-label="more">
+                    <IconButton aria-label="activity">
                         <FavoriteBorderRoundedIcon />
                     </IconButton>
                 </HomeLink>
-                <HomeLink to={`/profile/${loggedInUser.username}`}>
-                    <IconButton aria-label="more">
-                        <PersonOutlineRoundedIcon />
-                    </IconButton>
-                </HomeLink>
+                {/* If user is not logged in, redirect to login page. Otherwise, redirect to profile page */}
+                {user ? (
+                    <LinkContainer to={`/profile/${user?.userById?.username}`}>
+                        <PostAvatarImage
+                            src={
+                                user?.userById?.profileImage?.url ||
+                                userProfilePlaceHolder
+                            }
+                        />
+                    </LinkContainer>
+                ) : (
+                    <HomeLink to="/signup">
+                        <IconButton aria-label="profile">
+                            <PersonOutlineRoundedIcon />
+                        </IconButton>
+                    </HomeLink>
+                )}
             </Container>
             <RightContainer>
-                <HomeButtonContainer>
-                    <HomeButton>
-                        <IconButton aria-label="more">
-                            <DragHandleRoundedIcon />
-                        </IconButton>
-                    </HomeButton>
-                </HomeButtonContainer>
-                {children}
+                {/* Display log out icon if user is logged in. Otherwise, display nothing */}
+                {user && (
+                    <IconButton aria-label="signout" onClick={logout}>
+                        <LogoutIcon />
+                    </IconButton>
+                )}
             </RightContainer>
         </HeaderBar>
     )
@@ -79,24 +101,20 @@ const Navbar = ({ children, openNewPostDialog }) => {
 
 export default Navbar
 
-/** Navbar styled components */
+//#region Styled-Components
 const HeaderBar = styled.div({
+    alignItems: 'center',
+    backgroundColor: 'white',
+    boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.15)',
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'center',
-    // borderBottom: `solid 1px ${colors.pink.light}`,
-    boxShadow: '0px 1px 5px 0px rgba(0,0,0,0.15)',
     padding: '5px 30px',
     minHeight: 80,
-    backgroundColor: 'white',
+    width: '100%',
 })
 
 const LeftContainer = styled.div({
-    width: 40,
-})
-
-const RightContainer = styled.div({
     width: 40,
 })
 
@@ -130,21 +148,30 @@ const HomeButton = styled.div({
 const LogoContainer = styled.div({ display: 'flex', alignSelf: 'center' })
 
 const Logo = styled.img({
-    height: 32,
-    width: 32,
+    height: 40,
+    width: 40,
     marginRight: 8,
 })
 
-const Title = styled.div({
+const LinkContainer = styled(Link)({
+    alignSelf: 'center',
+    textDecoration: 'none',
     display: 'flex',
-    flexDirection: 'column',
-    h3: {
-        lineHeight: '1em',
-        marginBottom: 0,
-    },
-    div: {
-        fontSize: '0.9em',
-        lineHeight: '0.8em',
-        paddingLeft: 2,
-    },
 })
+
+const PostAvatarImage = styled.img({
+    borderRadius: '50%',
+    objectFit: 'cover',
+    width: 42,
+    height: 42,
+    ':hover': {
+        cursor: 'pointer',
+    },
+    margin: 0,
+})
+
+const RightContainer = styled.div({
+    width: 40,
+})
+
+//#endregion Styled-Components

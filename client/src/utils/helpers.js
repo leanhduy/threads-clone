@@ -1,6 +1,8 @@
 import { toast } from 'react-toastify'
 import axios from 'axios'
 
+export const userProfilePlaceHolder = '/images/placeholder_avatar.png'
+
 // * Perform a case-insensitive search for `searchStr` in `str`
 export const searchString = (str, searchStr) => {
     return str.toLowerCase().includes(searchStr.toLowerCase())
@@ -24,7 +26,7 @@ export const createPostToast = (icon) => {
 // * Display a success toast
 export const toastSuccess = (msg) => {
     toast.success(msg, {
-        position: 'bottom-center',
+        position: 'top-right',
         autoClose: 3000,
         hideProgressBar: true,
         closeOnClick: false,
@@ -36,7 +38,7 @@ export const toastSuccess = (msg) => {
 
 export const toastError = (msg) => {
     toast.error(msg, {
-        position: 'bottom-center',
+        position: 'top-right',
         autoClose: 3000,
         hideProgressBar: true,
         closeOnClick: false,

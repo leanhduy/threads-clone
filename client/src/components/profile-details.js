@@ -7,6 +7,7 @@ import { Post } from '../container'
 import { NewPostContext } from '../context'
 import { useMutation } from '@apollo/client'
 import { FOLLOW_USER, UNFOLLOW_USER } from '../utils'
+import { userProfilePlaceHolder } from '../utils/helpers'
 
 const filters = ['post', 'replies', 'reposts']
 
@@ -96,7 +97,9 @@ const ProfileDetails = ({
                     </ProfileUserInfoLeft>
                     <ProfileUserInfoRight>
                         <AvatarImage
-                            src={user.profileImage?.url}
+                            src={
+                                user.profileImage?.url || userProfilePlaceHolder
+                            }
                             alt="user avatar"
                         />
                     </ProfileUserInfoRight>

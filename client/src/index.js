@@ -1,11 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
-import Pages from './pages'
-import GlobalStyles from './styles'
-import { UserContext } from './context'
-import { mockUser } from './mock'
 import 'react-toastify/dist/ReactToastify.css'
+import { App, UserProvider } from './components'
 
 // ? Determine if it is the Development environment (NODE_ENV is not set or has value of 'development')
 const isDevelopment =
@@ -26,11 +23,9 @@ const client = new ApolloClient({
 root.render(
     <React.StrictMode>
         <ApolloProvider client={client}>
-            <UserContext.Provider value={mockUser}>
-                {/* Currently using mock user to simulate the logged in user. Replace with the logged in user later when Authentication feature is implemented */}
-                <GlobalStyles />
-                <Pages />
-            </UserContext.Provider>
+            <UserProvider>
+                <App />
+            </UserProvider>
         </ApolloProvider>
     </React.StrictMode>
 )

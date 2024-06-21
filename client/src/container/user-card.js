@@ -8,6 +8,7 @@ import UserCardPopover from './user-card-popover'
 import { useMutation } from '@apollo/client'
 import { FOLLOW_USER, UNFOLLOW_USER } from '../utils'
 import { UserContext } from '../context'
+import { userProfilePlaceHolder } from '../utils/helpers'
 
 const UserCard = ({ user, loggedInUser }) => {
     // * TOP-LEVEL STATES / VARIABLES
@@ -112,7 +113,7 @@ const UserCard = ({ user, loggedInUser }) => {
             <ContentSide>
                 <LinkContainer to={`/profile/${username}`}>
                     <PostAvatarImage
-                        src={profileImage?.url}
+                        src={profileImage?.url || userProfilePlaceHolder}
                         alt="user avatar"
                     />
                 </LinkContainer>

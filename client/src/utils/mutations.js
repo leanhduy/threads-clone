@@ -62,3 +62,19 @@ export const ADD_POST = gql`
         }
     }
 `
+
+export const SIGN_UP = gql`
+    mutation SignUp($username: String!, $password: String!) {
+        signup(username: $username, password: $password) {
+            code
+            success
+            message
+            payload {
+                user {
+                    id
+                }
+                token
+            }
+        }
+    }
+`

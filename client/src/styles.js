@@ -13,6 +13,7 @@ import SendRoundedIcon from '@mui/icons-material/SendRounded'
 import ScreenRotationAltRoundedIcon from '@mui/icons-material/ScreenRotationAltRounded'
 import FilterRoundedIcon from '@mui/icons-material/FilterRounded'
 import SyncAltIcon from '@mui/icons-material/SyncAlt'
+import LogoutIcon from '@mui/icons-material/Logout'
 import AddIcon from '@mui/icons-material/Add'
 import { styled } from '@mui/material/styles'
 
@@ -245,6 +246,10 @@ const StyledFilterRoundedIconSm = styled(FilterRoundedIcon)(() => ({
     height: 20,
     color: colors.grey.lighter,
 }))
+const StyledLogoutIcon = styled(LogoutIcon)(() => ({
+    height: 32,
+    width: 32,
+}))
 
 export { StyledHomeRoundedIcon as HomeRoundedIcon }
 export { StyledPostAddRoundedIcon as PostAddRoundedIcon }
@@ -262,3 +267,4 @@ export { StyledLikeIcon as LikeIcon }
 export { StyledAddIcon as AddIcon }
 export { StyledSyncAltIcon as ToggleIcon }
 export { StyledFilterRoundedIconSm as ImageUploadSmIcon }
+export { StyledLogoutIcon as LogoutIcon }
