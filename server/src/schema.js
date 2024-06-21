@@ -10,6 +10,8 @@ const {
 
 const { DateTimeResolver } = require('graphql-scalars')
 const { getJWT, getHash } = require('./utils/helpers')
+const { compareSync } = require('bcryptjs')
+const { isCompositeType } = require('graphql')
 
 const DateTime = asNexusMethod(DateTimeResolver, 'date')
 
@@ -103,8 +105,10 @@ const AuthPayload = objectType({
   },
 })
 
-const SignUpResponse = objectType({
-  name: 'SignUpResponse',
+const AuthResponse = objectType({
+  name: 'AuthResponse',
+  description:
+    'The response type used for authentication requests, such as sign up and sign in',
   definition(t) {
     t.nonNull.int('code', {
       description:
@@ -309,8 +313,8 @@ const Mutation = objectType({
     })
 
     t.field('signup', {
-      type: 'SignUpResponse',
-      description: 'Siging up a new user',
+      type: 'AuthResponse',
+      description: 'Signing up a new user',
       args: {
         username: nonNull(stringArg()),
         password: nonNull(stringArg()),
@@ -359,6 +363,62 @@ const Mutation = objectType({
             code: 500,
             success: false,
             message: 'Internal server error while creating new user',
+            payload: {
+              user: null,
+              token: null,
+            },
+          }
+        }
+      },
+    })
+
+    t.field('signin', {
+      type: 'AuthResponse',
+      description: 'Signing in',
+      args: {
+        username: nonNull(stringArg()),
+        password: nonNull(stringArg()),
+      },
+      resolve: async (_, args, context) => {
+        try {
+          // ? Check if the username already exists
+          const user = await context.prisma.user.findUnique({
+            where: { username: args.username },
+          })
+
+          // ? If user exists, continue checking the password with bcrypt.compareSync
+          if (user) {
+            const isPasswordCorrect = compareSync(args.password, user.password)
+            if (isPasswordCorrect) {
+              const token = getJWT(user.id)
+              // ? Return 200 response if sign in credential are correct
+              return {
+                code: 200,
+                success: true,
+                message: 'Sign in successfully!',
+                payload: {
+                  user: user,
+                  token: token,
+                },
+              }
+            }
+            // ? Return 401 (Unauthorized) response if sign in credential are correct
+            return {
+              code: 401,
+              success: false,
+              message: 'Unauthorized - Wrong credentials',
+              payload: {
+                user: null,
+                token: null,
+              },
+            }
+          }
+        } catch (error) {
+          console.error(error)
+          return {
+            code: 500,
+            success: false,
+            message: 'Internal server error while signing in',
             payload: {
               user: null,
               token: null,
@@ -780,7 +840,7 @@ const schema = makeSchema({
     FollowUserResponse,
     DateTime,
     AuthPayload,
-    SignUpResponse,
+    AuthResponse,
   ],
   outputs: {
     schema: __dirname + '/../schema.graphql',
