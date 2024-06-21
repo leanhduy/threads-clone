@@ -6,9 +6,8 @@ import styled from '@emotion/styled'
 import abbreviate from 'number-abbreviate'
 import UserCardPopover from './user-card-popover'
 import { useMutation } from '@apollo/client'
-import { FOLLOW_USER, UNFOLLOW_USER } from '../utils'
+import { FOLLOW_USER, UNFOLLOW_USER, userProfilePlaceHolder } from '../utils'
 import { UserContext } from '../context'
-
 const UserCard = ({ user, loggedInUser }) => {
     // * TOP-LEVEL STATES / VARIABLES
     const currentUser = useContext(UserContext)
@@ -112,7 +111,7 @@ const UserCard = ({ user, loggedInUser }) => {
             <ContentSide>
                 <LinkContainer to={`/profile/${username}`}>
                     <PostAvatarImage
-                        src={profileImage?.url}
+                        src={profileImage?.url || userProfilePlaceHolder}
                         alt="user avatar"
                     />
                 </LinkContainer>
