@@ -415,10 +415,10 @@ const userData = [
 module.exports = { userData }
 
 async function main() {
-  console.log(`Start seeding...`)
   const userCount = await prisma.user.count()
 
   if (userCount === 0) {
+    console.log('Start seeding...')
     let createdUsers = []
     // 1. Create all users without connections
     for (const user of userData) {
@@ -472,6 +472,7 @@ async function main() {
         }
       }
     }
+    console.log('Seeding completed.')
   } else {
     console.log('Database is not empty. Skipping seeding data.')
   }
