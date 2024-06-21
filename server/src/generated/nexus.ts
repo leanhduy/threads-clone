@@ -79,6 +79,12 @@ export interface NexusGenObjects {
     token?: string | null; // String
     user?: NexusGenRootTypes['User'] | null; // User
   }
+  AuthResponse: { // root type
+    code: number; // Int!
+    message: string; // String!
+    payload: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    success: boolean; // Boolean!
+  }
   FeedQueryResponse: { // root type
     cursorId?: number | null; // Int
     posts?: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
@@ -113,12 +119,6 @@ export interface NexusGenObjects {
     url: string; // String!
   }
   Query: {};
-  SignUpResponse: { // root type
-    code: number; // Int!
-    message: string; // String!
-    payload: NexusGenRootTypes['AuthPayload']; // AuthPayload!
-    success: boolean; // Boolean!
-  }
   User: { // root type
     bio?: string | null; // String
     followerCount?: number | null; // Int
@@ -157,6 +157,12 @@ export interface NexusGenFieldTypes {
     token: string | null; // String
     user: NexusGenRootTypes['User'] | null; // User
   }
+  AuthResponse: { // field return type
+    code: number; // Int!
+    message: string; // String!
+    payload: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    success: boolean; // Boolean!
+  }
   FeedQueryResponse: { // field return type
     cursorId: number | null; // Int
     posts: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
@@ -176,7 +182,8 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     addpost: NexusGenRootTypes['AddPostResponse'] | null; // AddPostResponse
     followUser: NexusGenRootTypes['FollowUserResponse'] | null; // FollowUserResponse
-    signup: NexusGenRootTypes['SignUpResponse'] | null; // SignUpResponse
+    signin: NexusGenRootTypes['AuthResponse'] | null; // AuthResponse
+    signup: NexusGenRootTypes['AuthResponse'] | null; // AuthResponse
     unfollowUser: NexusGenRootTypes['FollowUserResponse'] | null; // FollowUserResponse
   }
   Post: { // field return type
@@ -215,12 +222,6 @@ export interface NexusGenFieldTypes {
     userProfileImage: NexusGenRootTypes['ProfileImage']; // ProfileImage!
     users: NexusGenRootTypes['AllUsersQueryResponse']; // AllUsersQueryResponse!
   }
-  SignUpResponse: { // field return type
-    code: number; // Int!
-    message: string; // String!
-    payload: NexusGenRootTypes['AuthPayload']; // AuthPayload!
-    success: boolean; // Boolean!
-  }
   User: { // field return type
     bio: string | null; // String
     followedBy: Array<NexusGenRootTypes['User'] | null> | null; // [User]
@@ -253,6 +254,12 @@ export interface NexusGenFieldTypeNames {
     token: 'String'
     user: 'User'
   }
+  AuthResponse: { // field return type name
+    code: 'Int'
+    message: 'String'
+    payload: 'AuthPayload'
+    success: 'Boolean'
+  }
   FeedQueryResponse: { // field return type name
     cursorId: 'Int'
     posts: 'Post'
@@ -272,7 +279,8 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     addpost: 'AddPostResponse'
     followUser: 'FollowUserResponse'
-    signup: 'SignUpResponse'
+    signin: 'AuthResponse'
+    signup: 'AuthResponse'
     unfollowUser: 'FollowUserResponse'
   }
   Post: { // field return type name
@@ -311,12 +319,6 @@ export interface NexusGenFieldTypeNames {
     userProfileImage: 'ProfileImage'
     users: 'AllUsersQueryResponse'
   }
-  SignUpResponse: { // field return type name
-    code: 'Int'
-    message: 'String'
-    payload: 'AuthPayload'
-    success: 'Boolean'
-  }
   User: { // field return type name
     bio: 'String'
     followedBy: 'User'
@@ -342,6 +344,10 @@ export interface NexusGenArgTypes {
     followUser: { // args
       followerId: number; // Int!
       followingId: number; // Int!
+    }
+    signin: { // args
+      password: string; // String!
+      username: string; // String!
     }
     signup: { // args
       password: string; // String!
