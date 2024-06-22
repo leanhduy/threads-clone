@@ -5,6 +5,7 @@ import Search from './search'
 import Profile from './profile'
 import Activity from './activity'
 import SignUp from './signup'
+import SignIn from './signin'
 
 export default function Pages() {
     return (
@@ -15,6 +16,7 @@ export default function Pages() {
                 <Route element={<Profile />} path="/profile/:username" />
                 <Route element={<Activity />} path="/activity" />
                 <Route element={<SignUp />} path="/signup" />
+                <Route element={<SignIn />} path="/signin" />
             </Routes>
         </BrowserRouter>
     )

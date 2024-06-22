@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import 'react-toastify/dist/ReactToastify.css'
 import { App, UserProvider } from './components'
+import { ThemeProvider } from '@mui/material/styles'
+import { customMuiTheme } from './styles'
 
 // ? Determine if it is the Development environment (NODE_ENV is not set or has value of 'development')
 const isDevelopment =
@@ -24,7 +26,9 @@ root.render(
     <React.StrictMode>
         <ApolloProvider client={client}>
             <UserProvider>
-                <App />
+                <ThemeProvider theme={customMuiTheme}>
+                    <App />
+                </ThemeProvider>
             </UserProvider>
         </ApolloProvider>
     </React.StrictMode>

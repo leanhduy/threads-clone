@@ -32,12 +32,7 @@ const Profile = () => {
 
     return (
         <Layout grid>
-            <QueryResult
-                loading={loading}
-                error={error}
-                data={user}
-                loggedInUser={data?.userById}
-            >
+            <QueryResult loading={loading} error={error} data={user}>
                 <ProfileDetails
                     user={user?.userByUsername}
                     loggedInUser={data?.userById}

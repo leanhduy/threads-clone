@@ -15,7 +15,7 @@ import FilterRoundedIcon from '@mui/icons-material/FilterRounded'
 import SyncAltIcon from '@mui/icons-material/SyncAlt'
 import LogoutIcon from '@mui/icons-material/Logout'
 import AddIcon from '@mui/icons-material/Add'
-import { styled } from '@mui/material/styles'
+import { createTheme, styled } from '@mui/material/styles'
 
 export const unit = 8
 export const widths = {
@@ -33,7 +33,7 @@ const GlobalStyles = () => (
             body: {
                 margin: 0,
                 padding: 0,
-                fontFamily: "'Source Sans Pro', sans-serif",
+                fontFamily: "'Nunito Sans', 'Roboto', sans-serif",
                 backgroundColor: colors.silver.base,
                 color: colors.black.base,
             },
@@ -68,6 +68,12 @@ const GlobalStyles = () => (
         }}
     />
 )
+
+export const customMuiTheme = createTheme({
+    typography: {
+        fontFamily: 'Nunito Sans, Arial, sans-serif',
+    },
+})
 
 export const colors = {
     pink: {

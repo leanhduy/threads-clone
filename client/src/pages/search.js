@@ -151,7 +151,7 @@ const Container = styled.div({
 })
 
 const PageTitle = styled.div({
-    fontWeight: 'bold',
+    fontWeight: 600,
     marginBottom: '1rem',
     textAlign: 'center',
     width: '100%',

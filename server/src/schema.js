@@ -11,7 +11,7 @@ const {
 const { DateTimeResolver } = require('graphql-scalars')
 const { getJWT, getHash } = require('./utils/helpers')
 const { compareSync } = require('bcryptjs')
-const { isCompositeType } = require('graphql')
+require('graphql')
 
 const DateTime = asNexusMethod(DateTimeResolver, 'date')
 
@@ -402,16 +402,16 @@ const Mutation = objectType({
                 },
               }
             }
-            // ? Return 401 (Unauthorized) response if sign in credential are correct
-            return {
-              code: 401,
-              success: false,
-              message: 'Unauthorized - Wrong credentials',
-              payload: {
-                user: null,
-                token: null,
-              },
-            }
+          }
+          // ? Return 401 (Unauthorized) response if sign in credential are correct
+          return {
+            code: 401,
+            success: false,
+            message: 'Unauthorized - Wrong credentials',
+            payload: {
+              user: null,
+              token: null,
+            },
           }
         } catch (error) {
           console.error(error)

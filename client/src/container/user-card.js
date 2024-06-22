@@ -269,7 +269,7 @@ const FollowButton = styled(Button)({
     backgroundColor: colors.black.light,
     color: colors.white,
     fontSize: '1rem',
-    fontWeight: 'bold',
+    fontWeight: 600,
     marginBottom: '.75rem',
     textTransform: 'none',
     transition: 'transform 0.1s ease-in-out',

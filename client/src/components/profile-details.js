@@ -181,7 +181,7 @@ const Container = styled.div({
 })
 
 const PageTitle = styled.div({
-    fontWeight: 'bold',
+    fontWeight: 600,
     margin: '.5rem auto 1.5rem',
     textAlign: 'center',
     width: '100%',
@@ -270,7 +270,7 @@ const FollowButton = styled(Button)({
     backgroundColor: colors.black.light,
     color: colors.white,
     fontSize: '1rem',
-    fontWeight: 'bold',
+    fontWeight: 600,
     marginBottom: '.75rem',
     textTransform: 'none',
     transition: 'transform 0.1s ease-in-out',
@@ -292,7 +292,7 @@ const MentionButton = styled(Button)({
     border: `1px solid ${colors.silver.dark}`,
     borderRadius: '15px',
     fontSize: '1rem',
-    fontWeight: 'bold',
+    fontWeight: 600,
     marginBottom: '.75rem',
     textTransform: 'none',
     transition: 'transform 0.1s ease-in-out',
@@ -314,7 +314,7 @@ const EditButton = styled(Button)({
     borderRadius: '15px',
     color: colors.black.light,
     fontSize: '1rem',
-    fontWeight: 'bold',
+    fontWeight: 600,
     marginBottom: '.75rem',
     textTransform: 'none',
     transition: 'transform 0.1s ease-in-out',
@@ -351,7 +351,7 @@ const Tabs = styled.div({
 
 const TabOption = styled(Button)({
     color: colors.grey.light,
-    fontWeight: 'bold',
+    fontWeight: 600,
     flex: 1,
     padding: '1rem 0',
     textAlign: 'center',

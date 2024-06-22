@@ -12,7 +12,7 @@ import {
 import styled from '@emotion/styled'
 import { Link } from 'react-router-dom'
 import logo from '../assets/threads.png'
-import { CircularProgress, IconButton } from '@mui/material'
+import { IconButton } from '@mui/material'
 import { useQuery } from '@apollo/client'
 import { GET_USER_BY_ID, userProfilePlaceHolder } from '../utils'
 import { UserContext } from '../context'
@@ -29,10 +29,6 @@ const Navbar = ({ children, openNewPostDialog }) => {
             id: parseInt(userId),
         },
     })
-
-    if (loading) {
-        return <CircularProgress />
-    }
 
     return (
         <HeaderBar>
@@ -68,7 +64,6 @@ const Navbar = ({ children, openNewPostDialog }) => {
                         <FavoriteBorderRoundedIcon />
                     </IconButton>
                 </HomeLink>
-                {/* If user is not logged in, redirect to login page. Otherwise, redirect to profile page */}
                 {user ? (
                     <LinkContainer to={`/profile/${user?.userById?.username}`}>
                         <PostAvatarImage
@@ -87,7 +82,6 @@ const Navbar = ({ children, openNewPostDialog }) => {
                 )}
             </Container>
             <RightContainer>
-                {/* Display log out icon if user is logged in. Otherwise, display nothing */}
                 {user && (
                     <IconButton aria-label="signout" onClick={logout}>
                         <LogoutIcon />
