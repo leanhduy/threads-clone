@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import styled from '@emotion/styled'
 import { useQuery } from '@apollo/client'
-import { Layout, NewPostDialog } from '../components'
+import { Layout, NewPostDialog, QueryResult } from '../components'
 import { Post } from '../container'
 import { colors, ToggleIcon } from '../styles'
 import { Button } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { FEED_FOR_YOU, GET_USER_BY_ID } from '../utils'
+import { FEED_FOR_YOU, GET_USER_BY_ID, userProfilePlaceHolder } from '../utils'
 import { UserContext } from '../context'
 
 const Home = () => {
@@ -18,15 +18,22 @@ const Home = () => {
     // ? Ref to the element at the end of the post list for infinite scroll
     const ref = useRef()
 
-    // TODO: Optimize by removing redundant NewPostDialog component usage
     const [isCreatingNewPost, setIsCreatingNewPost] = useState(false)
 
     // * Client-side GraphQL queries
-    // ? Fetch the current logged-in user (Temporary implementation)
-    const { data: loggedInUser } = useQuery(GET_USER_BY_ID, {
+    // ? Get the data of current logged in user in the context
+    const { userId } = useContext(UserContext)
+
+    // ? Fetch the current logged-in user
+    const {
+        data: loggedInUser,
+        loading: loadingUser,
+        error: errorUser,
+    } = useQuery(GET_USER_BY_ID, {
         variables: {
-            id: 1,
+            id: parseInt(userId),
         },
+        skip: !userId, // Skip the query if no userId
     })
 
     // ? Fetch the posts gradually
@@ -80,26 +87,35 @@ const Home = () => {
 
     return (
         <Layout grid>
-            {/* New Thread */}
-            {loggedInUser && (
-                <NewThread>
-                    <LinkContainer
-                        to={`/profile/${loggedInUser?.userById?.username}`}
-                    >
-                        <PostAvatarImage
-                            src={loggedInUser?.userById?.profileImage?.url}
-                        />
-                    </LinkContainer>
-                    <TextButton onClick={handleOpenNewPostDialog}>
-                        Start a thread...
-                    </TextButton>
-                    <StyledButton
-                        variant="outlined"
-                        onClick={handleOpenNewPostDialog}
-                    >
-                        Post
-                    </StyledButton>
-                </NewThread>
+            {/* Only display <NewThread/> component if user is logged in */}
+            {userId && (
+                <QueryResult
+                    loading={loadingUser}
+                    data={loggedInUser}
+                    error={errorUser}
+                >
+                    <NewThread>
+                        <LinkContainer
+                            to={`/profile/${loggedInUser?.userById?.username}`}
+                        >
+                            <PostAvatarImage
+                                src={
+                                    loggedInUser?.userById?.profileImage?.url ||
+                                    userProfilePlaceHolder
+                                }
+                            />
+                        </LinkContainer>
+                        <TextButton onClick={handleOpenNewPostDialog}>
+                            Start a thread...
+                        </TextButton>
+                        <StyledButton
+                            variant="outlined"
+                            onClick={handleOpenNewPostDialog}
+                        >
+                            Post
+                        </StyledButton>
+                    </NewThread>
+                </QueryResult>
             )}
             {/* List of Posts */}
             {posts.map((post) => (
@@ -126,6 +142,7 @@ const Home = () => {
 
 export default Home
 
+//#region Styled-components
 const NewThread = styled.div({
     border: `1px solid ${colors.grey.lighter}`,
     borderBottom: 'none',
@@ -166,7 +183,7 @@ const StyledButton = styled(Button)({
         borderColor: colors.silver.darker,
         borderRadius: '10px',
         color: colors.black.base,
-        fontWeight: 'bold',
+        fontWeight: 600,
         textTransform: 'none',
     },
 })
@@ -179,7 +196,7 @@ const FeedModeToggleButton = styled(Button)({
         borderColor: colors.silver.darker,
         borderRadius: '10px',
         color: colors.black.base,
-        fontWeight: 'bold',
+        fontWeight: 600,
         textTransform: 'none',
     },
 })
@@ -187,3 +204,4 @@ const FeedModeToggleButton = styled(Button)({
 const LinkContainer = styled(Link)({
     textDecoration: 'none',
 })
+//#endregion Styled-components

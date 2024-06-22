@@ -1,13 +1,8 @@
 import React from 'react'
-import { useMutation, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { Layout, QueryResult, ProfileDetails } from '../components'
 import { useParams } from 'react-router-dom'
-import {
-    FOLLOW_USER,
-    UNFOLLOW_USER,
-    GET_USER_BY_ID,
-    GET_USER_BY_USERNAME,
-} from '../utils'
+import { GET_USER_BY_ID, GET_USER_BY_USERNAME } from '../utils'
 
 const Profile = () => {
     const { username } = useParams()
@@ -32,12 +27,7 @@ const Profile = () => {
 
     return (
         <Layout grid>
-            <QueryResult
-                loading={loading}
-                error={error}
-                data={user}
-                loggedInUser={data?.userById}
-            >
+            <QueryResult loading={loading} error={error} data={user}>
                 <ProfileDetails
                     user={user?.userByUsername}
                     loggedInUser={data?.userById}

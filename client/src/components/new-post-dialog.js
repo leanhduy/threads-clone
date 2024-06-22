@@ -345,7 +345,7 @@ const ScopeOption = styled(Button)({
     display: 'flex',
     color: colors.black.base,
     justifyContent: 'flex-start',
-    fontWeight: 'bold',
+    fontWeight: 600,
     padding: '1rem',
     textTransform: 'none',
     width: '100%',
@@ -360,7 +360,7 @@ const PostButton = styled(Button)({
     border: `1px solid ${colors.silver.dark}`,
     borderRadius: '10px',
     color: colors.black.base,
-    fontWeight: 'bold',
+    fontWeight: 600,
     textTransform: 'none',
 })
 

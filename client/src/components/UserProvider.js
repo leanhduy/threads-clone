@@ -18,9 +18,11 @@ const UserProvider = ({ children }) => {
         localStorage.setItem('userId', id)
     }
 
+    // * When user logs out, remove the userId and the token
     const logout = () => {
         setUserId(null)
         localStorage.removeItem('userId')
+        localStorage.removeItem('token')
     }
 
     return (

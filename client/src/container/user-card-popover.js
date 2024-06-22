@@ -92,7 +92,7 @@ const CardHeaderRight = styled.div({
 
 const CardUsername = styled(Typography)({
     fontSize: '1.375rem',
-    fontWeight: 'bold',
+    fontWeight: 600,
 })
 
 const CardFullname = styled(Typography)({
@@ -117,7 +117,7 @@ const FollowButton = styled(Button)({
     border: `1px solid ${colors.silver.dark}`,
     borderRadius: '10px',
     fontSize: '0.9rem',
-    fontWeight: 'bold',
+    fontWeight: 600,
     marginBottom: '.75rem',
     textTransform: 'none',
     transition: 'transform 0.1s ease-in-out',
