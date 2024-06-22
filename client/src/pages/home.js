@@ -4,9 +4,9 @@ import { useQuery } from '@apollo/client'
 import { Layout, NewPostDialog, QueryResult } from '../components'
 import { Post } from '../container'
 import { colors, ToggleIcon } from '../styles'
-import { Button, CircularProgress, Typography } from '@mui/material'
+import { Button } from '@mui/material'
 import { Link } from 'react-router-dom'
-import { FEED_FOR_YOU, GET_USER_BY_ID } from '../utils'
+import { FEED_FOR_YOU, GET_USER_BY_ID, userProfilePlaceHolder } from '../utils'
 import { UserContext } from '../context'
 
 const Home = () => {
@@ -25,7 +25,6 @@ const Home = () => {
     const { userId } = useContext(UserContext)
 
     // ? Fetch the current logged-in user
-
     const {
         data: loggedInUser,
         loading: loadingUser,
@@ -100,7 +99,10 @@ const Home = () => {
                             to={`/profile/${loggedInUser?.userById?.username}`}
                         >
                             <PostAvatarImage
-                                src={loggedInUser?.userById?.profileImage?.url}
+                                src={
+                                    loggedInUser?.userById?.profileImage?.url ||
+                                    userProfilePlaceHolder
+                                }
                             />
                         </LinkContainer>
                         <TextButton onClick={handleOpenNewPostDialog}>
