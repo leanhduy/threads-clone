@@ -6,7 +6,14 @@ export const userProfilePlaceHolder = '/images/placeholder_avatar.png'
 
 // * Perform a case-insensitive search for `searchStr` in `str`
 export const searchString = (str, searchStr) => {
-    return str.toLowerCase().includes(searchStr.toLowerCase())
+    try {
+        if (str) {
+            return str.toLowerCase().includes(searchStr.toLowerCase())
+        }
+        return false
+    } catch (e) {
+        console.error('Error: ', e.message)
+    }
 }
 
 // * Generate a random id text contain 10 characters

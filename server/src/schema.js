@@ -11,7 +11,6 @@ const {
 const { DateTimeResolver } = require('graphql-scalars')
 const { getJWT, getHash } = require('./utils/helpers')
 const { compareSync } = require('bcryptjs')
-require('graphql')
 
 const DateTime = asNexusMethod(DateTimeResolver, 'date')
 

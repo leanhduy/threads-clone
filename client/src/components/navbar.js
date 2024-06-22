@@ -64,7 +64,7 @@ const Navbar = ({ children, openNewPostDialog }) => {
                         <FavoriteBorderRoundedIcon />
                     </IconButton>
                 </HomeLink>
-                {user ? (
+                {userId ? (
                     <LinkContainer to={`/profile/${user?.userById?.username}`}>
                         <PostAvatarImage
                             src={
