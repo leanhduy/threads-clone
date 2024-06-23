@@ -14,8 +14,10 @@ const UserProvider = ({ children }) => {
 
     // * Store the id of the current user to the localStorage and the Context
     const login = (id) => {
-        setUserId(id)
-        localStorage.setItem('userId', id)
+        if (id != null) {
+            setUserId(id)
+            localStorage.setItem('userId', id)
+        }
     }
 
     // * When user logs out, remove the userId and the token

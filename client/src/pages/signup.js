@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
-import { Button, TextField } from '@mui/material'
+import { Button, Divider, TextField, Typography } from '@mui/material'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { colors } from '../styles'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
 import { SIGN_UP, toastError } from '../utils'
 import { useContext } from 'react'
@@ -21,7 +21,7 @@ const SignUp = () => {
             localStorage.setItem('token', data?.signup?.payload.token)
 
             // ? Log In
-            login(data.signup.payload.user.id)
+            login(data?.signup?.payload?.user?.id)
 
             // ? Navigate to the home page
             navigate('/')
@@ -61,6 +61,14 @@ const SignUp = () => {
             >
                 {(formik) => (
                     <StyledForm onSubmit={formik.handleSubmit}>
+                        <FormTitle>
+                            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                                Sign Up
+                            </Typography>
+                            <Typography variant="body1">
+                                It's quick and easy.
+                            </Typography>
+                        </FormTitle>
                         <FormRow>
                             <StyledInput
                                 type="text"
@@ -98,6 +106,11 @@ const SignUp = () => {
                         <StyledButton variant="contained" type="submit">
                             Sign up
                         </StyledButton>
+                        <StyledDivider />
+                        <SignInLink>
+                            Already have an account?{' '}
+                            <StyledLink to="/signin">Sign In</StyledLink>
+                        </SignInLink>
                     </StyledForm>
                 )}
             </Formik>
@@ -107,11 +120,12 @@ const SignUp = () => {
 
 export default SignUp
 
+//#region Styled-components
 const StyledContainer = styled.div({
     alignItems: 'center',
-    backgroundColor: colors.silver.dark,
+    backgroundImage: 'url("./images/bg.jpg")',
+    backgroundSize: 'cover',
     color: colors.black.base,
-    color: colors.white,
     display: 'flex',
     justifyContent: 'center',
     height: '100vh',
@@ -119,10 +133,14 @@ const StyledContainer = styled.div({
 })
 
 const StyledForm = styled.form({
+    backgroundColor: colors.black.base,
+    borderRadius: '10px',
+    color: colors.white,
     display: 'flex',
     flexDirection: 'column',
+    padding: '1.5rem 2.5rem',
     rowGap: '1rem',
-    width: '350px',
+    width: '480px',
 })
 
 const FormRow = styled.div({
@@ -141,18 +159,52 @@ const ErrorNotification = styled.p({
 })
 
 const StyledInput = styled(TextField)({
-    backgroundColor: colors.white,
+    backgroundColor: colors.grey.darker,
+    color: colors.white,
     borderRadius: '10px',
     flexGrow: 1,
     '.MuiOutlinedInput-notchedOutline': {
         border: 'none',
     },
+    ' .MuiInputBase-root': {
+        color: colors.white,
+    },
 })
 
 const StyledButton = styled(Button)({
-    padding: '1rem 0',
+    backgroundColor: colors.white,
+    color: colors.black.lighter,
     borderRadius: '10px',
-    fontWeight: 600,
     fontSize: '1rem',
+    fontWeight: 700,
+    padding: '1rem 0',
     textTransform: 'none',
+    ':hover': {
+        backgroundColor: colors.white,
+        color: colors.grey.light,
+    },
 })
+
+const FormTitle = styled(FormRow)({
+    // alignSelf: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+})
+
+const StyledDivider = styled(Divider)({
+    '&.MuiDivider-root': {
+        backgroundColor: colors.white,
+    },
+})
+
+const SignInLink = styled(FormRow)({
+    alignSelf: 'center',
+    color: colors.white.light,
+})
+
+const StyledLink = styled(Link)({
+    fontWeight: '600',
+    // textDecoration: 'none',
+})
+//#endregion Styled-components
