@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { Button, TextField, Typography } from '@mui/material'
+import { Button, Divider, TextField, Typography } from '@mui/material'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { colors } from '../styles'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
 import { SIGN_IN, toastError } from '../utils'
 import { useContext } from 'react'
@@ -71,11 +71,8 @@ const SignIn = () => {
                 {(formik) => (
                     <StyledForm onSubmit={formik.handleSubmit}>
                         <FormTitle>
-                            <Typography
-                                variant="body1"
-                                sx={{ fontSize: '1.15rem', fontWeight: 800 }}
-                            >
-                                Log in with your account
+                            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                                Sign In with your account
                             </Typography>
                         </FormTitle>
                         <FormRow>
@@ -118,6 +115,11 @@ const SignIn = () => {
                         <ForgotPasswordLink>
                             Forgot password?
                         </ForgotPasswordLink>
+                        <StyledDivider />
+                        <SignUpLink>
+                            No account yet?{' '}
+                            <StyledLink to="/signup">Sign up</StyledLink>
+                        </SignUpLink>
                     </StyledForm>
                 )}
             </Formik>
@@ -200,5 +202,21 @@ const FormTitle = styled(FormRow)({
 const ForgotPasswordLink = styled(FormRow)({
     alignSelf: 'center',
     color: colors.grey.light,
+})
+
+const StyledDivider = styled(Divider)({
+    '&.MuiDivider-root': {
+        backgroundColor: colors.white,
+    },
+})
+
+const SignUpLink = styled(FormRow)({
+    alignSelf: 'center',
+    color: colors.white.light,
+})
+
+const StyledLink = styled(Link)({
+    fontWeight: '600',
+    // textDecoration: 'none',
 })
 //#endregion Styled-components
